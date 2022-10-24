@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>hai!touch Controller</title>
+  <link rel="stylesheet" href="client.css"/>
+</head>
+
+<body>
+  <div id="roomClosedBg">
+    <div id="roomClosedModal">
+      <div id="roomClosedThanks">Thank you for playing!</div>
+      <div id="handBox">
+        <svg id="handImage" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 128 128" xmlns:v="https://vecta.io/nano"><path d="M50.366 1.597C56.08.151 62.779 2.933 63.908 11.647l.188 1.381c-.369-14.241 20.88-14.269 20.867-1.44-.019 19.992 1.403 37.425 5.824 55.67l3.986 38.801c-7.921 1.918-16.33 3.084-29.94 7.108-20.076 5.939-26.631-16.508-35.199-36.693-4.956-11.675-11.206-22.805-17.188-31.359-7.99-11.421 5.441-21.345 13.505-13.534l-.068-.122C16.647 15.681 36.25 6.352 43.193 18.239l-.461-1.318c-2.808-8.206 1.92-13.877 7.635-15.324z" fill="#6594e5" paint-order="stroke fill markers"/><path d="M88.3 67.861c-4.421-18.245-6.521-35.557-7.19-55.34-.284-8.409-14.951-7.973-13.486.954 2.628 15.989 5.361 28.614 7.108 41.869l-5.187.336c-3.459-13.231-6.676-29.935-8.934-44.392C58.882.24 41.962 3.675 45.672 15.199c4.051 12.586 9.832 29.143 11.935 42.454l-4.199 1.426c-4.656-11.458-8.87-23.478-11.844-35.757-2.84-11.726-20.7-4.755-13.193 7.534 6.728 11.014 10.423 22.734 15.333 33.45l-3.755 2.029c-4.147-7.946-9.49-18.942-12.688-27.773-4.367-12.061-17.99-4.35-11.511 5.75 5.638 8.786 11.416 19.885 16.371 31.559 8.568 20.185 16.607 39.393 32.106 34.809 13.611-4.026 22.022-5.192 29.942-7.11" fill="#c8f3ff" paint-order="stroke fill markers"/><path d="M108.474 34.899c-10.783-7.508-26.476-.671-19.391 27.975-15.919-4.239-31.056 15.994-22.261 28.671 8.488 12.231 23.579 15.574 27.951 14.513 20.166-4.885 11.508-46.194 13.701-71.16z" fill="#6594e5" paint-order="stroke fill markers"/><path d="M104.778 36.951c-11.978-7.074-17.352 5.361-11.293 29.773-15.919-4.239-29.905 11.439-26.663 24.822s13.828 15.301 27.348 12.026c18.3-4.433 8.415-41.654 10.608-66.621z" fill="#c8f3ff" paint-order="stroke fill markers"/><path d="M10.153 52.875c-5.933 10.276 0 37.189 19.771 40.955-10.356-7.69-19.928-23.694-19.77-40.955z" fill="#ffc2ee" paint-order="stroke markers fill"/><path d="M3.255 76.033c-3.22 7.77 3.601 24.25 19.846 22.962-8.007-3.158-16.952-11.811-19.846-22.962z" fill="#f63886" paint-order="stroke markers fill"/><path d="M95.796 5.877c11.462 3.071 26.296 26.296 14.979 42.94 1.886-12.76-2.663-30.846-14.98-42.94z" fill="#ffc2ee" paint-order="stroke markers fill"/><path d="M111.767 8.695c8.317 1.255 18.908 15.606 9.415 28.853 1.431-8.489-1.36-20.617-9.415-28.853z" fill="#f63886" paint-order="stroke markers fill"/></svg>
+      </div>
+      <div id="roomClosedMessage">Disconnected from server.</div>
+      <button type="button" onclick="location.reload()">Reload page</button>
+    </div>
+  </div>
+  <header>
+    <img id="logo" src="img/haitouch_logo_wide.svg">
+  </header>
+  <div id="main">
+    <div id="join">
+      <div class="letterCountSplit">
+        <label for="rc">Room code</label>
+        <span class="letterCount">0/4</span>
+      </div>
+      <input style="text-transform: uppercase;" name="rc" id="rc" type="text"
+      pattern="[A-Za-z]{4}" maxlength="4" title="4 capital letters." placeholder="ABCD">
+      <div id="roomName">...</div>
+      <div id="roomStatus">Room code must be 4 capital letters.</div>
+      <div class="letterCountSplit">
+        <label for="nick">Nickname <i>(optional)</i></label>
+        <span class="letterCount">0/12</span>
+      </div>
+      <input style="text-transform: uppercase;" name="nick" id="nick" type="text"
+      maxlength="12" title="Up to 12 letters, numbers, and limited symbols: !',-./?" placeholder="PLAYER">
+      <div id="joinStatus">Press button to join.</div>
+      <button id="btnJoin">Join room</button>
+      <div id="finePrint">
+        By clicking “Join room”, you agree to our <a href="https://haitouch.ga/tos">Terms of Service</a>.<br>
+        Created by <a href="https://haitouch.ga">hai!touch Studios</a> as <a href="https://github.com/JapanYoshi/haitouch-heroku/tree/render">free and open-source software</a><br>
+        Powered by <a href="https://firebase.google.com">Firebase Realtime Database</a>
+      </div>
+    </div>
+  </div>
+  <script type="module">
+// Firebase import
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js"
+import { getDatabase, ref, onValue, get, push, update, child } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js"
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
+
+var ready = false;
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCCQlFqG66ls0jNEeZDqv0F5V4d2l3mIPw",
+  authDomain: "haitouch-9320f.firebaseapp.com",
+  databaseURL: "https://haitouch-9320f-default-rtdb.firebaseio.com",
+  projectId: "haitouch-9320f",
+  storageBucket: "haitouch-9320f.appspot.com",
+  messagingSenderId: "850603279750",
+  appId: "1:850603279750:web:a92cc85981305fe85e5807"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const dbRef = ref(db);
+
+const auth = getAuth();
+signInAnonymously(auth).then(
+  () => {
+    console.log("Signed in anonymously to Firebase Realtime Database.");
+    ready = true;
+  }
+).catch(
+  error => {
+    console.error("Error signing in anonymously to Firebase Realtime Database.", error.code, error.message);
+  }
+);
+
+let roomRef;
+let roomCodeList = {};
+let controllerPageName = "";
+
+let myName = localStorage.getItem("name");
+if (!myName) {
+  myName = "";
+  let seed = new Date().valueOf(); // current timestamp in ms
+  // this is not actually Base64
+  const key = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
+  // just make shit up using Math.random()
+  for (let i = 0; i < 8; i++) {
+    myName += key.charAt(Math.floor(Math.random() * 64));
+  }
+  console.log("New name is:", myName);
+  localStorage.setItem("name", myName);
+}
+
+function formatRoomCode(text) {
+  return text.toUpperCase();
+}
+
+const roomCodeRef = ref(db, 'roomCodes');
+onValue(roomCodeRef, (snapshot) => {
+  roomCodeList = snapshot.val();
+  console.log("Room codes updated on", new Date);  
+  // in case inputRc is not empty upon page load (browser remembered last room code)
+  validateChange();
+});
+
+function roomExists(roomCode) {
+  return roomCodeList[roomCode] == true;
+}
+
+function getRoomData(roomCode) {
+  console.log("getRoomData");
+  roomRef = child(dbRef, `rooms/${roomCode}`);
+  let promise = new Promise((resolve, reject) => {
+    get(roomRef).then(snapshot => {
+      console.log("getRoomData then");
+      if (!snapshot.exists()) {
+        resolve({state: -1, name: "No such room"}); // room nonexistent; please update room codes list
+      }
+      let val = snapshot.val();
+      controllerPageName = val.controllerName;
+      if (val.inProgress === true) {
+        resolve({state: 3, name: val.gameName}); // game already started and can’t join as audience
+      }
+      if (val.playerCount < val.maxPlayers) {
+        resolve({state: 1, name: val.gameName}); // open for players
+      }
+      if (val.audienceCount < val.maxAudience) {
+        resolve({state: 2, name: val.gameName}); // open only for audience
+      }
+      resolve({state: 0, name: val.gameName}); // room exists, but is full and cannot be joined
+    }).catch(error => {
+      console.error(error);
+      resolve({state: -1, name: "Error checking room"});
+    });
+  });
+  
+  return promise;
+}
+
+/* Lobby HTML */
+
+const inputRc = document.getElementById('rc');
+const inputNick = document.getElementById('nick');
+const btnJoin = document.getElementById('btnJoin');
+const joinStatus = document.getElementById('joinStatus');
+
+/*
+Join request!
+TODO: Treat results.
+*/
+function joinRoom(roomCode) {
+  console.log("Joining");
+  btnJoin.innerText = "...";
+  // write own username into 'pending', then listen for it to be removed after it being processed
+  let joinRef = child(roomRef, `pending/${myName}`);
+  update(joinRef, {status: 1, nick: inputNick.value, uuid: myName});
+  onValue(joinRef, (snapshot) => {
+    let val = snapshot.val();
+    console.log("joinRoom val", val);
+    if (val.status === 1) {
+      // no change
+      return;
+    }
+    if (val.status == -1) {
+      console.log("join rejected");
+    } else {
+      console.log("join permitted");
+      replacePage();
+    }
+  });
+}
+
+btnJoin.addEventListener("click", joinRoom);
+
+/*
+Room code input.
+If the room code is valid, first check if it's in the list of room codes. Then if it exists, get the current state of the room.
+ */
+function validateChange() {
+  let rc = inputRc.value.toUpperCase();
+  document.querySelector("label[for=rc] + .letterCount").innerText = `${rc.length}/4`;
+  if (
+    rc.length == 4 &&
+    inputRc.validity.valid
+  ) {
+    btnJoin.disabled = true;
+    if (!ready) {
+      roomName.innerText = "Connecting to database";
+      roomStatus.innerText = "Please wait...";
+      setTimeout(250, validateChange);
+      return;
+    }
+    if (!roomExists(rc)) {
+      roomName.innerText = "No such room";
+      roomStatus.innerText = "Double-check your room code";
+      return;
+    }
+    roomName.innerText = "Fetching game name...";
+    roomStatus.innerText = "...";
+    let roomData = getRoomData(rc);
+    console.log(roomData);
+    roomData.then(
+      (value) => {
+        console.log("roomData resolved, value is", value);
+        roomName.innerText = value.name;
+        switch (value.state) {
+          case 0:
+            roomStatus.innerText = "Sorry, this room is full.";
+            break
+          case 1:
+            btnJoin.disabled = false;
+            roomStatus.innerText = "Join as player";
+            break
+          case 2:
+            btnJoin.disabled = false;
+            roomStatus.innerText = "Join as audience";
+            break
+          case 3:
+            btnJoin.disabled = false;
+            roomStatus.innerText = "Game in progress. Rejoins only.";
+            break
+          default:
+            roomStatus.innerText = `Unknown status (${value.state})`;
+        }
+        if (btnJoin.disabled === false) {
+          inputNick.focus();
+        }
+      }
+    );
+  } else {
+    btnJoin.disabled = true;
+    roomName.innerText = "...";
+    roomStatus.innerText = "Room code must be 4 capital letters.";
+  }
+}
+inputRc.addEventListener("input", validateChange);
+
+/*
+Nickname input.
+Pass the input element.
+If the nickname contains curly Unicode single quotes,
+replace them with the allowed typewriter/ASCII single quotes.
+ */
+function fixQuotes(el) {
+  // replace unicode single quotes
+  var start = el.selectionStart;
+  var end = el.selectionEnd;
+  const quotes = /[\u2018\u2019\u201b]/g
+  el.value = el.value.replaceAll(quotes, "'");
+  el.value = el.value.replaceAll('\u201a', ",");
+  //console.log("Fixed quotes:", el.value);
+  el.setSelectionRange(start, end);
+  document.querySelector("label[for=nick] + .letterCount").innerText = `${el.value.length}/12`;
+}
+
+function inputNickValidation() {
+  fixQuotes(inputNick);
+  // Check against the name regex
+  var nameRegex = RegExp("^[ !',-./0-9?A-Za-z]{0,12}$");
+  if (nameRegex.test(inputNick.value)) {
+    // Valid nick, allow join and save for later
+    document.getElementById("btnJoin").disabled = false;
+    localStorage.setItem("nickname", inputNick.value);
+  } else {
+    // Not a valid nick, don't allow join
+    document.getElementById("btnJoin").disabled = true;
+  }
+};
+inputNick.addEventListener("input", inputNickValidation);
+// Let the player press Enter after entering their nickname to insta-join
+inputNick.addEventListener('keypress', (e) => {
+  if (e.key === "Enter" && btnJoin.disabled === false) {
+    joinRoom();
+  }
+});
+
+// Once you join, replace the page's contents with the specified controller
+function replacePage() {
+  // fetch the controller file
+  var xmlHttp = new XMLHttpRequest();
+  xmlHttp.onreadystatechange = () => {
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+      //console.log(xmlHttp.responseText);
+      // manually extract the element div.game using specific comments
+      let header = "<!--START INJECTED HTML-->"
+      let start = xmlHttp.responseText.indexOf(header) + header.length;
+      let end = xmlHttp.responseText.indexOf("<!--END INJECTED HTML-->");
+      let htmlText = xmlHttp.responseText.substring(start, end);
+      let disconnectedModal = document.getElementById("roomClosedBg");
+      document.body.innerHTML = htmlText;
+      document.body.appendChild(disconnectedModal);
+      // manually extract the element script using specific comments
+      header = '/** START INJECTED SCRIPT **/';
+      start = xmlHttp.responseText.indexOf(header) + header.length;
+      end = xmlHttp.responseText.indexOf("/** END INJECTED SCRIPT **/");
+      let jsText = xmlHttp.responseText.substring(start, end);
+      let scriptEl = document.createElement('script');
+      scriptEl.innerHTML = jsText;
+      document.head.appendChild(scriptEl);
+      // setInterval(heartbeat, 1000);
+    }
+  }
+  xmlHttp.open("GET", "https://" + window.hostname + "/" + controllerPageName + ".html", true);
+  xmlHttp.send(null)
+}
+
+// Finally, hide the disconnect overlay
+document.getElementById("roomClosedBg").style.display = "none";
+</script>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "lastUpdate": {
+      ".read": "auth !== null",
+      ".write": "auth !== null",
+    },
+    "roomCodes": {
+      ".read": "auth !== null",
+      ".write": "auth !== null",
+    },
+    "rooms": {
+      ".read": "auth !== null",
+      ".write": "auth !== null",
+    }
+  }
+}
