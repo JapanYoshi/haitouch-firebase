@@ -110,6 +110,10 @@ onValue(roomCodeRef, (snapshot) => {
   // in case inputRc is not empty upon page load (browser remembered last room code)
   validateChange();
 });
+get(roomCodeRef).then(snapshot => {
+  roomCodeList = snapshot.val();
+  console.log("Room codes initialized on", new Date);
+});
 
 function roomExists(roomCode) {
   return roomCodeList[roomCode] == true;
