@@ -312,7 +312,7 @@ function replacePage() {
       // setInterval(heartbeat, 1000);
     }
   }
-  xmlHttp.open("GET", "https://" + window.hostname + "/" + controllerPageName + ".html", true);
+  xmlHttp.open("GET", "https://" + window.location.hostname + "/" + controllerPageName + ".html", true);
   xmlHttp.send(null)
 }
 
