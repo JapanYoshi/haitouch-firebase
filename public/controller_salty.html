@@ -950,10 +950,12 @@
     </article>
   </div>
   <!--END INJECTED HTML-->
-  <script>
+  <script type="module">
     /** START INJECTED SCRIPT **/
-    console.log("roomRef =", roomRef);
+    import { ref, onValue, get, push, update, child } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js"
+    console.log("database object =", window.fb_db);
     var scene = document.querySelector("article#standby");
+    
     /* Change BBcode tags to HTML tags */
     function convertBB(bbcode) {
       if (typeof bbcode == "string") {
@@ -973,6 +975,7 @@
         return "Error in funtion convertBB"
       }
     }
+    /* Old Websocket-based game event handler */
     window.gameSpecificHandler = (data) => {
       if (data.type == "sendToRoom" || data.type == "onMessage") {
         switch (data.action) {

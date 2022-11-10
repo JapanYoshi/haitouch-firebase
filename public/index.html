@@ -6,54 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>hai!touch Controller</title>
   <link rel="stylesheet" href="client.css"/>
-</head>
-
-<body>
-  <div id="roomClosedBg">
-    <div id="roomClosedModal">
-      <div id="roomClosedThanks">Thank you for playing!</div>
-      <div id="handBox">
-        <svg id="handImage" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 128 128" xmlns:v="https://vecta.io/nano"><path d="M50.366 1.597C56.08.151 62.779 2.933 63.908 11.647l.188 1.381c-.369-14.241 20.88-14.269 20.867-1.44-.019 19.992 1.403 37.425 5.824 55.67l3.986 38.801c-7.921 1.918-16.33 3.084-29.94 7.108-20.076 5.939-26.631-16.508-35.199-36.693-4.956-11.675-11.206-22.805-17.188-31.359-7.99-11.421 5.441-21.345 13.505-13.534l-.068-.122C16.647 15.681 36.25 6.352 43.193 18.239l-.461-1.318c-2.808-8.206 1.92-13.877 7.635-15.324z" fill="#6594e5" paint-order="stroke fill markers"/><path d="M88.3 67.861c-4.421-18.245-6.521-35.557-7.19-55.34-.284-8.409-14.951-7.973-13.486.954 2.628 15.989 5.361 28.614 7.108 41.869l-5.187.336c-3.459-13.231-6.676-29.935-8.934-44.392C58.882.24 41.962 3.675 45.672 15.199c4.051 12.586 9.832 29.143 11.935 42.454l-4.199 1.426c-4.656-11.458-8.87-23.478-11.844-35.757-2.84-11.726-20.7-4.755-13.193 7.534 6.728 11.014 10.423 22.734 15.333 33.45l-3.755 2.029c-4.147-7.946-9.49-18.942-12.688-27.773-4.367-12.061-17.99-4.35-11.511 5.75 5.638 8.786 11.416 19.885 16.371 31.559 8.568 20.185 16.607 39.393 32.106 34.809 13.611-4.026 22.022-5.192 29.942-7.11" fill="#c8f3ff" paint-order="stroke fill markers"/><path d="M108.474 34.899c-10.783-7.508-26.476-.671-19.391 27.975-15.919-4.239-31.056 15.994-22.261 28.671 8.488 12.231 23.579 15.574 27.951 14.513 20.166-4.885 11.508-46.194 13.701-71.16z" fill="#6594e5" paint-order="stroke fill markers"/><path d="M104.778 36.951c-11.978-7.074-17.352 5.361-11.293 29.773-15.919-4.239-29.905 11.439-26.663 24.822s13.828 15.301 27.348 12.026c18.3-4.433 8.415-41.654 10.608-66.621z" fill="#c8f3ff" paint-order="stroke fill markers"/><path d="M10.153 52.875c-5.933 10.276 0 37.189 19.771 40.955-10.356-7.69-19.928-23.694-19.77-40.955z" fill="#ffc2ee" paint-order="stroke markers fill"/><path d="M3.255 76.033c-3.22 7.77 3.601 24.25 19.846 22.962-8.007-3.158-16.952-11.811-19.846-22.962z" fill="#f63886" paint-order="stroke markers fill"/><path d="M95.796 5.877c11.462 3.071 26.296 26.296 14.979 42.94 1.886-12.76-2.663-30.846-14.98-42.94z" fill="#ffc2ee" paint-order="stroke markers fill"/><path d="M111.767 8.695c8.317 1.255 18.908 15.606 9.415 28.853 1.431-8.489-1.36-20.617-9.415-28.853z" fill="#f63886" paint-order="stroke markers fill"/></svg>
-      </div>
-      <div id="roomClosedMessage">Disconnected from server.</div>
-      <button type="button" onclick="location.reload()">Reload page</button>
-    </div>
-  </div>
-  <header>
-    <img id="logo" src="img/haitouch_logo_wide.svg">
-  </header>
-  <div id="main">
-    <div id="join">
-      <div class="letterCountSplit">
-        <label for="rc">Room code</label>
-        <span class="letterCount">0/4</span>
-      </div>
-      <input style="text-transform: uppercase;" name="rc" id="rc" type="text"
-      pattern="[A-Za-z]{4}" maxlength="4" title="4 capital letters." placeholder="ABCD">
-      <div id="roomName">...</div>
-      <div id="roomStatus">Room code must be 4 capital letters.</div>
-      <div class="letterCountSplit">
-        <label for="nick">Nickname <i>(optional)</i></label>
-        <span class="letterCount">0/12</span>
-      </div>
-      <input style="text-transform: uppercase;" name="nick" id="nick" type="text"
-      maxlength="12" title="Up to 12 letters, numbers, and limited symbols: !',-./?" placeholder="PLAYER">
-      <div id="joinStatus">Press button to join.</div>
-      <button id="btnJoin">Join room</button>
-      <div id="finePrint">
-        By clicking “Join room”, you agree to our <a href="https://haitouch.ga/tos">Terms of Service</a>.<br>
-        Created by <a href="https://haitouch.ga">hai!touch Studios</a> as <a href="https://github.com/JapanYoshi/haitouch-heroku/tree/render">free and open-source software</a><br>
-        Powered by <a href="https://firebase.google.com">Firebase Realtime Database</a>
-      </div>
-    </div>
-  </div>
   <script type="module">
 // Firebase import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js"
 import { getDatabase, ref, onValue, get, push, update, child } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js"
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
 
-var ready = false;
+ready = false;
 
 const firebaseConfig = {
   apiKey: "AIzaSyCCQlFqG66ls0jNEeZDqv0F5V4d2l3mIPw",
@@ -65,9 +24,9 @@ const firebaseConfig = {
   appId: "1:850603279750:web:a92cc85981305fe85e5807"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const dbRef = ref(db);
+window.fb_app = initializeApp(firebaseConfig);
+window.fb_db = getDatabase(window.fb_app);
+window.fb_dbRef = ref(window.fb_db);
 
 const auth = getAuth();
 signInAnonymously(auth).then(
@@ -103,7 +62,7 @@ function formatRoomCode(text) {
   return text.toUpperCase();
 }
 
-const roomCodeRef = ref(db, 'roomCodes');
+const roomCodeRef = ref(window.fb_db, 'roomCodes');
 onValue(roomCodeRef, (snapshot) => {
   roomCodeList = snapshot.val();
   console.log("Room codes updated on", new Date);  
@@ -121,7 +80,7 @@ function roomExists(roomCode) {
 
 function getRoomData(roomCode) {
   console.log("getRoomData");
-  roomRef = child(dbRef, `rooms/${roomCode}`);
+  roomRef = child(window.fb_dbRef, `rooms/${roomCode}`);
   let promise = new Promise((resolve, reject) => {
     get(roomRef).then(snapshot => {
       console.log("getRoomData then");
@@ -308,6 +267,7 @@ function replacePage() {
       let jsText = xmlHttp.responseText.substring(start, end);
       let scriptEl = document.createElement('script');
       scriptEl.innerHTML = jsText;
+      scriptEl.type = "module";
       document.head.appendChild(scriptEl);
       // setInterval(heartbeat, 1000);
     }
@@ -319,6 +279,48 @@ function replacePage() {
 // Finally, hide the disconnect overlay
 document.getElementById("roomClosedBg").style.display = "none";
 </script>
+</head>
+
+<body>
+  <div id="roomClosedBg">
+    <div id="roomClosedModal">
+      <div id="roomClosedThanks">Thank you for playing!</div>
+      <div id="handBox">
+        <svg id="handImage" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 128 128" xmlns:v="https://vecta.io/nano"><path d="M50.366 1.597C56.08.151 62.779 2.933 63.908 11.647l.188 1.381c-.369-14.241 20.88-14.269 20.867-1.44-.019 19.992 1.403 37.425 5.824 55.67l3.986 38.801c-7.921 1.918-16.33 3.084-29.94 7.108-20.076 5.939-26.631-16.508-35.199-36.693-4.956-11.675-11.206-22.805-17.188-31.359-7.99-11.421 5.441-21.345 13.505-13.534l-.068-.122C16.647 15.681 36.25 6.352 43.193 18.239l-.461-1.318c-2.808-8.206 1.92-13.877 7.635-15.324z" fill="#6594e5" paint-order="stroke fill markers"/><path d="M88.3 67.861c-4.421-18.245-6.521-35.557-7.19-55.34-.284-8.409-14.951-7.973-13.486.954 2.628 15.989 5.361 28.614 7.108 41.869l-5.187.336c-3.459-13.231-6.676-29.935-8.934-44.392C58.882.24 41.962 3.675 45.672 15.199c4.051 12.586 9.832 29.143 11.935 42.454l-4.199 1.426c-4.656-11.458-8.87-23.478-11.844-35.757-2.84-11.726-20.7-4.755-13.193 7.534 6.728 11.014 10.423 22.734 15.333 33.45l-3.755 2.029c-4.147-7.946-9.49-18.942-12.688-27.773-4.367-12.061-17.99-4.35-11.511 5.75 5.638 8.786 11.416 19.885 16.371 31.559 8.568 20.185 16.607 39.393 32.106 34.809 13.611-4.026 22.022-5.192 29.942-7.11" fill="#c8f3ff" paint-order="stroke fill markers"/><path d="M108.474 34.899c-10.783-7.508-26.476-.671-19.391 27.975-15.919-4.239-31.056 15.994-22.261 28.671 8.488 12.231 23.579 15.574 27.951 14.513 20.166-4.885 11.508-46.194 13.701-71.16z" fill="#6594e5" paint-order="stroke fill markers"/><path d="M104.778 36.951c-11.978-7.074-17.352 5.361-11.293 29.773-15.919-4.239-29.905 11.439-26.663 24.822s13.828 15.301 27.348 12.026c18.3-4.433 8.415-41.654 10.608-66.621z" fill="#c8f3ff" paint-order="stroke fill markers"/><path d="M10.153 52.875c-5.933 10.276 0 37.189 19.771 40.955-10.356-7.69-19.928-23.694-19.77-40.955z" fill="#ffc2ee" paint-order="stroke markers fill"/><path d="M3.255 76.033c-3.22 7.77 3.601 24.25 19.846 22.962-8.007-3.158-16.952-11.811-19.846-22.962z" fill="#f63886" paint-order="stroke markers fill"/><path d="M95.796 5.877c11.462 3.071 26.296 26.296 14.979 42.94 1.886-12.76-2.663-30.846-14.98-42.94z" fill="#ffc2ee" paint-order="stroke markers fill"/><path d="M111.767 8.695c8.317 1.255 18.908 15.606 9.415 28.853 1.431-8.489-1.36-20.617-9.415-28.853z" fill="#f63886" paint-order="stroke markers fill"/></svg>
+      </div>
+      <div id="roomClosedMessage">Disconnected from server.</div>
+      <button type="button" onclick="location.reload()">Reload page</button>
+    </div>
+  </div>
+  <header>
+    <img id="logo" src="img/haitouch_logo_wide.svg">
+  </header>
+  <div id="main">
+    <div id="join">
+      <div class="letterCountSplit">
+        <label for="rc">Room code</label>
+        <span class="letterCount">0/4</span>
+      </div>
+      <input style="text-transform: uppercase;" name="rc" id="rc" type="text"
+      pattern="[A-Za-z]{4}" maxlength="4" title="4 capital letters." placeholder="ABCD">
+      <div id="roomName">...</div>
+      <div id="roomStatus">Room code must be 4 capital letters.</div>
+      <div class="letterCountSplit">
+        <label for="nick">Nickname <i>(optional)</i></label>
+        <span class="letterCount">0/12</span>
+      </div>
+      <input style="text-transform: uppercase;" name="nick" id="nick" type="text"
+      maxlength="12" title="Up to 12 letters, numbers, and limited symbols: !',-./?" placeholder="PLAYER">
+      <div id="joinStatus">Press button to join.</div>
+      <button id="btnJoin">Join room</button>
+      <div id="finePrint">
+        By clicking “Join room”, you agree to our <a href="https://haitouch.ga/tos">Terms of Service</a>.<br>
+        Created by <a href="https://haitouch.ga">hai!touch Studios</a> as <a href="https://github.com/JapanYoshi/haitouch-heroku/tree/render">free and open-source software</a><br>
+        Powered by <a href="https://firebase.google.com">Firebase Realtime Database</a>
+      </div>
+    </div>
+  </div>
+
 </body>
 
 </html>
