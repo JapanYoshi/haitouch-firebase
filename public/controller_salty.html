@@ -956,6 +956,9 @@
     console.log("database object =", window.fb_db);
     var scene = document.querySelector("article#standby");
     
+    /* DEBUG: Make the debug keypad visible */
+    document.getElementById("debugKeypad").style.display = "";
+    
     /* Change BBcode tags to HTML tags */
     function convertBB(bbcode) {
       if (typeof bbcode == "string") {
@@ -975,7 +978,52 @@
         return "Error in funtion convertBB"
       }
     }
+    /* New Firebase-based player initializer */
+    var ref_me = ref(window.fb_db, `rooms/${window.rc}/${window.isAudience ? "audience" : "players"}/${localStorage.getItem("name")/messages`);
+    get(ref_me).then(snapshot => {
+      if (!snapshot.exists()) {
+        console.error("Could not find ref_me");
+        return;
+      }
+      let val = snapshot.val();
+      document.getElementById('nickname').innerText = val.nick.toUpperCase();
+      if (val.playerIndex == -1) {
+        document.getElementById('game').classList.add('audience');
+        document.getElementById('playerNumber').style.backgroundPositionX = "100%";
+        document.getElementByDi('playerNumber').style.backgroundPositionY = "100%";
+      } else {
+        if (val.playerIndex == 0) {
+          document.getElementById("standby").classList.add('playerOne');
+          document.querySelector('.startGame').addEventListener('click', () => {
+            document.getElementById("standby").classList.remove('playerOne');
+            sendButton(5, 'start game');
+          })
+        }
+        document.getElementById('playerNumber').style.backgroundPositionX = (
+          25 * (
+            val.playerIndex < 4 ? val.playerIndex + 1 : val.playerIndex - 4
+          ) + "%"
+        );
+        document.getElementById('playerNumber').style.backgroundPositionY = (
+          val.playerIndex < 4 ?
+          '0%' : '100%'
+        );
+      }
+    });
+    /* New Firebase-based game event handler */
+    onValue(ref_me, (snapshot) => {
+      const data = snapshot.val();
+      // do stuff with it
+      console.log("ref me", data);
+    }
+    var ref_msg = ref(window.fb_db, `rooms/${window.rc}/messages`);
+    onValue(ref_msg, (snapshot) => {
+      const data = snapshot.val();
+      // do stuff with it
+      console.log("ref msg", data);
+    }
     /* Old Websocket-based game event handler */
+    /*
     window.gameSpecificHandler = (data) => {
       if (data.type == "sendToRoom" || data.type == "onMessage") {
         switch (data.action) {
@@ -1320,6 +1368,7 @@
       }
       return true;
     }
+    */
     function sendToHost(data) {
       // roomCode: string length 4
       // additional data with any keys

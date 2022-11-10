@@ -12,7 +12,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebas
 import { getDatabase, ref, onValue, get, push, update, child } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js"
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
 
-ready = false;
+var ready = false;
 
 const firebaseConfig = {
   apiKey: "AIzaSyCCQlFqG66ls0jNEeZDqv0F5V4d2l3mIPw",
@@ -120,6 +120,7 @@ Join request!
 TODO: Treat results.
 */
 function joinRoom(roomCode) {
+  window.rc = roomCode;
   console.log("Joining");
   btnJoin.innerText = "Please wait...";
   // write own username into 'pending', then listen for it to be removed after it being processed
@@ -135,6 +136,7 @@ function joinRoom(roomCode) {
     if (val.status == -1) {
       console.log("join rejected");
     } else {
+      window.isAudience = (val.status == 9);
       console.log("join permitted");
       replacePage();
     }
