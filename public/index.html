@@ -39,7 +39,6 @@ signInAnonymously(auth).then(
     console.error("Error signing in anonymously to Firebase Realtime Database.", error.code, error.message);
   }
 );
-
 let roomRef;
 let roomCodeList = {};
 let controllerPageName = "";
@@ -62,7 +61,7 @@ function formatRoomCode(text) {
   return text.toUpperCase();
 }
 
-const roomCodeRef = ref(window.fb_db, 'roomCodes');
+let roomCodeRef = ref(window.fb_db, 'roomCodes');
 onValue(roomCodeRef, (snapshot) => {
   roomCodeList = snapshot.val();
   console.log("Room codes updated on", new Date);  
@@ -120,6 +119,7 @@ Join request!
 TODO: Treat results.
 */
 function joinRoom(roomCode) {
+  btnJoin.disabled = true;
   window.rc = roomCode;
   console.log("Joining");
   btnJoin.innerText = "Please wait...";
@@ -135,9 +135,14 @@ function joinRoom(roomCode) {
     }
     if (val.status == -1) {
       console.log("join rejected");
+      btnJoin.disabled = false;
+      joinStatus = "Your join request was rejected.";
+      btnJoin.innerText = "Join room";
     } else {
       window.isAudience = (val.status == 9);
       console.log("join permitted");
+      joinStatus = "Loading game-specific controller...";
+      btnJoin.innerText = "Success!";
       replacePage();
     }
   });
@@ -255,6 +260,7 @@ function replacePage() {
     if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
       //console.log(xmlHttp.responseText);
       // manually extract the element div.game using specific comments
+      // this is pretty janky, so if you're looking at this, don't do this for your own projects
       let header = "<!--START INJECTED HTML-->"
       let start = xmlHttp.responseText.indexOf(header) + header.length;
       let end = xmlHttp.responseText.indexOf("<!--END INJECTED HTML-->");
@@ -314,7 +320,7 @@ document.getElementById("roomClosedBg").style.display = "none";
       <input style="text-transform: uppercase;" name="nick" id="nick" type="text"
       maxlength="12" title="Up to 12 letters, numbers, and limited symbols: !',-./?" placeholder="PLAYER">
       <div id="joinStatus">Press button to join.</div>
-      <button id="btnJoin">Join room</button>
+      <button id="btnJoin" disabled>Join room</button>
       <div id="finePrint">
         By clicking “Join room”, you agree to our <a href="https://haitouch.ga/tos">Terms of Service</a>.<br>
         Created by <a href="https://haitouch.ga">hai!touch Studios</a> as <a href="https://github.com/JapanYoshi/haitouch-heroku/tree/render">free and open-source software</a><br>

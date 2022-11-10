@@ -979,8 +979,9 @@
       }
     }
     /* New Firebase-based player initializer */
-    var ref_me = ref(window.fb_db, `rooms/${window.rc}/${window.isAudience ? "audience" : "players"}/${localStorage.getItem("name")/messages`);
+    var ref_me = ref(window.fb_db, `rooms/${window.rc}/${window.isAudience ? "audience" : "players"}/${localStorage.getItem("name")}/messages`);
     get(ref_me).then(snapshot => {
+      console.log("Player Init");
       if (!snapshot.exists()) {
         console.error("Could not find ref_me");
         return;
@@ -1015,13 +1016,13 @@
       const data = snapshot.val();
       // do stuff with it
       console.log("ref me", data);
-    }
+    });
     var ref_msg = ref(window.fb_db, `rooms/${window.rc}/messages`);
     onValue(ref_msg, (snapshot) => {
       const data = snapshot.val();
       // do stuff with it
       console.log("ref msg", data);
-    }
+    });
     /* Old Websocket-based game event handler */
     /*
     window.gameSpecificHandler = (data) => {
@@ -1516,11 +1517,23 @@
         finalize: !!finalize
       });
     }
+    
+    function debounce(func, timeout = 300){
+      let timer;
+      return (...args) => {
+        if (!timer) {
+          func.apply(this, args);
+        }
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          timer = undefined;
+        }, timeout);
+      };
+    }
 
     const sendTextContent = debounce(
-      updateText, 125, false
+      updateText, 125
     );
-
     
     /*
      *  If the nickname contains curly Unicode single quotes,
