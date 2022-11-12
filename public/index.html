@@ -136,12 +136,12 @@ function joinRoom(roomCode) {
     if (val.status == -1) {
       console.log("join rejected");
       btnJoin.disabled = false;
-      joinStatus = "Your join request was rejected.";
+      joinStatus.innerText = "Your join request was rejected.";
       btnJoin.innerText = "Join room";
     } else {
       window.isAudience = (val.status == 9);
       console.log("join permitted");
-      joinStatus = "Loading game-specific controller...";
+      joinStatus.innerText = "Loading game-specific controller...";
       btnJoin.innerText = "Success!";
       replacePage();
     }
