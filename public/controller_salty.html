@@ -1090,14 +1090,16 @@
       const data = snapshot.val();
       // do stuff with it
       console.log("ref msg", data);
-      data.forEach((m, _, _) => {
-        if (m.time > msg_timestamp) {
-          msg_timestamp = m.time;
-          onRoomMessage(m);
-        }
-      });
+      if (data !== null) {
+        data.forEach((m, _index, _array) => {
+          if (m.time > msg_timestamp) {
+            msg_timestamp = m.time;
+            onRoomMessage(m);
+          }
+        });
+      }
     });
-    onPlayerMessage = data => {
+    var onPlayerMessage = data => {
       switch (data.action) {
         case "none":
           return;
@@ -1108,26 +1110,33 @@
           return;
         case "gibYourTurn":
           console.log("IT'S YOUR TURN TO TYPE");
-          scene.querySelector('.buzzer').disabled = true;
+          var buzzer = scene.querySelector('.buzzer');
+          buzzer.disabled = true;
           setTimeout(() => {
-            scene.querySelector('.buzzer').disabled = false;
+            buzzer.disabled = false;
             scene.classList.add('canSubmit');
           }, 2000);
+          buzzer.innerText = "Finish typing (or press ⏎)";
           scene.classList.add('yourTurn');
           scene.querySelector('input').disabled = false;
           scene.querySelector('input').focus();
-          scene.querySelector('.buzzer').innerText = "Finish typing";
           return;
         default:
           console.error("Unimplemented player message action: " + data.action);
           return
       }
-    }
-    onRoomMessage = data => {
+    };
+    var onRoomMessage = data => {
       switch (data.sceneName) {
         case "intro":
+          document.querySelector(".startGame").display = "none";
           document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
           document.getElementById("standby").querySelector(".logoRound1").classList.add("active");
+          return;
+        case "round2":
+          document.querySelector(".startGame").display = "none";
+          document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
+          document.getElementById("standby").querySelector(".logoRound2").classList.add("active");
           return;
         case "lifesaver":
           document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
@@ -1203,6 +1212,7 @@
           if (scene.getElementsByClassName('correct').length > 0) {
             scene.getElementsByClassName('correct')[0].classList.remove("correct");
           }
+          scene.classList.add("buzzIn");
           return;
         case "sortAnswer":
           scene.classList.remove("buzzIn");
@@ -1221,7 +1231,7 @@
           scene.querySelector('input').classList.remove("correct");
           scene.querySelector('input').value = "";
           scene.querySelector('input').disabled = true;
-          scene.querySelector('buzzer').disabled = true;
+          scene.querySelector('.buzzer').disabled = true;
           if (document.getElementById('game').classList.contains('audience')) {
               console.log("Since you're in the Audience, you can answer the All Outta Salt any time.");
             scene.getElementsByClassName('buzzer')[0].innerText = "Audience members don't need to buzz in.";
@@ -1235,7 +1245,7 @@
           scene.querySelectorAll('.gibClue')[data.i].innerHTML = convertBB(data.t);
           return;
         case "correctReveal":
-          optionWrapper = scene.getElementsByClassName('options')[0];
+          var optionWrapper = scene.getElementsByClassName('options')[0];
           if (optionWrapper != undefined) {
             optionWrapper.getElementsByClassName('option')[data.index].classList.add('correct');
             optionWrapper.querySelectorAll('.option:not(.correct)').forEach((e, i) => { e.classList.add('incorrect') });
@@ -1245,7 +1255,7 @@
           }
           return;
         case "wrongReveal":
-          optionWrapper = scene.getElementsByClassName('options')[0];
+          var optionWrapper = scene.getElementsByClassName('options')[0];
           if (optionWrapper != undefined) {
             optionWrapper.getElementsByClassName('option')[data.index].classList.add('incorrect');
           } else {
