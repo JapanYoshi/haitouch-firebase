@@ -168,6 +168,29 @@
         text-shadow: 0 0 0.25rem var(--col-red);
       }
 
+      #headerLifesaver {
+        position: absolute;
+        width: 3rem;
+        height: 3rem;
+        top: 3rem;
+        right: 0rem;
+        display: none;
+      }
+
+      #headerLifesaver.lsAvailable {
+        display: block;
+      }
+
+      #headerLifesaverImg {
+        width: 3rem;
+        height: 3rem;
+      }
+
+      #headerLifesaver.lsAvailable #headerLifesaverImg {
+        animation: rotate-slowly 15s infinite linear;
+      }
+
+
       article {
         position: relative;
         display: block;
@@ -212,8 +235,11 @@
         max-width: 110vmax;
         max-height: 110vmax;
         transform: translate(-50%, -50%);
-        animation: rotate-slowly 60s infinite linear;
         mix-blend-mode: overlay;
+      }
+
+      .active #rush_bg {
+        animation: rotate-slowly 60s infinite linear;
       }
       
       article#rush.reveal #rush_bg {
@@ -757,6 +783,9 @@
       <div id="playerNumber"></div>
       <span id="nickname">SIGNING UP...</span>
       <span id="score">$0</span>
+      <div id="headerLifesaver">
+        <img id="headerLifesaverImg" src="salty/lifesaver.png"/>
+      </div>
     </header>
     <article class="active" id="standby">
       <div class="filter"></div>
@@ -957,7 +986,7 @@
     var scene = document.querySelector("article#standby");
     
     /* DEBUG: Make the debug keypad visible */
-    document.getElementById("debugKeypad").style.display = "";
+    //document.getElementById("debugKeypad").style.display = "";
     
     /* Change BBcode tags to HTML tags */
     function convertBB(bbcode) {
@@ -1018,6 +1047,7 @@
       "input": 0,
       "inputFinale": "000000",
       "inputText": "",
+      "lifesaver": false,
       "messages": {"action": "none"},
       "nick": "Φ",
       "playerNumber": -1,
@@ -1029,6 +1059,13 @@
       console.log("ref me", data);
       // do stuff with it
       // includes changes in score, input state, nickname, etc.
+      if (snapshotMe.lifesaver != data.lifesaver) {
+        if (data.lifesaver) {
+          document.getElementById("headerLifesaver").classList.add("lsAvailable");
+        } else {
+          document.getElementById("headerLifesaver").classList.remove("lsAvailable");
+        }
+      }
       if (snapshotMe.nick != data.nick) {
         document.getElementById("nickname").innerText = data.nick;
       }
