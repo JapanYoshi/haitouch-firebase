@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>hai!touch Gate</title>
   <meta property="og:title" value="hai!touch Gate">
-  <meta property="twitter:title" value="hai!touch Gate">
   <!-- boilerplate -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -16,16 +15,20 @@
   <!-- page metadata -->
   <meta name="description"
   content="Control games by hai!touch Studios using your phone, tablet, or computer browser.">
-<meta property="og:description"
-  content="Control games by hai!touch Studios using your phone, tablet, or computer browser.">
-<meta name="twitter:description"
+  <meta property="og:description"
   content="Control games by hai!touch Studios using your phone, tablet, or computer browser.">
   <!-- sharable image -->
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@hai1touch">
+  <meta name="twitter:creator" content="@hai1touch">
   <meta property="og:image" content="https://haitouch-9320f.web.app/twitter-card.png">
-  <meta name="twitter:image" content="https://haitouch-9320f.web.app/twitter-card.png">
 
   <link rel="stylesheet" href="client.css"/>
+  <script id="confirmLeave">
+    window.onbeforeunload = function () {
+      return "Are you sure you want to leave/reload this page?";
+    }
+  </script>
   <script type="module">
 // Firebase import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js"
@@ -277,6 +280,8 @@ inputNick.addEventListener('keypress', (e) => {
 
 // Once you join, replace the page's contents with the specified controller
 function replacePage() {
+  // set section tag to make rejoining easier
+  window.location.hash = window.rc;
   // fetch the controller file
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = () => {

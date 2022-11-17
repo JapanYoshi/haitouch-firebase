@@ -1041,374 +1041,311 @@
         };
         score.innerText = data.scoreText;
       }
-      if (snapshotMe.messages != data.messages) {
-        console.log("message manager not implemented")
+      if (snapshotMe.messages.time < data.messages.time) {
+        onPlayerMessage(data.messages);
       }
       // update local copy for next snapshot
       snapshotMe = data;
     });
+    var msg_timestamp = 0;
     var ref_msg = ref(window.fb_db, `rooms/${window.rc}/scene`);
     onValue(ref_msg, (snapshot) => {
       const data = snapshot.val();
       // do stuff with it
       console.log("ref msg", data);
-    });
-    /* Old Websocket-based game event handler */
-    /*
-    window.gameSpecificHandler = (data) => {
-      if (data.type == "sendToRoom" || data.type == "onMessage") {
-        switch (data.action) {
-          case undefined:
-            return true;
-            break
-          case "changeNick":
-            console.log("game-specific handling of message type " + data.type + ", action " + data.action);
-            document.getElementById('nickname').innerText = data.nick;
-            // set player number at the top of the screen
-            document.getElementById('playerNumber').style.backgroundPositionX = (
-              25 * (
-                data.playerIndex < 4 ?
-                data.playerIndex + 1 :
-                data.playerIndex - 4
-                ) + '%'
-              );
-            document.getElementById('playerNumber').style.backgroundPositionY = (
-              data.playerIndex < 4 ?
-              '0%' : '100%'
-            );
-            // also hide the lifesaver button if the player is audience (index 8)
-            if (data.playerIndex == 8) {
-              document.getElementById('game').classList.add('audience');
-            }
-            
-            // also show the start-game button if the player is player 1
-            if (data.isVip) {
-              document.getElementById("standby").classList.add('playerOne');
-              document.querySelector('.startGame').addEventListener('click', () => {
-                document.getElementById("standby").classList.remove('playerOne');
-                sendButton(5, 'start game');
-              })
-            }
-            return false;
-            break
-          case "gibYourTurn":
-            console.log("IT'S YOUR TURN TO TYPE");
-            scene.querySelector('.buzzer').disabled = true;
-            setTimeout(() => {
-              scene.querySelector('.buzzer').disabled = false;
-              scene.classList.add('canSubmit');
-            }, 2000);
-            scene.classList.add('yourTurn');
-            scene.querySelector('input').disabled = false;
-            scene.querySelector('input').focus();
-            scene.querySelector('.buzzer').innerText = "Finish typing";
-            break;
-          case "score":
-            console.log("Not implemented");
-            var score = document.getElementById("score");
-            if (data.value < 0) {
-              score.classList.add("negative");
-            } else {
-              score.classList.remove("negative");
-            };
-            score.innerText = data.formatted;
-            break;
-          case "changeScene":
-            switch (data.sceneName) {
-              case "intro":
-                document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
-                document.getElementById("standby").querySelector(".logoRound1").classList.add("active");
-                break;
-              case "lifesaver":
-                document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
-                document.getElementById("standby").querySelector(".logoLS").classList.add("active");
-                break;
-              case "enableBuzzIn":
-                scene.classList.add("buzzIn");
-                if (document.querySelector('article#gib.active')) {
-                  scene.classList.remove("qHidden");
-                  // let the audience members submit their own answers at any time
-                  if (document.getElementById('game').classList.contains('audience')) {
-                    console.log("Since you're in the Audience, you can answer the All Outta Salt any time.");
-                    scene.classList.remove("buzzIn");
-                    scene.classList.add('yourTurn');
-                    scene.querySelector('input').disabled = false;
-                    scene.querySelector('input').focus();
-                    scene.querySelector('.buzzer').innerText = "Final answer!";
-                  }
-                }
-                break;
-              case "disableBuzzIn":
-                scene.classList.remove("buzzIn");
-                break;
-              case "enableSkip":
-                if (document.getElementById('playerNumber').innerText != '8') {
-                  scene.classList.add("skippable");
-                }
-                break;
-              case "disableSkip":
-                scene.classList.remove("skippable");
-                break;
-              case "showQuestion":
-                scene.classList.remove("qHidden");
-                break;
-              case "endQuestion":
-                scene.classList.remove("active");
-                scene = document.querySelector("article#standby");
-                scene.querySelector(".logo.active").classList.remove("active");
-                scene.querySelector(".logoGame").classList.add("active");
-                scene.classList.add("active");
-                break;
-              case "normal":
-              case "candy":
-              case "rage":
-                scene.classList.remove("active");
-                scene = document.querySelector("article#normal");
-                scene.classList.remove("normal", "candy", "rage");
-                scene.classList.add("active", "qHidden", data.sceneName);
-
-                scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(data.question);
-                var options = scene.querySelectorAll(".option");
-                for (let i = 0; i < options.length; i++) {
-                  options[i].innerHTML = convertBB(data.options[i]);
-                  options[i].classList.remove('correct', 'incorrect');
-                };
-
-                break;
-              case "sort":
-                scene.classList.remove("active");
-                scene = document.querySelector("article#sort");
-                scene.classList.add("active", "qHidden");
-
-                scene.getElementsByClassName('sortA')[0].innerText = data.a
-                scene.getElementsByClassName('sortB')[0].innerText = data.b
-                if (data.hasBoth == true) {
-                  scene.getElementsByClassName('sortBoth')[0].style.display = "block";
-                } else {
-                  scene.getElementsByClassName('sortBoth')[0].style.display = "none";
-                }
-                break;
-              case "sortQuestion":
-                scene.classList.remove("qHidden");
-                scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(data.question);
-                if (scene.getElementsByClassName('correct').length > 0) {
-                  scene.getElementsByClassName('correct')[0].classList.remove("correct");
-                }
-                break;
-              case "sortAnswer":
-                scene.classList.remove("buzzIn");
-                switch (data.index) {
-                  case 0:
-                    scene.getElementsByClassName('sortA')[0].classList.add("correct");
-                    break;
-                  case 1:
-                    scene.getElementsByClassName('sortB')[0].classList.add("correct");
-                    break;
-                  case 2:
-                    scene.getElementsByClassName('sortBoth')[0].classList.add("correct");
-                    break;
-                }
-                break;
-              case "sortAcc":
-                scene.getElementsByClassName("questionText")[0].innerHTML =
-                  "Your accuracy was " + data.numerator + "/" + data.denominator + ".";
-                scene.getElementsByClassName('correct')[0].classList.remove("correct");
-                break;
-              case "gib":
-                scene.classList.remove("active");
-                scene = document.querySelector("article#gib");
-                scene.classList.add("active", "qHidden");
-
-                scene.getElementsByClassName('questionText')[0].innerText = data.question;
-                scene.querySelector('input').classList.remove("correct");
-                scene.querySelector('input').value = "";
-                scene.querySelector('input').disabled = true;
-                scene.querySelector('buzzer').disabled = true;
-                if (document.getElementById('game').classList.contains('audience')) {
-                    console.log("Since you're in the Audience, you can answer the All Outta Salt any time.");
-                  scene.getElementsByClassName('buzzer')[0].innerText = "Audience members don't need to buzz in.";
-                } else {
-                  scene.getElementsByClassName('buzzer')[0].innerText = "I know this one!";
-                }
-                for (let i = 0; i <= 2; i++) {scene.querySelectorAll('.gibClue')[i].innerHTML = `Wait for clue ${i+1}...`};
-                document.querySelector('#gib .buzzer').style.display = "";
-                break;
-              case "gibClue":
-                scene.querySelectorAll('.gibClue')[data.i].innerHTML = convertBB(data.t);
-                break;
-              case "correctReveal":
-                optionWrapper = scene.getElementsByClassName('options')[0];
-                if (optionWrapper != undefined) {
-                  optionWrapper.getElementsByClassName('option')[data.index].classList.add('correct');
-                  optionWrapper.querySelectorAll('.option:not(.correct)').forEach((e, i) => { e.classList.add('incorrect') });
-                } else {
-                  // will i actually use this or nah
-                  console.log("could not find optionWrapper");
-                }
-                break;
-              case "wrongReveal":
-                optionWrapper = scene.getElementsByClassName('options')[0];
-                if (optionWrapper != undefined) {
-                  optionWrapper.getElementsByClassName('option')[data.index].classList.add('incorrect');
-                } else {
-                  // will i actually use this or nah
-                  console.log("could not find optionWrapper");
-                }
-                break;
-              case "score":
-                var scoreElem = document.getElementById("score");
-                scoreElem.innerText = data.formatted;
-                if (data.score < 0) {
-                  scoreElem.classList.add("negative");
-                } else {
-                  scoreElem.classList.remove("negative");
-                }
-              case "gibReveal":
-                scene.classList.remove('buzzIn');
-                //scene.classList.add('qHidden');
-                scene.querySelector('input').classList.add('correct');
-                scene.querySelector('input').value = data.answer;
-                scene.querySelector('input').disabled = true;
-                break;
-              case "thousand":
-                scene.classList.remove("active");
-                scene = document.querySelector("article#thousand");
-                scene.classList.add("active", "qHidden");
-                console.log('data.question is', data.question, 'type of data.question is', typeof(data.question));
-                scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(data.question);
-                var options = scene.querySelectorAll(".option");
-                for (let i = 0; i < options.length; i++) {
-                  options[i].innerHTML = convertBB(data.options[i]);
-                  options[i].classList.remove('correct', 'incorrect');
-                };
-                if (document.getElementById('game').classList.contains('audience')) {
-                  console.log("Since you're in the Audience, you can answer the Thousand Question Question any time, but only get the normal amount.");
-                }
-                break;
-              case "rush":
-                scene.classList.remove("active");
-                document.getElementById("score").display = "none";
-                scene = document.querySelector("article#rush");
-                scene.classList.add("active", "qHidden");
-                scene.querySelector('.clue').innerHTML = convertBB(data.title);
-                scene.querySelector('.clue').style.display = "none";
-                break;
-              case "rushClue":
-                scene.querySelector('.clue').style.display = "block";
-                break;
-              case "rushSection":
-                scene.classList.remove('qHidden', 'reveal');
-                scene.querySelector('.questionText').innerHTML = convertBB(data.question);
-                var options = scene.querySelectorAll(".optionRush");
-                var ticks = scene.querySelectorAll("input[type=checkbox]");
-                for (let i = 0; i < options.length; i++) {
-                  options[i].innerHTML = "<span>"+convertBB(data.options[i])+"</span>";
-                  options[i].classList.remove('true', 'false');
-                  ticks[i].checked = false;
-                  ticks[i].disabled = true;
-                }
-                options[0].classList.add('selectable');
-                ticks[0].disabled = false;
-                for (let i = 1; i < 6; i++) {
-                  setTimeout(
-                    () => {
-                      options[i].classList.add('selectable');
-                      ticks[i].disabled = false;
-                    },
-                    (i * 2 - (i % 2)) * 15000.0/16.0
-                  );
-                }
-              break;
-              case "rushReveal":
-                scene.classList.add('reveal');
-                var options = scene.querySelectorAll(".optionRush");
-                var ticks = scene.querySelectorAll("input[type=checkbox]");
-                for (let i = 0; i < options.length; i++) {
-                  options[i].classList.remove('selectable');
-                  options[i].classList.add(
-                    data.answers[i] ? 'true': 'false'
-                  );
-                };
-                break;
-              case "like":
-                scene.classList.remove("active");
-                document.getElementById("score").display = "none";
-                scene = document.querySelector("article#like");
-                scene.classList.add("active", "qHidden");
-                scene.querySelector('.clue').innerHTML = convertBB(data.title);
-                scene.querySelector('.clue').style.display = "none";
-                break;
-              case "likeClue":
-                scene.querySelector('.clue').style.display = "block";
-                break;
-              case "likeOptions":
-                var options = scene.querySelectorAll('.optionLike');
-                for (let i = 0; i < options.length; i++) {
-                  options[i].innerHTML = "<span>" + convertBB(data.options[i]) + "</span>";
-                }
-              case "likeSection":
-                scene.classList.remove('qHidden', 'reveal');
-                scene.querySelector('.questionText').innerHTML = convertBB(data.question);
-                var options = scene.querySelectorAll(".optionRush");
-                var ticks = scene.querySelectorAll("input[type=checkbox]");
-                for (let i = 0; i < options.length; i++) {
-                  options[i].innerHTML = "<span>"+convertBB(data.options[i])+"</span>";
-                  options[i].classList.remove('true', 'false');
-                  ticks[i].checked = false;
-                  ticks[i].disabled = true;
-                }
-                options[0].classList.add('selectable');
-                ticks[0].disabled = false;
-                for (let i = 1; i < 4; i++) {
-                  options[i].classList.add('selectable');
-                  ticks[i].disabled = false;
-                }
-              break;
-              case "likeReveal":
-                scene.classList.add('reveal');
-                var options = scene.querySelectorAll(".optionRush");
-                var ticks = scene.querySelectorAll("input[type=checkbox]");
-                for (let i = 0; i < options.length; i++) {
-                  options[i].classList.remove('selectable');
-                  options[i].classList.add(
-                    data.answers[i] ? 'true': 'false'
-                  );
-                };
-                break;
-              case "finalResult":
-                console.log("LMAO YEET finalResult", data);
-                scene.classList.remove("active");
-                scene = document.getElementById("standby");
-                scene.classList.add("active");
-                document.getElementById("finalScore").innerText = data.resultAsText;
-                if (data.result < 0) {
-                  document.getElementById("finalResult").classList.add('negative');
-                }
-                document.getElementById("finalPlacement").innerText = data.comment;
-                setTimeout(() => {scene.classList.add('result')}, 5000);
-                break;
-              default:
-                console.error('sceneName is unrecognized: ' + data.sceneName);
-                return true;
-            }
-            break;
-          default:
-            return true; // undefined
+      data.forEach((m, _, _) => {
+        if (m.time > msg_timestamp) {
+          msg_timestamp = m.time;
+          onRoomMessage(m);
         }
-        return false; // no problem
+      });
+    });
+    onPlayerMessage = data => {
+      switch (data.action) {
+        case "none":
+          return;
+        case "sortAcc":
+          scene.getElementsByClassName("questionText")[0].innerHTML =
+            "Your accuracy was " + data.numerator + "/" + data.denominator + ".";
+          scene.getElementsByClassName('correct')[0].classList.remove("correct");
+          return;
+        case "gibYourTurn":
+          console.log("IT'S YOUR TURN TO TYPE");
+          scene.querySelector('.buzzer').disabled = true;
+          setTimeout(() => {
+            scene.querySelector('.buzzer').disabled = false;
+            scene.classList.add('canSubmit');
+          }, 2000);
+          scene.classList.add('yourTurn');
+          scene.querySelector('input').disabled = false;
+          scene.querySelector('input').focus();
+          scene.querySelector('.buzzer').innerText = "Finish typing";
+          return;
+        default:
+          console.error("Unimplemented player message action: " + data.action);
+          return
       }
-      return true;
     }
-    */
-    function sendToHost(data) {
-      // roomCode: string length 4
-      // additional data with any keys
-      data.type = 'sendToHost';
-      data.roomCode = sessionStorage.getItem("room");
-      data.from = localStorage.getItem("name");
-      //ws.send(JSON.stringify(data));
-      console.log("sent the following to host:", data);
-    }
+    onRoomMessage = data => {
+      switch (data.sceneName) {
+        case "intro":
+          document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
+          document.getElementById("standby").querySelector(".logoRound1").classList.add("active");
+          return;
+        case "lifesaver":
+          document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
+          document.getElementById("standby").querySelector(".logoLS").classList.add("active");
+          return;
+        case "enableBuzzIn":
+          scene.classList.add("buzzIn");
+          if (document.querySelector('article#gib.active')) {
+            scene.classList.remove("qHidden");
+            // let the audience members submit their own answers at any time
+            if (document.getElementById('game').classList.contains('audience')) {
+              console.log("Since you're in the Audience, you can answer the All Outta Salt any time.");
+              scene.classList.remove("buzzIn");
+              scene.classList.add('yourTurn');
+              scene.querySelector('input').disabled = false;
+              scene.querySelector('input').focus();
+              scene.querySelector('.buzzer').innerText = "Final answer!";
+            }
+          }
+          return;
+        case "disableBuzzIn":
+          scene.classList.remove("buzzIn");
+          return;
+        case "enableSkip":
+          if (document.getElementById('playerNumber').innerText != '8') {
+            scene.classList.add("skippable");
+          }
+          return;
+        case "disableSkip":
+          scene.classList.remove("skippable");
+          return;
+        case "showQuestion":
+          scene.classList.remove("qHidden");
+          return;
+        case "endQuestion":
+          scene.classList.remove("active");
+          scene = document.querySelector("article#standby");
+          scene.querySelector(".logo.active").classList.remove("active");
+          scene.querySelector(".logoGame").classList.add("active");
+          scene.classList.add("active");
+          return;
+        case "normal":
+        case "candy":
+        case "rage":
+          scene.classList.remove("active");
+          scene = document.querySelector("article#normal");
+          scene.classList.remove("normal", "candy", "rage");
+          scene.classList.add("active", "qHidden", data.sceneName);
+
+          scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(data.question);
+          var options = scene.querySelectorAll(".option");
+          for (let i = 0; i < options.length; i++) {
+            options[i].innerHTML = convertBB(data.options[i]);
+            options[i].classList.remove('correct', 'incorrect');
+          };
+          return;
+        case "sort":
+          scene.classList.remove("active");
+          scene = document.querySelector("article#sort");
+          scene.classList.add("active", "qHidden");
+
+          scene.getElementsByClassName('sortA')[0].innerText = data.a
+          scene.getElementsByClassName('sortB')[0].innerText = data.b
+          if (data.hasBoth == true) {
+            scene.getElementsByClassName('sortBoth')[0].style.display = "block";
+          } else {
+            scene.getElementsByClassName('sortBoth')[0].style.display = "none";
+          }
+          return;
+        case "sortQuestion":
+          scene.classList.remove("qHidden");
+          scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(data.question);
+          if (scene.getElementsByClassName('correct').length > 0) {
+            scene.getElementsByClassName('correct')[0].classList.remove("correct");
+          }
+          return;
+        case "sortAnswer":
+          scene.classList.remove("buzzIn");
+          let correctOne = scene.querySelector(
+            data.index === 0 ? 'sortA' :
+            data.index === 1 ? 'sortB' : 'sortBoth'
+          )
+          correctOne.classList.add("correct");
+          return;
+        case "gib":
+          scene.classList.remove("active");
+          scene = document.querySelector("article#gib");
+          scene.classList.add("active", "qHidden");
+
+          scene.getElementsByClassName('questionText')[0].innerText = data.question;
+          scene.querySelector('input').classList.remove("correct");
+          scene.querySelector('input').value = "";
+          scene.querySelector('input').disabled = true;
+          scene.querySelector('buzzer').disabled = true;
+          if (document.getElementById('game').classList.contains('audience')) {
+              console.log("Since you're in the Audience, you can answer the All Outta Salt any time.");
+            scene.getElementsByClassName('buzzer')[0].innerText = "Audience members don't need to buzz in.";
+          } else {
+            scene.getElementsByClassName('buzzer')[0].innerText = "I know this one!";
+          }
+          for (let i = 0; i <= 2; i++) {scene.querySelectorAll('.gibClue')[i].innerHTML = `Wait for clue ${i+1}...`};
+          document.querySelector('#gib .buzzer').style.display = "";
+          return;
+        case "gibClue":
+          scene.querySelectorAll('.gibClue')[data.i].innerHTML = convertBB(data.t);
+          return;
+        case "correctReveal":
+          optionWrapper = scene.getElementsByClassName('options')[0];
+          if (optionWrapper != undefined) {
+            optionWrapper.getElementsByClassName('option')[data.index].classList.add('correct');
+            optionWrapper.querySelectorAll('.option:not(.correct)').forEach((e, i) => { e.classList.add('incorrect') });
+          } else {
+            // will i actually use this or nah
+            console.log("could not find optionWrapper");
+          }
+          return;
+        case "wrongReveal":
+          optionWrapper = scene.getElementsByClassName('options')[0];
+          if (optionWrapper != undefined) {
+            optionWrapper.getElementsByClassName('option')[data.index].classList.add('incorrect');
+          } else {
+            // will i actually use this or nah
+            console.log("could not find optionWrapper");
+          }
+          return;
+        case "gibReveal":
+          scene.classList.remove('buzzIn');
+          //scene.classList.add('qHidden');
+          scene.querySelector('input').classList.add('correct');
+          scene.querySelector('input').value = data.answer;
+          scene.querySelector('input').disabled = true;
+          return;
+        case "thousand":
+          scene.classList.remove("active");
+          scene = document.querySelector("article#thousand");
+          scene.classList.add("active", "qHidden");
+          console.log('data.question is', data.question, 'type of data.question is', typeof(data.question));
+          scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(data.question);
+          var options = scene.querySelectorAll(".option");
+          for (let i = 0; i < options.length; i++) {
+            options[i].innerHTML = convertBB(data.options[i]);
+            options[i].classList.remove('correct', 'incorrect');
+          };
+          if (document.getElementById('game').classList.contains('audience')) {
+            console.log("Since you're in the Audience, you can answer the Thousand Question Question any time, but only get the normal amount.");
+          }
+          return;
+        case "rush":
+          scene.classList.remove("active");
+          document.getElementById("score").display = "none";
+          scene = document.querySelector("article#rush");
+          scene.classList.add("active", "qHidden");
+          scene.querySelector('.clue').innerHTML = convertBB(data.title);
+          scene.querySelector('.clue').style.display = "none";
+          return;
+        case "rushClue":
+          scene.querySelector('.clue').style.display = "block";
+          return;
+        case "rushSection":
+          scene.classList.remove('qHidden', 'reveal');
+          scene.querySelector('.questionText').innerHTML = convertBB(data.question);
+          var options = scene.querySelectorAll(".optionRush");
+          var ticks = scene.querySelectorAll("input[type=checkbox]");
+          for (let i = 0; i < options.length; i++) {
+            options[i].innerHTML = "<span>"+convertBB(data.options[i])+"</span>";
+            options[i].classList.remove('true', 'false');
+            ticks[i].checked = false;
+            ticks[i].disabled = true;
+          }
+          options[0].classList.add('selectable');
+          ticks[0].disabled = false;
+          for (let i = 1; i < 6; i++) {
+            setTimeout(
+              () => {
+                options[i].classList.add('selectable');
+                ticks[i].disabled = false;
+              },
+              (i * 2 - (i % 2)) * 15000.0/16.0
+            );
+          }
+          return;
+        case "rushReveal":
+          scene.classList.add('reveal');
+          var options = scene.querySelectorAll(".optionRush");
+          var ticks = scene.querySelectorAll("input[type=checkbox]");
+          for (let i = 0; i < options.length; i++) {
+            options[i].classList.remove('selectable');
+            options[i].classList.add(
+              data.answers[i] ? 'true': 'false'
+            );
+          };
+          return;
+        case "like":
+          scene.classList.remove("active");
+          document.getElementById("score").display = "none";
+          scene = document.querySelector("article#like");
+          scene.classList.add("active", "qHidden");
+          scene.querySelector('.clue').innerHTML = convertBB(data.title);
+          scene.querySelector('.clue').style.display = "none";
+          return;
+        case "likeClue":
+          scene.querySelector('.clue').style.display = "block";
+          return;
+        case "likeOptions":
+          var options = scene.querySelectorAll('.optionLike');
+          for (let i = 0; i < options.length; i++) {
+            options[i].innerHTML = "<span>" + convertBB(data.options[i]) + "</span>";
+          }
+          return;
+        case "likeSection":
+          scene.classList.remove('qHidden', 'reveal');
+          scene.querySelector('.questionText').innerHTML = convertBB(data.question);
+          var options = scene.querySelectorAll(".optionLike");
+          var ticks = scene.querySelectorAll("input[type=checkbox]");
+          for (let i = 0; i < options.length; i++) {
+            options[i].innerHTML = "<span>"+convertBB(data.options[i])+"</span>";
+            options[i].classList.remove('true', 'false');
+            ticks[i].checked = false;
+            ticks[i].disabled = true;
+          }
+          options[0].classList.add('selectable');
+          ticks[0].disabled = false;
+          for (let i = 1; i < 4; i++) {
+            options[i].classList.add('selectable');
+            ticks[i].disabled = false;
+          }
+          return;
+        case "likeReveal":
+          scene.classList.add('reveal');
+          var options = scene.querySelectorAll(".optionRush");
+          var ticks = scene.querySelectorAll("input[type=checkbox]");
+          for (let i = 0; i < options.length; i++) {
+            options[i].classList.remove('selectable');
+            options[i].classList.add(
+              data.answers[i] ? 'true': 'false'
+            );
+          };
+          return;
+        case "finalResult":
+          console.log("LMAO YEET finalResult", data);
+          scene.classList.remove("active");
+          scene = document.getElementById("standby");
+          scene.classList.add("active");
+          document.getElementById("finalScore").innerText = data.resultAsText;
+          if (data.result < 0) {
+            document.getElementById("finalResult").classList.add('negative');
+          }
+          document.getElementById("finalPlacement").innerText = data.comment;
+          setTimeout(() => {scene.classList.add('result')}, 5000);
+          return;
+        default:
+          console.error("Unimplemented sceneName: " + data.sceneName);
+          return;
+      }
+    };
     function sendButton(which, reason, aux = undefined) {
       let bit = 1 << which;
       update(ref_me, {"input": bit});
@@ -1546,10 +1483,8 @@
 
     const updateText = (finalize) => {
       console.log("Updating text content");
-      sendToHost({
-        action: 'updateText',
-        message: document.querySelector('#gib input').value
-      });
+      var text = document.querySelector('#gib input').value;
+      update(ref_me, {"inputText": text});
     }
     
     function debounce(func, timeout = 300){
@@ -1600,10 +1535,6 @@
         }
       }
     );
-
-    sendToHost({
-      'action': 'requestNick'
-    });
 
     /** END INJECTED SCRIPT **/
   </script>
