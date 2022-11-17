@@ -2,9 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>hai!touch Gate</title>
+  <meta property="og:title" value="hai!touch Gate">
+  <meta property="twitter:title" value="hai!touch Gate">
+  <!-- boilerplate -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>hai!touch Controller</title>
+  <!-- favicons -->
+  <link rel="icon" href="../favicon.ico" type="image/x-icon" sizes="16x16">
+  <link rel="icon" href="../favicon-128.png" sizes="128x128">
+  <link rel="icon" href="../favicon-180.png" sizes="180x180">
+  <link rel="icon" href="../favicon-192.png" sizes="192x192">
+  <!-- page metadata -->
+  <meta name="description"
+  content="Control games by hai!touch Studios using your phone, tablet, or computer browser.">
+<meta property="og:description"
+  content="Control games by hai!touch Studios using your phone, tablet, or computer browser.">
+<meta name="twitter:description"
+  content="Control games by hai!touch Studios using your phone, tablet, or computer browser.">
+  <!-- sharable image -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://haitouch-9320f.web.app/twitter-card.png">
+  <meta name="twitter:image" content="https://haitouch-9320f.web.app/twitter-card.png">
+
   <link rel="stylesheet" href="client.css"/>
   <script type="module">
 // Firebase import
@@ -27,6 +47,7 @@ const firebaseConfig = {
 window.fb_app = initializeApp(firebaseConfig);
 window.fb_db = getDatabase(window.fb_app);
 window.fb_dbRef = ref(window.fb_db);
+window.rc = "";
 
 const auth = getAuth();
 signInAnonymously(auth).then(
@@ -66,11 +87,12 @@ onValue(roomCodeRef, (snapshot) => {
   roomCodeList = snapshot.val();
   console.log("Room codes updated on", new Date);  
   // in case inputRc is not empty upon page load (browser remembered last room code)
-  validateChange();
+  //validateChange();
 });
 get(roomCodeRef).then(snapshot => {
   roomCodeList = snapshot.val();
   console.log("Room codes initialized on", new Date);
+  validateChange();
 });
 
 function roomExists(roomCode) {
@@ -118,9 +140,8 @@ const joinStatus = document.getElementById('joinStatus');
 Join request!
 TODO: Treat results.
 */
-function joinRoom(roomCode) {
+function joinRoom() {
   btnJoin.disabled = true;
-  window.rc = roomCode;
   console.log("Joining");
   btnJoin.innerText = "Please wait...";
   // write own username into 'pending', then listen for it to be removed after it being processed
@@ -175,6 +196,7 @@ function validateChange() {
     }
     roomName.innerText = "Fetching game name...";
     roomStatus.innerText = "...";
+    window.rc = rc;
     let roomData = getRoomData(rc);
     console.log(roomData);
     roomData.then(
@@ -226,6 +248,7 @@ function fixQuotes(el) {
   const quotes = /[\u2018\u2019\u201b]/g
   el.value = el.value.replaceAll(quotes, "'");
   el.value = el.value.replaceAll('\u201a', ",");
+  el.value = el.value.toUpperCase();
   //console.log("Fixed quotes:", el.value);
   el.setSelectionRange(start, end);
   document.querySelector("label[for=nick] + .letterCount").innerText = `${el.value.length}/12`;
@@ -323,7 +346,7 @@ document.getElementById("roomClosedBg").style.display = "none";
       <button id="btnJoin" disabled>Join room</button>
       <div id="finePrint">
         By clicking “Join room”, you agree to our <a href="https://haitouch.ga/tos">Terms of Service</a>.<br>
-        Created by <a href="https://haitouch.ga">hai!touch Studios</a> as <a href="https://github.com/JapanYoshi/haitouch-heroku/tree/render">free and open-source software</a><br>
+        Created by <a href="https://haitouch.ga">hai!touch Studios</a> as <a href="https://github.com/JapanYoshi/haitouch-firebase">free and open-source software</a><br>
         Powered by <a href="https://firebase.google.com">Firebase Realtime Database</a>
       </div>
     </div>

@@ -952,7 +952,7 @@
   <!--END INJECTED HTML-->
   <script type="module">
     /** START INJECTED SCRIPT **/
-    import { ref, onValue, get, push, update, child } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js"
+    import { ref, onValue, get, set, update, child } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js"
     console.log("database object =", window.fb_db);
     var scene = document.querySelector("article#standby");
     
@@ -979,7 +979,7 @@
       }
     }
     /* New Firebase-based player initializer */
-    var ref_me = ref(window.fb_db, `rooms/${window.rc}/${window.isAudience ? "audience" : "players"}/${localStorage.getItem("name")}/messages`);
+    var ref_me = ref(window.fb_db, `rooms/${window.rc}/${window.isAudience ? "audience" : "players"}/${localStorage.getItem("name")}`);
     get(ref_me).then(snapshot => {
       console.log("Player Init");
       if (!snapshot.exists()) {
@@ -987,13 +987,15 @@
         return;
       }
       let val = snapshot.val();
+      // What the hell is your content, bruh?
+      console.log("Player init val", val);
       document.getElementById('nickname').innerText = val.nick.toUpperCase();
-      if (val.playerIndex == -1) {
+      if (val.playerNumber == -1) {
         document.getElementById('game').classList.add('audience');
         document.getElementById('playerNumber').style.backgroundPositionX = "100%";
-        document.getElementByDi('playerNumber').style.backgroundPositionY = "100%";
+        document.getElementById('playerNumber').style.backgroundPositionY = "100%";
       } else {
-        if (val.playerIndex == 0) {
+        if (val.playerNumber == 0) {
           document.getElementById("standby").classList.add('playerOne');
           document.querySelector('.startGame').addEventListener('click', () => {
             document.getElementById("standby").classList.remove('playerOne');
@@ -1002,22 +1004,50 @@
         }
         document.getElementById('playerNumber').style.backgroundPositionX = (
           25 * (
-            val.playerIndex < 4 ? val.playerIndex + 1 : val.playerIndex - 4
+            val.playerNumber < 4 ? val.playerNumber + 1 : val.playerNumber - 4
           ) + "%"
         );
         document.getElementById('playerNumber').style.backgroundPositionY = (
-          val.playerIndex < 4 ?
+          val.playerNumber < 4 ?
           '0%' : '100%'
         );
       }
     });
     /* New Firebase-based game event handler */
+    var snapshotMe = {
+      "input": 0,
+      "inputFinale": "000000",
+      "inputText": "",
+      "messages": {"action": "none"},
+      "nick": "Φ",
+      "playerNumber": -1,
+      "score": -1,
+      "scoreText": "$0"
+    }
     onValue(ref_me, (snapshot) => {
       const data = snapshot.val();
-      // do stuff with it
       console.log("ref me", data);
+      // do stuff with it
+      // includes changes in score, input state, nickname, etc.
+      if (snapshotMe.nick != data.nick) {
+        document.getElementById("nickname").innerText = data.nick;
+      }
+      if (snapshotMe.score != data.score) {
+        var score = document.getElementById("score");
+        if (data.score < 0) {
+          score.classList.add("negative");
+        } else {
+          score.classList.remove("negative");
+        };
+        score.innerText = data.scoreText;
+      }
+      if (snapshotMe.messages != data.messages) {
+        console.log("message manager not implemented")
+      }
+      // update local copy for next snapshot
+      snapshotMe = data;
     });
-    var ref_msg = ref(window.fb_db, `rooms/${window.rc}/messages`);
+    var ref_msg = ref(window.fb_db, `rooms/${window.rc}/scene`);
     onValue(ref_msg, (snapshot) => {
       const data = snapshot.val();
       // do stuff with it
@@ -1376,19 +1406,24 @@
       data.type = 'sendToHost';
       data.roomCode = sessionStorage.getItem("room");
       data.from = localStorage.getItem("name");
-      ws.send(JSON.stringify(data));
+      //ws.send(JSON.stringify(data));
       console.log("sent the following to host:", data);
     }
     function sendButton(which, reason, aux = undefined) {
-      let data = {
-        action: 'buttonPress',
-        which: which,
-        reason: reason
-      };
-      if (aux != undefined) {
-        data.aux = aux;
+      let bit = 1 << which;
+      update(ref_me, {"input": bit});
+      console.debug(`Pressed button ${which} with reason ${reason}.`);
+    }
+    function reflectFinaleButton(mode) {
+      // selects all checkboxes in the currently active question type page
+      let elems = querySelectorAll(".active input[type=checkbox]");
+      let text = "";
+      for (let i = 0; i < len(elems); i++) {
+        // appends "1" if checked, "0" if not
+        text += elems[i].checked ? "1" : "0";
       }
-      sendToHost(data)
+      update(ref_me, {"inputFinale": text});
+      console.debug(`Reflected button state of finale question: ${text}.`);
     }
     /* Add event handlers to send input */
     /* Debug keypad */
@@ -1475,7 +1510,7 @@
         if (document.getElementById("gib").classList.contains('buzzIn')) {
           sendButton(5, 'all outta salt buzz in');
         } else if (document.getElementById('gib').classList.contains('gibSubmit')) {
-          updateText(true);
+          sendButton(5, 'all outta salt finished');
           document.querySelector('#gib .buzzer').style.display = "none";
         }
       }
@@ -1486,7 +1521,7 @@
         let tick = document.getElementById(el.htmlFor);
         if (!tick.disabled) {
           el.classList.add('pressed')
-          sendButton(i, tick.checked ? 'rush false' : 'rush true', +!tick.checked);
+          reflectfinaleButton()
           setTimeout(() => {
             el.classList.remove('pressed')
           }, 50);
@@ -1500,7 +1535,7 @@
         let tick = document.getElementById(el.htmlFor);
         if (!tick.disabled) {
           el.classList.add('pressed')
-          sendButton(2 * i + 1 - 3 * (i == 3), tick.checked ? 'like false' : 'like true', +!tick.checked);
+          reflectfinaleButton()
           setTimeout(() => {
             el.classList.remove('pressed')
           }, 50);
@@ -1513,8 +1548,7 @@
       console.log("Updating text content");
       sendToHost({
         action: 'updateText',
-        message: document.querySelector('#gib input').value,
-        finalize: !!finalize
+        message: document.querySelector('#gib input').value
       });
     }
     
@@ -1532,7 +1566,7 @@
     }
 
     const sendTextContent = debounce(
-      updateText, 125
+      updateText, 200
     );
     
     /*
@@ -1561,7 +1595,7 @@
       'keyup', (e) => {
         console.log("Keypress", e.which);
         if (e.which == 13) {
-          updateText(true);
+          sendButton(5, "gib done submit by pressing enter");
           document.querySelector('#gib .buzzer').style.display = "none";
         }
       }
