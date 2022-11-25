@@ -141,6 +141,18 @@ const inputNick = document.getElementById('nick');
 const btnJoin = document.getElementById('btnJoin');
 const joinStatus = document.getElementById('joinStatus');
 
+/* Autofill upon reload */
+document.addEventListener("DOMContentLoaded", () => {
+  var rc = window.location.hash
+    .substring(1) // starts with a literal "#"
+    .toUpperCase();
+  if (/^[A-Z]{4}$/.test(rc)) {
+    inputRc.value = rc;
+  } else {
+    inputRc.value = "";
+  }
+});
+
 /*
 Join request!
 TODO: Treat results.

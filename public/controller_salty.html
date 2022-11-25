@@ -110,15 +110,29 @@
 
       .filter {
         background-image: url("salty/noise.png");
-        background-size: cover;
+        background-size: 32rem;
         background-position: center;
-        opacity: 0.3;
+        background-repeat: repeat;
         position: absolute;
         top: 0;
         left: 0;
         bottom: 0;
         right: 0;
+      }
+
+      article.active > .filter {
+        opacity: 0.3;
         mix-blend-mode: overlay;
+        animation: float-anim 30s infinite linear;
+      }
+
+      @keyframes float-anim {
+        from {
+          background-position-y: 32rem;
+        }
+        to {
+          background-position-y: 0rem;
+        }
       }
 
       header {
@@ -187,7 +201,7 @@
       }
 
       #headerLifesaver.lsAvailable #headerLifesaverImg {
-        animation: rotate-slowly 15s infinite linear;
+        animation: rot-anim 15s infinite linear;
       }
 
 
@@ -239,14 +253,14 @@
       }
 
       .active #rush_bg {
-        animation: rotate-slowly 60s infinite linear;
+        animation: rot-anim 60s infinite linear;
       }
       
       article#rush.reveal #rush_bg {
         opacity: 0;
       }
 
-      @keyframes rotate-slowly {
+      @keyframes rot-anim {
         from {
           transform: translate(-50%, -50%) rotate(0deg);
         } to {
@@ -258,18 +272,17 @@
         background-color: #205fd2
       }
 
-      article#normal.candy .logoCandy {
-        display: block;
-      }
-
-      article#normal:not(.candy) .logoCandy {
-        display: none;
-      }
-
+      
+      article#normal .logoGame,
+      article#normal.candy .logoCandy,
       article#normal.rage .logoRage {
         display: block;
+        opacity: 1;
       }
-
+      
+      article#normal.candy .logoGame,
+      article#normal.rage .logoGame,
+      article#normal:not(.candy) .logoCandy,
       article#normal:not(.rage) .logoRage {
         display: none;
       }
@@ -291,7 +304,8 @@
       }
 
       article#normal.rage {
-        background-color: #a95c72;
+        background: #fd0;
+        background: linear-gradient(0deg, #fd0 0%, #e30 28%, #500 65%, #000 100%);
       }
 
       article#sorta {
@@ -667,8 +681,8 @@
         display: block;
         flex-grow: 0;
         flex-shrink: 0;
-        width: 3rem;
-        height: 3rem;
+        width: 2rem;
+        height: 2rem;
         margin: -0.5rem;
         margin-right: 0.5rem;
         color: transparent;
@@ -719,7 +733,6 @@
         text-align: center;
         background: var(--green-gradient);
         padding: 1rem;
-        border-radius: 1rem;
         box-shadow: 0rem 0.5rem 2rem black;
       }
 
@@ -1048,7 +1061,7 @@
       "inputFinale": "000000",
       "inputText": "",
       "lifesaver": false,
-      "messages": {"action": "none"},
+      "messages": {"action": "none", "time": 0},
       "nick": "Φ",
       "playerNumber": -1,
       "score": -1,
@@ -1056,7 +1069,7 @@
     }
     onValue(ref_me, (snapshot) => {
       const data = snapshot.val();
-      console.log("ref me", data);
+      //console.log("ref me", data);
       // do stuff with it
       // includes changes in score, input state, nickname, etc.
       if (snapshotMe.lifesaver != data.lifesaver) {
@@ -1089,7 +1102,7 @@
     onValue(ref_msg, (snapshot) => {
       const data = snapshot.val();
       // do stuff with it
-      console.log("ref msg", data);
+      //console.log("ref msg", data);
       if (data !== null) {
         data.forEach((m, _index, _array) => {
           if (m.time > msg_timestamp) {
@@ -1100,6 +1113,7 @@
       }
     });
     var onPlayerMessage = data => {
+      console.log("onPlayerMessage", data.action);
       switch (data.action) {
         case "none":
           return;
@@ -1121,20 +1135,32 @@
           scene.querySelector('input').disabled = false;
           scene.querySelector('input').focus();
           return;
+        case "finalResult":
+          console.log("LMAO YEET finalResult", data);
+          scene.classList.remove("active");
+          scene = document.getElementById("standby");
+          scene.classList.add("active");
+          document.getElementById("finalScore").innerText = data.resultAsText;
+          if (data.result < 0) {
+            document.getElementById("finalResult").classList.add('negative');
+          }
+          document.getElementById("finalPlacement").innerText = data.comment;
+          return;
         default:
           console.error("Unimplemented player message action: " + data.action);
           return
       }
     };
     var onRoomMessage = data => {
+      console.log("onRoomMessage", data.sceneName);
       switch (data.sceneName) {
         case "intro":
-          document.querySelector(".startGame").display = "none";
+          document.querySelector(".startGame").style.display = "none";
           document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
           document.getElementById("standby").querySelector(".logoRound1").classList.add("active");
           return;
         case "round2":
-          document.querySelector(".startGame").display = "none";
+          document.querySelector(".startGame").style.display = "none";
           document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
           document.getElementById("standby").querySelector(".logoRound2").classList.add("active");
           return;
@@ -1142,9 +1168,19 @@
           document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
           document.getElementById("standby").querySelector(".logoLS").classList.add("active");
           return;
+        case "gameEnd":
+          document.querySelector(".startGame").style.display = "none";
+          document.getElementById("score").style.display = "none";
+          document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
+          document.getElementById("standby").querySelector(".logoGame").classList.add("active");
+          return;
+        case "showResult":
+          scene.classList.add('result');
+          return;
         case "enableBuzzIn":
           scene.classList.add("buzzIn");
           if (document.querySelector('article#gib.active')) {
+            document.querySelector("#gib .buzzer").disabled = false;
             scene.classList.remove("qHidden");
             // let the audience members submit their own answers at any time
             if (document.getElementById('game').classList.contains('audience')) {
@@ -1216,10 +1252,10 @@
           return;
         case "sortAnswer":
           scene.classList.remove("buzzIn");
-          let correctOne = scene.querySelector(
-            data.index === 0 ? 'sortA' :
-            data.index === 1 ? 'sortB' : 'sortBoth'
-          )
+          let correctOne = scene.querySelector('.sort' + (
+            data.index === 0 ? 'A' :
+            data.index === 1 ? 'B' : 'Both'
+          ))
           correctOne.classList.add("correct");
           return;
         case "gib":
@@ -1231,7 +1267,7 @@
           scene.querySelector('input').classList.remove("correct");
           scene.querySelector('input').value = "";
           scene.querySelector('input').disabled = true;
-          scene.querySelector('.buzzer').disabled = true;
+          
           if (document.getElementById('game').classList.contains('audience')) {
               console.log("Since you're in the Audience, you can answer the All Outta Salt any time.");
             scene.getElementsByClassName('buzzer')[0].innerText = "Audience members don't need to buzz in.";
@@ -1239,7 +1275,7 @@
             scene.getElementsByClassName('buzzer')[0].innerText = "I know this one!";
           }
           for (let i = 0; i <= 2; i++) {scene.querySelectorAll('.gibClue')[i].innerHTML = `Wait for clue ${i+1}...`};
-          document.querySelector('#gib .buzzer').style.display = "";
+          document.querySelector('#gib .buzzer').disabled = true;
           return;
         case "gibClue":
           scene.querySelectorAll('.gibClue')[data.i].innerHTML = convertBB(data.t);
@@ -1287,7 +1323,7 @@
           return;
         case "rush":
           scene.classList.remove("active");
-          document.getElementById("score").display = "none";
+          document.getElementById("score").style.display = "none";
           scene = document.querySelector("article#rush");
           scene.classList.add("active", "qHidden");
           scene.querySelector('.clue').innerHTML = convertBB(data.title);
@@ -1332,17 +1368,17 @@
           return;
         case "like":
           scene.classList.remove("active");
-          document.getElementById("score").display = "none";
+          document.getElementById("score").style.display = "none";
           scene = document.querySelector("article#like");
           scene.classList.add("active", "qHidden");
-          scene.querySelector('.clue').innerHTML = convertBB(data.title);
           scene.querySelector('.clue').style.display = "none";
+          scene.querySelector('.clue').innerHTML = convertBB(data.title);
           return;
         case "likeClue":
           scene.querySelector('.clue').style.display = "block";
           return;
         case "likeOptions":
-          var options = scene.querySelectorAll('.optionLike');
+          var options = scene.querySelectorAll('.optionRush');
           for (let i = 0; i < options.length; i++) {
             options[i].innerHTML = "<span>" + convertBB(data.options[i]) + "</span>";
           }
@@ -1350,18 +1386,13 @@
         case "likeSection":
           scene.classList.remove('qHidden', 'reveal');
           scene.querySelector('.questionText').innerHTML = convertBB(data.question);
-          var options = scene.querySelectorAll(".optionLike");
+          var options = scene.querySelectorAll(".optionRush");
           var ticks = scene.querySelectorAll("input[type=checkbox]");
           for (let i = 0; i < options.length; i++) {
             options[i].innerHTML = "<span>"+convertBB(data.options[i])+"</span>";
             options[i].classList.remove('true', 'false');
-            ticks[i].checked = false;
-            ticks[i].disabled = true;
-          }
-          options[0].classList.add('selectable');
-          ticks[0].disabled = false;
-          for (let i = 1; i < 4; i++) {
             options[i].classList.add('selectable');
+            ticks[i].checked = false;
             ticks[i].disabled = false;
           }
           return;
@@ -1371,22 +1402,11 @@
           var ticks = scene.querySelectorAll("input[type=checkbox]");
           for (let i = 0; i < options.length; i++) {
             options[i].classList.remove('selectable');
+            ticks[i].disabled = true;
             options[i].classList.add(
               data.answers[i] ? 'true': 'false'
             );
           };
-          return;
-        case "finalResult":
-          console.log("LMAO YEET finalResult", data);
-          scene.classList.remove("active");
-          scene = document.getElementById("standby");
-          scene.classList.add("active");
-          document.getElementById("finalScore").innerText = data.resultAsText;
-          if (data.result < 0) {
-            document.getElementById("finalResult").classList.add('negative');
-          }
-          document.getElementById("finalPlacement").innerText = data.comment;
-          setTimeout(() => {scene.classList.add('result')}, 5000);
           return;
         default:
           console.error("Unimplemented sceneName: " + data.sceneName);
@@ -1398,11 +1418,11 @@
       update(ref_me, {"input": bit});
       console.debug(`Pressed button ${which} with reason ${reason}.`);
     }
-    function reflectFinaleButton(mode) {
+    function reflectFinaleButton() {
       // selects all checkboxes in the currently active question type page
-      let elems = querySelectorAll(".active input[type=checkbox]");
+      let elems = document.querySelectorAll(".active input[type=checkbox]");
       let text = "";
-      for (let i = 0; i < len(elems); i++) {
+      for (let i = 0; i < elems.length; i++) {
         // appends "1" if checked, "0" if not
         text += elems[i].checked ? "1" : "0";
       }
@@ -1427,7 +1447,7 @@
       el.addEventListener('click', () => {
         sendButton(5, 'skip');
       })
-    })
+    });
 
     /* Option buttons */
     let options = document.querySelectorAll('#normal .option, #thousand .option');
@@ -1493,7 +1513,7 @@
       'click', () => {
         if (document.getElementById("gib").classList.contains('buzzIn')) {
           sendButton(5, 'all outta salt buzz in');
-        } else if (document.getElementById('gib').classList.contains('gibSubmit')) {
+        } else if (document.getElementById('gib').classList.contains('canSubmit')) {
           sendButton(5, 'all outta salt finished');
           document.querySelector('#gib .buzzer').style.display = "none";
         }
@@ -1505,11 +1525,11 @@
         let tick = document.getElementById(el.htmlFor);
         if (!tick.disabled) {
           el.classList.add('pressed')
-          reflectfinaleButton()
+          console.log("Toggled option " + (i + 1) + " o" + (tick.checked ? "ff" : "n"))
           setTimeout(() => {
+            reflectFinaleButton()
             el.classList.remove('pressed')
           }, 50);
-          console.log("Toggled option " + (i + 1) + " o" + (tick.checked ? "ff" : "n"))
         }
       });
     })
@@ -1519,8 +1539,8 @@
         let tick = document.getElementById(el.htmlFor);
         if (!tick.disabled) {
           el.classList.add('pressed')
-          reflectfinaleButton()
           setTimeout(() => {
+            reflectFinaleButton()
             el.classList.remove('pressed')
           }, 50);
           console.log("Toggled option " + (i + 1) + " o" + (tick.checked ? "ff" : "n"))
@@ -1539,16 +1559,17 @@
       return (...args) => {
         if (!timer) {
           func.apply(this, args);
+          //clearTimeout(timer);
+          timer = setTimeout(() => {
+            timer = undefined;
+            func.apply(this, args);
+          }, timeout);
         }
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-          timer = undefined;
-        }, timeout);
       };
     }
 
     const sendTextContent = debounce(
-      updateText, 200
+      updateText, 80
     );
     
     /*
