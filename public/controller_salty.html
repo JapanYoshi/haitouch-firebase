@@ -332,6 +332,14 @@
             #050c17 100%);
       }
 
+      article#brain {
+        background-color: #664a1f;
+        background: radial-gradient(circle,
+            #664a1f 0%,
+            #31210f 50%,
+            #1c120c 100%);
+      }
+
       article#rush.reveal {
         background: white;
       }
@@ -377,6 +385,105 @@
         display: block;
       }
 
+      .questionCardsFlex {
+        --dog-ear: 0.7rem;
+        margin: 0.5rem auto 0;
+        width: min(100vw, 30rem);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .qHidden .questionCardsFlex {
+        opacity: 0.25;
+      }
+
+      .questionCardBlank, .questionCard, .questionCardSource {
+        text-align: center;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .questionCardBG {
+        width: 16rem;
+        height: 16rem;
+        background: white;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(3rem, calc(3rem + var(--dog-ear))) rotate(45deg);
+        transform-origin: top right;
+        z-index: 1;
+      }
+      
+      .questionCardsFlex:first-child .questionCard .questionCardBG {
+        background: #e9d651;
+        background: linear-gradient(0deg, #feffc0 0%, #fff58b 40%, #e9d651 80%); 
+      }
+
+      .questionCardsFlex:nth-child(2) .questionCard .questionCardBG {
+        background: #e951be;
+        background: linear-gradient(0deg, #fdc0ff 0%, #ff8bf5 40%, #e951be 80%);
+      }
+
+      .questionCardsFlex:nth-child(3) .questionCard .questionCardBG {
+        background: #51e9e4;
+        background: linear-gradient(0deg, #dbfffe 0%, #94fff9 40%, #51e9e4 80%);
+      }
+      
+      .questionCardSource .questionCardBG {
+        width: 8rem;
+        height: 6rem;
+        background: #d4d4d3;
+        background: linear-gradient(0deg, #ffffff 0%, #d4d4d3 80%); 
+      }
+      
+      .questionCardText::before {
+        display: block;
+        content: "";
+        width: 0;
+        height: 0;
+        border-right: var(--dog-ear) solid transparent;
+        border-bottom: var(--dog-ear) solid white;
+        box-shadow: -1px 1px 1px rgba(0,0,0,0.15);
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 3;
+      }
+
+      .questionCardsFlex:first-child .questionCard .questionCardText::before {
+        border-bottom-color: #fff58b;
+      }
+
+      .questionCardsFlex:nth-child(2) .questionCard .questionCardText::before {
+        border-bottom-color: #ff8bf5;
+      }
+
+      .questionCardsFlex:nth-child(3) .questionCard .questionCardText::before {
+        border-bottom-color: #94fff9;
+      }
+
+      .questionCardBlank, .questionCardSource {
+        flex: 4rem 0 0;
+      }
+
+      .questionCard {
+        flex: 0px 1 0;
+        margin-left: 0.5rem;
+      }
+
+      .questionCardText {
+        position: relative;
+        z-index: 2;
+        padding: 1rem;
+        color: black;
+      }
+      
+      .qHidden .questionCardText {
+        color: transparent;
+      }
+
       .question {
         flex: 0 1 auto;
         max-height: 15vh;
@@ -387,6 +494,10 @@
         color: black;
         font-size: 1rem;
         overflow-y: auto;
+      }
+
+      .questionCardsFlex + .question {
+        margin-top: 0.5rem;
       }
 
       .questionText {
@@ -446,14 +557,16 @@
       }
 
       #normal .option.correct,
-      #thousand .option.correct {
+      #thousand .option.correct,
+      #brain .option.correct {
         opacity: 1;
         background: var(--green-gradient);
         color: white;
       }
 
       #normal .option.incorrect,
-      #thousand .option.incorrect {
+      #thousand .option.incorrect,
+      #brain .option.incorrect {
         opacity: 1;
         background: var(--red-gradient);
         color: black;
@@ -800,7 +913,7 @@
         <img id="headerLifesaverImg" src="salty/lifesaver.png"/>
       </div>
     </header>
-    <article class="active" id="standby">
+    <article id="standby" class="active">
       <div class="filter"></div>
       <div class="logo active logoGame" style="background-image: url('salty/logo_game.png')"></div>
       <div class="logo logoLS" style="background-image: url('salty/lifesavers.png')"></div>
@@ -925,6 +1038,88 @@
           </div>
           <div class="option">
             4
+          </div>
+        </div>
+      </div>
+      <div class="skipButton">Yeah, we all get it</div>
+    </article>
+    <article id="brain">
+      <div class="filter"></div>
+      <div class="logo active" style="background-image: url('salty/logo_brain.png')"></div>
+      <div class="filter"></div>
+      <div class="questionFlex">
+        <div class="questionCardsFlex">
+          <div class="questionCardBlank"></div>
+          <div class="questionCard">
+            <div class="questionCardBG"></div>
+            <div class="questionCardText">A</div>
+          </div>
+          <div class="questionCard">
+            <div class="questionCardBG"></div>
+            <div class="questionCardText">B</div>
+          </div>
+        </div><div class="questionCardsFlex">
+          <div class="questionCardSource">
+            <div class="questionCardBG"></div>
+            <div class="questionCardText">?</div>
+          </div>
+          <div class="questionCard">
+            <div class="questionCardBG"></div>
+            <div class="questionCardText">Cao eu aoeu aou aoeu aoeu aoeu aoeu aoeu aeo u</div>
+          </div>
+          <div class="questionCard">
+            <div class="questionCardBG"></div>
+            <div class="questionCardText">D</div>
+          </div>
+        </div><div class="questionCardsFlex">
+          <div class="questionCardBlank"></div>
+          <div class="questionCard">
+            <div class="questionCardBG"></div>
+            <div class="questionCardText">E</div>
+          </div>
+          <div class="questionCard">
+            <div class="questionCardBG"></div>
+            <div class="questionCardText">F</div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="questionText">
+            Q
+          </div>
+        </div>
+        <div class="options">
+          <div class="option">
+            1
+          </div>
+          <div class="option">
+            2
+          </div>
+          <div class="option">
+            3
+          </div>
+          <div class="option">
+            4
+          </div>
+        </div>
+        <div class="btnLifesaver">
+          <img src="salty/lifesaver.png"> Use a Lifesaver (eliminate 2 choices)
+        </div>
+      </div>
+    </article>
+    <article id="sort">
+      <div class="filter"></div>
+      <div class="logo active" style="background-image: url('salty/logo_sorta.png')"></div>
+      <div class="questionFlex">
+        <div class="question">
+          <div class="questionText">
+            Q
+          </div>
+        </div>
+        <div class="sortBox">
+          <div class="sortBoth">both</div>
+          <div class="sortAB">
+            <div class="sortA">a</div>
+            <div class="sortB">b</div>
           </div>
         </div>
       </div>
@@ -1229,6 +1424,21 @@
             options[i].classList.remove('correct', 'incorrect');
           };
           return;
+        case "brain":
+          scene.classList.remove("active");
+          scene = document.querySelector("article#brain");
+          scene.classList.add("active", "qHidden");
+          var cards = scene.querySelectorAll(".questionCard .questionCardText");
+          for (let i = 0; i < 6; i++) {
+            cards[i].innerHTML = convertBB(data.cards[i]);
+          }
+          scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(data.question);
+          var options = scene.querySelectorAll(".option");
+          for (let i = 0; i < options.length; i++) {
+            options[i].innerHTML = convertBB(data.options[i]);
+            options[i].classList.remove('correct', 'incorrect');
+          };
+          return;
         case "sort":
           scene.classList.remove("active");
           scene = document.querySelector("article#sort");
@@ -1449,8 +1659,8 @@
       })
     });
 
-    /* Option buttons */
-    let options = document.querySelectorAll('#normal .option, #thousand .option');
+    // Option buttons
+    let options = document.querySelectorAll('#normal .option, #thousand .option, #brain .option');
     options.forEach((el, i) => {
       el.addEventListener('click', () => {
         if (scene.classList.contains('buzzIn') && !(el.classList.contains('incorrect'))) {
@@ -1464,15 +1674,36 @@
         }
       });
     })
+    // just for fun, tilt each note card in Big Brain Storming randomly
+    document.querySelectorAll(".questionCardsFlex > *").forEach(
+      (el, i) => {
+        el.style.transform = `rotate(${Math.cos(i + 1) * 1.5}deg)`;
+      }
+    )
+    // Lifesaver buttons
     document.querySelector('#normal .btnLifesaver').addEventListener(
       'click', () => {
         if (document.getElementById("normal").classList.contains('buzzIn')) {
           document.getElementById("normal").classList.remove('buzzIn');
           sendButton(0, 'lifesaver normal question');
-          document.querySelector('#normal .btnLifesaver').style.display = "none";
+          document.querySelectorAll('.btnLifesaver').forEach(
+            (el) => {el.style.display = "none";}
+          )
         }
       }
     )
+    document.querySelector('#brain .btnLifesaver').addEventListener(
+      'click', () => {
+        if (document.getElementById("brain").classList.contains('buzzIn')) {
+          document.getElementById("brain").classList.remove('buzzIn');
+          sendButton(0, 'lifesaver brain question');
+          document.querySelectorAll('.btnLifesaver').forEach(
+            (el) => {el.style.display = "none";}
+          )
+        }
+      }
+    )
+    // Sorta buttons
     document.querySelector('#sort .sortA').addEventListener(
       'click', () => {
         if (document.getElementById("sort").classList.contains('buzzIn')) {
@@ -1509,6 +1740,7 @@
         }
       }
     )
+    // AOS buzzer button
     document.querySelector('#gib .buzzer').addEventListener(
       'click', () => {
         if (document.getElementById("gib").classList.contains('buzzIn')) {
@@ -1519,6 +1751,7 @@
         }
       }
     )
+    // Sugar Rush and Like/Leave option toggles
     options = document.querySelectorAll('#rush .optionRush');
     options.forEach((el, i) => {
       el.addEventListener('click', () => {
