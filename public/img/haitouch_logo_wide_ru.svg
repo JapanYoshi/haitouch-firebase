@@ -23,15 +23,15 @@
      inkscape:pagecheckerboard="1"
      inkscape:deskcolor="#505050"
      showgrid="false"
-     inkscape:zoom="2.0590276"
-     inkscape:cx="219.27827"
-     inkscape:cy="102.96122"
-     inkscape:window-width="1350"
-     inkscape:window-height="1041"
+     inkscape:zoom="2.9119048"
+     inkscape:cx="344.44808"
+     inkscape:cy="93.066231"
+     inkscape:window-width="1920"
+     inkscape:window-height="1027"
      inkscape:window-x="-8"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="eQDJpaBvkjY1" />
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g49" />
   <style
      id="style2"><![CDATA[
 
@@ -68,7 +68,8 @@
     }
 
     #exclam {
-      animation: exclam_c_o 10000ms linear infinite normal forwards
+      animation: exclam_c_o 10000ms linear infinite normal forwards;
+      will-change: opacity
     }
 
     @keyframes exclam_c_o {
@@ -224,11 +225,11 @@
       }
 
       45% {
-        transform: translate(219px, 100px)
+        transform: translate(229px, 100px)
       }
 
       85% {
-        transform: translate(219px, 100px);
+        transform: translate(229px, 100px);
         animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
       }
 
@@ -256,11 +257,11 @@
       }
 
       48% {
-        transform: translate(285px, 100px)
+        transform: translate(298px, 100px)
       }
 
       88% {
-        transform: translate(285px, 100px);
+        transform: translate(298px, 100px);
         animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
       }
 
@@ -279,191 +280,162 @@
 
     @keyframes g_move {
       0% {
-        transform: translate(233px)
+        transform: translate(206px);
       }
-
+      
       38% {
-        transform: translate(233px);
+        transform: translate(206px);
         animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
       }
 
       48% {
-        transform: translate(237px)
+        transform: translate(248px)
       }
 
       88% {
-        transform: translate(237px);
+        transform: translate(248px);
         animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
       }
 
       98% {
-        transform: translate(233px)
+        transform: translate(206px)
       }
 
-      100% {
-        transform: translate(233px)
+      to {
+        transform: translate(206px)
       }
     }
 
-    #a_left_group {
-      animation: a_left_move 10000ms linear infinite normal forwards
+    #a_group {
+      animation: a_move 10000ms linear infinite normal forwards
     }
 
-    @keyframes a_left_move {
+    @keyframes a_move {
       0% {
-        transform: translate(260px)
+        transform: translate(230px)
       }
 
       38% {
-        transform: translate(260px);
+        transform: translate(230px);
         animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
       }
 
       48% {
-        transform: translate(266px)
+        transform: translate(276px)
       }
 
       88% {
-        transform: translate(266px);
+        transform: translate(276px);
         animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
       }
 
       98% {
-        transform: translate(260px)
+        transform: translate(230px)
       }
 
       100% {
-        transform: translate(260px)
+        transform: translate(230px)
       }
     }
-    #v_group {
-      animation: v_move 10000ms linear infinite normal forwards
+    #l_group {
+      animation: l_move 10000ms linear infinite normal forwards
     }
 
-    @keyframes v_move {
+    @keyframes l_move {
       0% {
-        transform: translate(287px)
+        transform: translate(257px)
       }
 
       38% {
-        transform: translate(287px);
+        transform: translate(257px);
         animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
       }
 
       48% {
-        transform: translate(302px)
+        transform: translate(313px)
       }
 
       88% {
-        transform: translate(302px);
+        transform: translate(313px);
         animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
       }
 
       98% {
-        transform: translate(287px)
+        transform: translate(257px)
       }
 
       100% {
-        transform: translate(287px)
+        transform: translate(257px)
       }
     }
 
-    #a_right_group {
-      animation: a_right_move 10000ms linear infinite normal forwards
+    #ya_group {
+      animation: ya_move 10000ms linear infinite normal forwards
     }
 
-    @keyframes a_right_move {
+    @keyframes ya_move {
       0% {
-        transform: translate(315px)
+        transform: translate(285px)
       }
 
       38% {
-        transform: translate(315px);
+        transform: translate(285px);
         animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
       }
 
       48% {
-        transform: translate(328px)
-      }
-
-      88% {
-        transform: translate(328px);
-        animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
-      }
-
-      98% {
-        transform: translate(315px)
-      }
-
-      100% {
-        transform: translate(315px)
-      }
-    }
-    #n_group {
-      animation: n_move 10000ms linear infinite normal forwards
-    }
-
-    @keyframes n_move {
-      0% {
         transform: translate(344px)
       }
 
-      38% {
+      88% {
         transform: translate(344px);
         animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
       }
 
-      48% {
-        transform: translate(357px)
-      }
-
-      88% {
-        transform: translate(357px);
-        animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
-      }
-
       98% {
-        transform: translate(344px)
+        transform: translate(285px)
       }
 
       100% {
-        transform: translate(344px)
+        transform: translate(285px)
       }
     }
-    #soft_group {
-      animation: soft_move 10000ms linear infinite normal forwards
+
+    #igrat {
+      animation: igrat_move 10000ms linear infinite normal forwards
     }
 
-    @keyframes soft_move {
+    @keyframes igrat_move {
       0% {
-        transform: translate(371px)
+        transform: translate(356px)
       }
 
       38% {
-        transform: translate(371px);
+        transform: translate(356px);
         animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
       }
 
       48% {
-        transform: translate(375px)
+        transform: translate(360px)
       }
 
       88% {
-        transform: translate(375px);
+        transform: translate(360px);
         animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1)
       }
 
       98% {
-        transform: translate(371px)
+        transform: translate(356px)
       }
 
       100% {
-        transform: translate(371px)
+        transform: translate(356px)
       }
     }
 
     #dot, #slash {
-      animation: dot_fade 10000ms linear infinite normal forwards
+      animation: dot_fade 10000ms linear infinite normal forwards;
+      will-change: opacity;
     }
 
     @keyframes dot_fade {
@@ -493,7 +465,7 @@
         opacity: 0
       }
     }
-    #g_cyrl, #v_cyrl, #n_cyrl, #soft_cyrl {
+    #g_cyrl, #l_cyrl, #ya, #igrat_comma, #igrat_word {
       animation: cyrl_flip 10000ms linear infinite normal forwards
     }
 
@@ -525,7 +497,7 @@
       }
     }
 
-    #g_latn, #v_latn, #n_latn, #soft_latn {
+    #g_latn, #l_latn, #y, #a_right {
       animation: latn_flip 10000ms linear infinite normal forwards
     }
 
@@ -557,10 +529,11 @@
       }
     }
 
-    #g_cyrl,    #g_latn    {animation-delay: 0ms}
-    #v_cyrl,    #v_latn    {animation-delay: 60ms}
-    #n_cyrl,    #n_latn    {animation-delay: 120ms}
-    #soft_cyrl, #soft_latn {animation-delay: 180ms}
+    #g_cyrl,      #g_latn    {animation-delay: 0ms}
+    #l_cyrl,      #l_latn    {animation-delay: 60ms}
+    #ya,          #y         {animation-delay: 120ms}
+    #igrat_comma, #a_right   {animation-delay: 180ms}
+    #igrat_word              {animation_delay: 240ms}
 
     #hai_text_to {
       animation: hai_text_to__to 10000ms linear infinite normal forwards
@@ -685,7 +658,7 @@
     <g
        id="dot_to"
        inkscape:label="dot"
-       transform="translate(219,100)">
+       transform="translate(236,100)">
       <path
          id="dot"
          d="m 5.85601,10.93329 c 0,-4.176 -2.64,-5.568 -5.184,-5.712 -4.224,-0.24 -6.528,2.064 -6.528,5.856 0,3.408 2.64,5.616 5.088,5.712 4.272,0.144 6.624,-2.112 6.624,-5.856 z"
@@ -693,7 +666,7 @@
     </g>
     <g
        id="slash_to"
-       transform="translate(275,100)"
+       transform="translate(296,100)"
        inkscape:label="slash">
       <path
          id="slash"
@@ -702,77 +675,68 @@
     </g>
     <g
        id="g_group"
-       transform="translate(233)">
+       transform="translate(250.00718)">
+      <path
+         d="m 9.9932181,92.696907 0.8639999,-9.312 -20.0159999,1.152 -0.048,31.008003 h 8.35199998 c 0.096,-5.232 0.24,-13.056 0.384,-23.520003 z"
+         id="g_cyrl"
+         style="font-size:48px;line-height:1.2;font-family:'Tobi Greek Cyrillic';-inkscape-font-specification:'Tobi Greek Cyrillic, Normal';font-feature-settings:'ss01';text-align:center;letter-spacing:0px;text-anchor:middle;display:inline;fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers"
+         inkscape:label="g_cyrl" />
       <path
          d="m 12.21644,92.379531 -7.872,0.432 0.048,2.256 c -1.296,-1.584 -3.408,-2.304 -6.336,-2.16 -2.64,0.144 -4.896,1.152 -6.768,3.024 -1.872,1.872 -2.784,4.511999 -2.784,7.871999 0,3.264 0.864,5.904 2.592,7.968 1.776,2.064 4.224,3.072 7.392,3.024 2.544,0 4.416,-0.672 5.616,-1.968 0,3.408 -2.064,4.896 -4.608,5.136 -0.432,0.192 -1.776,-0.096 -2.16,-0.096 -0.384,0.048 -1.584,-0.336 -1.92,-0.384 -0.24,0 -1.344,-0.48 -1.536,-0.528 -0.192,-0.048 -1.152,-0.528 -1.2,-0.528 l -1.728,7.44 c 2.496,1.392 5.472,2.064 8.928,2.064 4.128,0 7.152,-1.104 9.12,-3.312 1.92,-2.112 2.928,-5.472 2.976,-10.128 z m -11.904,7.392 c 2.16,0 3.888,1.823999 3.888,4.271999 0,2.304 -1.728,4.176 -3.888,4.176 -2.448,0 -4.032,-1.68 -4.032,-4.176 0,-2.448 1.728,-4.271999 4.032,-4.271999 z"
          id="g_latn"
-         style="font-size:48px;line-height:1.2;font-family:'Tobi Greek Cyrillic';-inkscape-font-specification:'Tobi Greek Cyrillic, Normal';font-feature-settings:'ss01';text-align:center;letter-spacing:0px;text-anchor:middle;transform: scale(0, 1);fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers"
-         inkscape:label="g_latn" />
-      <path
-         d="m -8.84759,115.65953 h 8.496 l 0.192,-14.976 9.408,-0.336 -0.048,-7.967999 -18.288,0.816 z"
-         id="g_cyrl"
          style="font-size:48px;line-height:1.2;font-family:'Tobi Greek Cyrillic';-inkscape-font-specification:'Tobi Greek Cyrillic, Normal';font-feature-settings:'ss01';text-align:center;letter-spacing:0px;text-anchor:middle;fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers"
-         inkscape:label="g_cyrl" />
+         inkscape:label="g_latn" />
     </g>
     <g
-       id="a_left_group"
-       transform="translate(260)">
+       id="a_group"
+       transform="translate(278)"
+       style="display:inline">
       <path
          d="m 4.64844,115.65953 h 7.104 l 0.384,-23.567999 -8.784,0.672 -0.096,2.4 c -1.2,-1.92 -3.744,-2.832 -6.192,-2.784 -2.88,0.048 -5.328,1.056 -7.296,2.928 -1.968,1.872 -2.976,4.847999 -2.976,8.975999 0,3.984 0.96,6.96 2.88,8.976 1.968,1.968 4.368,3.024 7.248,3.168 2.544,0.144 5.52,-0.672 7.056,-2.4 z m -5.136,-16.031999 c 2.352,0 4.08,1.871999 4.032,4.799999 0,2.544 -1.584,4.752 -4.032,4.752 -2.448,0 -4.176,-2.016 -4.176,-4.752 0,-3.024 1.728,-4.799999 4.176,-4.799999 z"
-         id="a_left"
-         style="font-size:48px;line-height:1.2;font-family:'Tobi Greek Cyrillic';-inkscape-font-specification:'Tobi Greek Cyrillic, Normal';font-feature-settings:'ss01';text-align:center;letter-spacing:0px;text-anchor:middle;fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers"
-         inkscape:label="a_left" />
+         id="a"
+         style="fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers"
+         inkscape:label="a" />
     </g>
     <g
-       id="v_group"
-       transform="translate(287)">
+       id="l_group"
+       transform="translate(308)">
       <path
-         d="m 3.28848,92.571531 -3.456,15.359999 -3.168,-15.839999 -9.072,1.2 6.432,22.367999 h 11.088 l 7.392,-22.895999 z"
-         id="v_latn"
-         style="font-size:48px;line-height:1.2;font-family:'Tobi Greek Cyrillic';-inkscape-font-specification:'Tobi Greek Cyrillic, Normal';font-feature-settings:'ss01';text-align:center;letter-spacing:0px;text-anchor:middle;transform: scale(0, 1);fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers"
-         inkscape:label="v_latn" />
+         d="m 3.3574955,99.19813 -0.144,16.08 h 8.4479995 l 0.288,-23.28 -19.0559995,0.816 c 0.192,2.304 0.288,4.656 0.096,8.304 -0.144,3.6 -1.152,6.24 -2.928,6.432 -0.8160005,0.096 -1.5360005,-0.096 -2.1600005,-0.528 l -1.536,7.2 c 1.488,1.44 3.6,2.064 6.3360005,1.872 3.216,-0.192 5.376,-2.208 6.57599995,-6.048 0.672,-2.16 1.056,-5.664 1.2,-10.56 z"
+         id="l_cyrl"
+         style="fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers" />
       <path
-         d="m 11.61646,97.131531 c -0.24,-1.872 -1.44,-3.216 -3.552,-4.032 -2.064,-0.816 -4.608,-1.296 -7.536,-1.344 -1.584,-0.048 -3.264,0.048 -5.088,0.24 -1.776,0.144 -3.216,0.336 -4.32,0.576 -1.056,0.192 -1.584,0.336 -1.584,0.384 l 0.576,23.039999 c 3.216,0.768 6.72,1.056 10.416,0.864 5.856,-0.24 11.76,-2.064 12.048,-7.776 0.144,-2.064 -0.528,-3.552 -2.016,-4.512 -0.528,-0.384 -1.248,-0.624 -2.208,-0.72 0.72,-0.336 1.344,-0.768 1.968,-1.392 1.2,-1.392 1.632,-3.167999 1.296,-5.327999 z m -13.728,0.528 c 1.44,-0.288 2.64,-0.288 3.648,-0.048 1.104,0.24 1.872,1.008 1.872,1.92 0.096,1.727999 -1.392,2.399999 -2.784,2.591999 -0.768,0.144 -2.256,0.192 -2.496,0.24 z m 0.288,9.407999 c 2.16,-0.336 5.712,-0.624 5.808,1.776 0.144,1.728 -1.152,2.448 -2.88,2.688 -0.768,0.144 -1.68,0.096 -2.688,-0.144 z"
-         id="v_cyrl"
-         style="font-size:48px;line-height:1.2;font-family:'Tobi Greek Cyrillic';-inkscape-font-specification:'Tobi Greek Cyrillic, Normal';font-feature-settings:'ss01';text-align:center;letter-spacing:0px;text-anchor:middle;fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers"
-         inkscape:label="v_cyrl" />
+         d="m 3.7970062,114.27812 0.192,-32.591998 -8.736,0.816 0.624,31.775998 z"
+         id="l_latn"
+         style="fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers" />
     </g>
     <g
-       id="a_right_group"
-       transform="translate(315)">
+       id="ya_group"
+       transform="translate(339)">
       <path
-         d="m 5.63245,115.65953 h 7.104 l 0.384,-23.567999 -8.784,0.672 -0.096,2.4 c -1.2,-1.92 -3.744,-2.832 -6.192,-2.784 -2.88,0.048 -5.328,1.056 -7.296,2.928 -1.968,1.872 -2.976,4.847999 -2.976,8.975999 0,3.984 0.96,6.96 2.88,8.976 1.968,1.968 4.368,3.024 7.248,3.168 2.544,0.144 5.52,-0.672 7.056,-2.4 z m -5.136,-16.031999 c 2.352,0 4.08,1.871999 4.032,4.799999 0,2.544 -1.584,4.752 -4.032,4.752 -2.448,0 -4.176,-2.016 -4.176,-4.752 0,-3.024 1.728,-4.799999 4.176,-4.799999 z"
+         d="m -2.4269828,92.38127 -8.7840002,1.008 -0.336,12.672 c -0.624,0.528 -1.296,0.768 -2.016,0.768 -1.44,0 -2.112,-0.912 -2.064,-2.688 l 0.336,-11.76 -8.88,1.008 -0.096,11.76 c 0,2.352 0.288,4.032 0.816,5.136 1.152,2.208 3.312,3.312 6.528,3.264 2.208,0 4.08,-0.576 5.568,-1.68 h 0.048 c 0,3.936 -1.68,5.904 -4.992,5.952 -1.68,0 -3.648,-0.48 -5.952,-1.392 l -1.728,7.392 c 2.832,1.584 6.096,2.256 9.744,2.112 3.984,-0.096 6.9600002,-1.44 8.9280002,-4.032 0.816,-1.056 1.392,-2.256 1.776,-3.552 0.336,-1.2 0.528,-3.456 0.624,-6.672 z"
+         id="y"
+         style="fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers" />
+      <path
+         d="m 17.780977,115.66127 h 7.104 l 0.384,-23.568 -8.784,0.672 -0.096,2.4 c -1.2,-1.92 -3.744,-2.832 -6.192,-2.784 -2.8800001,0.048 -5.3280001,1.056 -7.2960001,2.928 -1.96799997,1.872 -2.97599997,4.848 -2.97599997,8.976 0,3.984 0.96,6.96 2.87999997,8.976 1.968,1.968 4.368,3.024 7.2480001,3.168 2.544,0.144 5.52,-0.672 7.056,-2.4 z m -5.136,-16.032 c 2.352,0 4.08,1.872 4.032,4.8 0,2.544 -1.584,4.752 -4.032,4.752 -2.448,0 -4.1760001,-2.016 -4.1760001,-4.752 0,-3.024 1.7280001,-4.8 4.1760001,-4.8 z"
          id="a_right"
-         style="font-size:48px;line-height:1.2;font-family:'Tobi Greek Cyrillic';-inkscape-font-specification:'Tobi Greek Cyrillic, Normal';font-feature-settings:'ss01';text-align:center;letter-spacing:0px;text-anchor:middle;fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers"
-         inkscape:label="a_right" />
+         style="fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers" />
+      <path
+         d="m -12.205175,113.02127 6.5280002,3.984 7.344,-8.352 h 0.624 l 0.192,7.056 h 8.0639998 l 0.624,-22.896 c -2.7359998,-0.816 -6.1439998,-1.248 -10.17599979,-1.392 -3.45600001,-0.048 -6.19200001,0.432 -8.16000001,1.44 -3.0240002,1.584 -4.4640002,3.888 -4.3200002,6.96 0.24,3.696 2.1120002,6.048 5.6160002,7.056 z m 14.7360002,-9.264 c -1.58399999,0.048 -3.02399999,-0.192 -4.32,-0.72 -1.248,-0.576 -1.824,-1.488 -1.728,-2.784 0.096,-1.344 0.816,-2.208 2.16,-2.544 1.39200001,-0.384 2.688,-0.336 3.936,0.144 z"
+         id="ya"
+         style="fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers" />
     </g>
     <g
-       id="n_group"
-       transform="translate(344)">
+       aria-label=", играть!"
+       id="igrat"
+       style="fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers"
+       transform="translate(347)">
       <path
-         d="m 4.43248,92.043531 c -2.592,0 -4.896,1.296 -6.864,3.936 v -3.504 l -8.448,0.816 0.336,22.367999 h 7.968 l 0.096,-13.824 c 0.912,-1.296 1.872,-1.967999 2.976,-1.919999 1.392,0.048 2.16,1.247999 2.208,3.599999 0.048,2.256 -0.096,5.424 -0.288,8.736 l -0.144,3.408 h 8.544 c 0.336,-3.36 0.48,-7.248 0.48,-11.712 0,-2.928 -0.096,-4.895999 -0.672,-7.007999 -0.288,-1.104 -0.672,-1.968 -1.152,-2.64 -0.96,-1.344 -2.688,-2.256 -5.04,-2.256 z"
-         id="n_latn"
-         style="font-size:48px;line-height:1.2;font-family:'Tobi Greek Cyrillic';-inkscape-font-specification:'Tobi Greek Cyrillic, Normal';font-feature-settings:'ss01';text-align:center;letter-spacing:0px;text-anchor:middle;transform: scale(0, 1);fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers"
-         inkscape:label="n_latn" />
+         d="m -53.379039,113.45327 c -0.128,-2.08 -1.44,-3.264 -3.104,-3.264 -1.536,0 -2.784,1.088 -2.912,2.912 -0.096,1.664 0.896,2.912 2.592,2.912 0.032,0.416 -0.192,0.96 -0.672,1.632 -0.48,0.672 -1.088,1.216 -1.76,1.632 l 1.792,1.984 c 1.184,-0.864 2.112,-1.856 2.784,-2.912 0.928,-1.6 1.376,-3.232 1.28,-4.896 z"
+         id="igrat_comma" />
       <path
-         d="m 11.60847,92.043531 -8.496,0.672 -0.336,8.543999 -5.424,0.24 0.336,-9.743999 -9.264,1.296 1.056,22.607999 h 7.2 l 0.288,-6.816 5.424,-0.192 -0.24,7.008 h 7.728 z"
-         id="n_cyrl"
-         style="font-size:48px;line-height:1.2;font-family:'Tobi Greek Cyrillic';-inkscape-font-specification:'Tobi Greek Cyrillic, Normal';font-feature-settings:'ss01';text-align:center;letter-spacing:0px;text-anchor:middle;fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers"
-         inkscape:label="n_cyrl" />
-    </g>
-    <g
-       id="soft_group"
-       transform="translate(371)">
-      <path
-         d="m 4.2005,85.659531 c -0.192,-2.832 -1.968,-4.368 -4.128,-4.368 -2.064,0 -3.744,1.44 -3.888,3.888 -0.144,2.16 1.152,3.888 3.408,3.888 0.144,1.152 -1.44,3.216 -3.216,4.368 l 2.4,2.64 c 1.584,-1.2 2.832,-2.496 3.696,-3.888 1.248,-2.064 1.824,-4.224 1.728,-6.528 z"
-         id="soft_latn"
-         style="font-size:48px;line-height:1.2;font-family:'Tobi Greek Cyrillic';-inkscape-font-specification:'Tobi Greek Cyrillic, Normal';font-feature-settings:'ss01';text-align:center;letter-spacing:0px;text-anchor:middle;transform: scale(0, 1);fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers"
-         inkscape:label="soft_latn" />
-      <path
-         d="m -2.44752,92.523531 -8.448,0.864 c 0.384,7.199999 0.72,14.495999 1.056,21.839999 3.312,0.864 6.528,1.248 9.6,1.104 3.216,-0.144 5.904,-0.96 8.016,-2.4 2.688,-1.92 4.032,-4.512 4.032,-7.776 0,-5.184 -3.072,-8.447999 -8.208,-8.399999 -2.16,0 -4.08,0.48 -5.856,1.392 z m 0.432,12.527999 c 0.816,-0.624 1.728,-0.912 2.736,-0.912 1.728,0 2.784,1.2 2.784,2.784 0.048,1.872 -1.296,3.024 -3.264,3.216 -0.576,0.048 -1.248,0 -2.016,-0.144 z"
-         id="soft_cyrl"
-         style="font-size:48px;line-height:1.2;font-family:'Tobi Greek Cyrillic';-inkscape-font-specification:'Tobi Greek Cyrillic, Normal';font-feature-settings:'ss01';text-align:center;letter-spacing:0px;text-anchor:middle;fill:#dad5dc;stroke:#56405c;stroke-width:4;stroke-linejoin:round;paint-order:stroke fill markers"
-         inkscape:label="soft_cyrl" />
+         id="igrat_word"
+         style="stroke:none"
+         d="m 48.656335,93.260514 0.41602,14.880856 5.08789,-0.22461 0.73633,-14.656246 z m -90.867273,6.464843 -6.175781,0.863283 0.703125,15.07226 h 4.800782 l 4.640624,-7.07226 -0.255859,7.07226 h 5.439453 l 0.958985,-15.744136 -5.375,0.449216 -5.056641,7.80664 z m 35.055811,0.126953 c -1.823998,-0.032 -3.359423,0.57667 -4.607422,1.88867 l 0.03125,-1.69531 -5.919922,0.60742 0.03125,21.1836 h 5.3125 l 0.19336,-7.61524 c 0.991999,1.12 2.430361,1.66361 4.318359,1.59961 2.207998,-0.064 3.872188,-0.86439 4.992187,-2.40039 1.119999,-1.568 1.664063,-3.48702 1.664063,-5.79102 0,-4.47999 -1.919629,-7.64934 -6.015625,-7.77734 z m 23.530842,0.09766 -5.855469,0.44726 -0.06445,1.59961 c -0.799999,-1.28 -2.494955,-1.88747 -4.126953,-1.85547 -1.919998,0.032 -3.553236,0.70318 -4.865235,1.95117 -1.311998,1.248 -1.982421,3.23238 -1.982421,5.98438 0,2.656 0.639923,4.64038 1.919921,5.98437 1.311999,1.312 2.912034,2.01533 4.832032,2.11133 1.695998,0.096 3.679126,-0.44761 4.703125,-1.59961 l 0.449219,1.08789 h 4.734374 z m -35.217765,0.1914 -12.193359,0.54297 0.160156,14.97656 h 5.664063 l 0.128906,-9.98437 6.271484,-0.22266 z m 50.039208,0 -13.919926,0.54297 0.126954,5.44141 4.095702,-0.19336 0.0957,9.72851 h 5.60157 l 0.12695,-9.88671 3.9043,-0.22461 z m 6.450857,0.0957 -5.63086,0.57617 c 0.256,4.79999 0.47912,9.66455 0.70312,14.56054 2.208,0.576 4.3524,0.83233 6.40039,0.73633 2.144,-0.096 3.93576,-0.64156 5.34375,-1.60156 1.792,-1.28 2.6875,-3.0076 2.6875,-5.18359 0,-3.456 -2.0467,-5.63161 -5.4707,-5.59961 -1.44,0 -2.7203,0.31973 -3.9043,0.92773 z m -47.17033,4.57617 c 1.663999,0 2.783204,1.18322 2.783204,3.19922 0,1.88799 -1.151205,3.07226 -2.783204,3.07226 -1.503998,0 -2.689453,-1.15227 -2.689453,-3.07226 0,-2.08 1.121455,-3.19922 2.689453,-3.19922 z m 17.482014,0.16015 c 1.567999,0 2.721453,1.24722 2.689453,3.19922 0,1.696 -1.057454,3.16797 -2.689453,3.16797 -1.631998,0 -2.783203,-1.34397 -2.783203,-3.16797 0,-2.016 1.151205,-3.19922 2.783203,-3.19922 z m 31.801596,3.00782 c 0,-1.152 1.85547,0.79947 1.85547,1.85547 0.032,1.24799 -0.86379,2.01653 -2.17578,2.14453 -0.384,0.032 -0.83175,2.9e-4 -1.34375,-0.0957 l -0.16016,-3.29687 c 0.544,-0.416 1.82422,0.0646 1.82422,-0.60742 z m 11.71145,2.24023 c -1.824,0 -2.94532,1.24736 -2.94532,2.94336 0,1.696 1.05732,2.94531 2.94532,2.94531 1.92,0 2.97461,-1.24931 2.97461,-2.94531 0,-1.696 -1.05461,-2.94336 -2.97461,-2.94336 z" />
     </g>
   </g>
 </svg>
