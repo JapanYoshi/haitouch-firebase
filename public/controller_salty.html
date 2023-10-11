@@ -1,6 +1,6 @@
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="client.css" />
 </head>
 
@@ -11,38 +11,38 @@
   <div id="game">
     <style>
       @font-face {
-        font-family: '_Barlow';
+        font-family: "_Barlow";
         font-weight: normal;
         font-style: normal;
-        src: url('salty/400.otf');
+        src: url("salty/400.otf");
       }
 
       @font-face {
-        font-family: '_Barlow';
+        font-family: "_Barlow";
         font-weight: normal;
         font-style: italic;
-        src: url('salty/400i.otf');
+        src: url("salty/400i.otf");
       }
 
       @font-face {
-        font-family: '_Barlow';
+        font-family: "_Barlow";
         font-weight: bold;
         font-style: normal;
-        src: url('salty/700.otf');
+        src: url("salty/700.otf");
       }
 
       @font-face {
-        font-family: '_Barlow';
+        font-family: "_Barlow";
         font-weight: bold;
         font-style: italic;
-        src: url('salty/700i.otf');
+        src: url("salty/700i.otf");
       }
 
       @font-face {
-        font-family: '_Iosevka';
+        font-family: "_Iosevka";
         font-weight: normal;
         font-style: normal;
-        src: url('salty/mono.otf');
+        src: url("salty/mono.otf");
       }
 
       :root {
@@ -62,26 +62,28 @@
         --col-rush-off: #5d7697;
         --col-rush-on: #67eff6;
 
-        --white-gradient: linear-gradient(0deg,
-            #ebebeb 50%,
-            #ffffff 100%);
-        --green-gradient: linear-gradient(0deg,
-            var(--col-dark-green) 50%,
-            var(--col-green) 100%);
-        --red-gradient: linear-gradient(0deg,
-            var(--col-red) 50%,
-            var(--col-light-red) 100%);
-            
+        --white-gradient: linear-gradient(0deg, #ebebeb 50%, #ffffff 100%);
+        --green-gradient: linear-gradient(
+          0deg,
+          var(--col-dark-green) 50%,
+          var(--col-green) 100%
+        );
+        --red-gradient: linear-gradient(
+          0deg,
+          var(--col-red) 50%,
+          var(--col-light-red) 100%
+        );
+
         --like-off: linear-gradient(0deg, #2e333e 50%, #585a62 100%);
         --like-on: linear-gradient(0deg, #f77498 50%, #ffa5cb 100%);
       }
 
       html {
-        font-family: '_Barlow', 'Barlow Semi-Condensed', sans-serif;
+        font-family: "_Barlow", "Barlow Semi-Condensed", sans-serif;
       }
-      
+
       code {
-        font-family: '_Iosevka', 'Iosevka', monospace;
+        font-family: "_Iosevka", "Iosevka", monospace;
       }
 
       body {
@@ -130,6 +132,7 @@
         from {
           background-position-y: 32rem;
         }
+
         to {
           background-position-y: 0rem;
         }
@@ -177,7 +180,7 @@
         color: rgba(255, 255, 255, 0.8);
       }
 
-      #score.negative { 
+      #score.negative {
         color: var(--col-light-red);
         text-shadow: 0 0 0.25rem var(--col-red);
       }
@@ -203,7 +206,6 @@
       #headerLifesaver.lsAvailable #headerLifesaverImg {
         animation: rot-anim 15s infinite linear;
       }
-
 
       article {
         position: relative;
@@ -255,7 +257,7 @@
       .active #rush_bg {
         animation: rot-anim 60s infinite linear;
       }
-      
+
       article#rush.reveal #rush_bg {
         opacity: 0;
       }
@@ -263,23 +265,24 @@
       @keyframes rot-anim {
         from {
           transform: translate(-50%, -50%) rotate(0deg);
-        } to {
+        }
+
+        to {
           transform: translate(-50%, -50%) rotate(360deg);
         }
       }
 
       article#like {
-        background-color: #205fd2
+        background-color: #205fd2;
       }
 
-      
       article#normal .logoGame,
       article#normal.candy .logoCandy,
       article#normal.rage .logoRage {
         display: block;
         opacity: 1;
       }
-      
+
       article#normal.candy .logoGame,
       article#normal.rage .logoGame,
       article#normal:not(.candy) .logoCandy,
@@ -289,10 +292,12 @@
 
       article#standby {
         background-color: var(--col-dark-green);
-        background: radial-gradient(circle,
-            #052b14 0%,
-            #365c45 50%,
-            #527861 100%);
+        background: radial-gradient(
+          circle,
+          #052b14 0%,
+          #365c45 50%,
+          #527861 100%
+        );
       }
 
       article#normal {
@@ -305,15 +310,23 @@
 
       article#normal.rage {
         background: #fd0;
-        background: linear-gradient(0deg, #fd0 0%, #e30 28%, #500 65%, #000 100%);
+        background: linear-gradient(
+          0deg,
+          #fd0 0%,
+          #e30 28%,
+          #500 65%,
+          #000 100%
+        );
       }
 
       article#sorta {
         background: var(--col-darkgray);
-        background: radial-gradient(circle,
-            black 0%,
-            var(--col-darkgray) 50%,
-            var(--col-lightgray) 100%);
+        background: radial-gradient(
+          circle,
+          black 0%,
+          var(--col-darkgray) 50%,
+          var(--col-lightgray) 100%
+        );
       }
 
       article#gib {
@@ -326,18 +339,22 @@
 
       article#rush {
         background-color: #112f54;
-        background: radial-gradient(circle,
-            #153867 0%,
-            #112f56 50%,
-            #050c17 100%);
+        background: radial-gradient(
+          circle,
+          #153867 0%,
+          #112f56 50%,
+          #050c17 100%
+        );
       }
 
       article#brain {
         background-color: #664a1f;
-        background: radial-gradient(circle,
-            #664a1f 0%,
-            #31210f 50%,
-            #1c120c 100%);
+        background: radial-gradient(
+          circle,
+          #664a1f 0%,
+          #31210f 50%,
+          #1c120c 100%
+        );
       }
 
       article#rush.reveal {
@@ -398,7 +415,9 @@
         opacity: 0.25;
       }
 
-      .questionCardBlank, .questionCard, .questionCardSource {
+      .questionCardBlank,
+      .questionCard,
+      .questionCardSource {
         text-align: center;
         overflow: hidden;
         position: relative;
@@ -415,10 +434,10 @@
         transform-origin: top right;
         z-index: 1;
       }
-      
+
       .questionCardsFlex:first-child .questionCard .questionCardBG {
         background: #e9d651;
-        background: linear-gradient(0deg, #feffc0 0%, #fff58b 40%, #e9d651 80%); 
+        background: linear-gradient(0deg, #feffc0 0%, #fff58b 40%, #e9d651 80%);
       }
 
       .questionCardsFlex:nth-child(2) .questionCard .questionCardBG {
@@ -430,14 +449,14 @@
         background: #51e9e4;
         background: linear-gradient(0deg, #dbfffe 0%, #94fff9 40%, #51e9e4 80%);
       }
-      
+
       .questionCardSource .questionCardBG {
         width: 8rem;
         height: 6rem;
         background: #d4d4d3;
-        background: linear-gradient(0deg, #ffffff 0%, #d4d4d3 80%); 
+        background: linear-gradient(0deg, #ffffff 0%, #d4d4d3 80%);
       }
-      
+
       .questionCardText::before {
         display: block;
         content: "";
@@ -445,7 +464,7 @@
         height: 0;
         border-right: var(--dog-ear) solid transparent;
         border-bottom: var(--dog-ear) solid white;
-        box-shadow: -1px 1px 1px rgba(0,0,0,0.15);
+        box-shadow: -1px 1px 1px rgba(0, 0, 0, 0.15);
         position: absolute;
         right: 0;
         top: 0;
@@ -464,7 +483,8 @@
         border-bottom-color: #94fff9;
       }
 
-      .questionCardBlank, .questionCardSource {
+      .questionCardBlank,
+      .questionCardSource {
         flex: 4rem 0 0;
       }
 
@@ -479,7 +499,7 @@
         padding: 1rem;
         color: black;
       }
-      
+
       .qHidden .questionCardText {
         color: transparent;
       }
@@ -521,13 +541,13 @@
         flex-basis: 0;
         overflow-y: scroll;
       }
-      
+
       @media screen and (min-width: 720px) {
         #rush .options {
           display: flex;
           flex-wrap: wrap;
         }
-        
+
         #rush .optionRush {
           flex-basis: 34%;
           flex-grow: 1;
@@ -587,7 +607,7 @@
         font-style: italic;
       }
 
-      .btnLifesaver>img {
+      .btnLifesaver > img {
         display: float;
         float: left;
         width: 2rem;
@@ -596,7 +616,7 @@
       }
 
       .buzzIn .btnLifesaver {
-        opacity: 1.0;
+        opacity: 1;
       }
 
       #game.audience .btnLifesaver {
@@ -696,11 +716,11 @@
         color: white;
         background: rgba(21, 77, 122, 0.75);
       }
-      
+
       .gibClue + .gibClue {
         margin-top: 0.25rem;
       }
-      
+
       .gibOption {
         margin: 0.25rem 0;
       }
@@ -764,32 +784,39 @@
         transform: scale(100%, 100%);
         transition: transform 150ms ease-out;
       }
+
       .optionRush.selectable,
       .optionRush.false,
       .optionRush.true {
         opacity: 1;
       }
+
       .optionRush > span {
         display: block;
         flex-grow: 1;
         flex-shrink: 1;
       }
+
       .checkRush:not(:checked) + .optionRush.selectable {
         background: var(--col-rush-off);
         color: white;
       }
+
       .checkRush:checked + .optionRush.selectable {
         background: var(--col-rush-on);
         color: darkblue;
       }
+
       #like .checkRush:not(:checked) + .optionRush.selectable {
         background: var(--like-off);
         color: white;
       }
+
       #like .checkRush:checked + .optionRush.selectable {
         background: var(--like-on);
         color: black;
       }
+
       .optionRush::before {
         display: block;
         flex-grow: 0;
@@ -802,16 +829,19 @@
         background-size: contain;
         font-size: 0;
       }
+
       .checkRush:not(:checked) + .optionRush::before,
       .optionRush.false::before {
         content: "No: ";
-        background-image: url("salty/rush_false.png")
+        background-image: url("salty/rush_false.png");
       }
+
       .checkRush:checked + .optionRush::before,
       .optionRush.true::before {
         content: "Yes: ";
-        background-image: url("salty/rush_true.png")
+        background-image: url("salty/rush_true.png");
       }
+
       .option.pressed,
       .checkRush + .optionRush.selectable.pressed {
         transform: scale(0.9);
@@ -819,13 +849,15 @@
         background: white;
         transition: transform 10ms ease-out;
       }
+
       .checkRush:not(:checked) + .optionRush.false,
-      .checkRush:checked       + .optionRush.true {
+      .checkRush:checked + .optionRush.true {
         background: var(--green-gradient);
         color: white;
       }
+
       .checkRush:not(:checked) + .optionRush.true,
-      .checkRush:checked       + .optionRush.false {
+      .checkRush:checked + .optionRush.false {
         background: var(--red-gradient);
         color: black;
       }
@@ -850,7 +882,7 @@
       }
 
       #finalResult.negative {
-        background: var(--red-gradient)
+        background: var(--red-gradient);
       }
 
       #finalHeader {
@@ -859,12 +891,12 @@
         opacity: 0.85;
         letter-spacing: 0.25rem;
       }
-      
+
       #finalScore {
         font-size: 2rem;
         font-weight: bold;
       }
-      
+
       #finalPlacement {
         font-size: 1.5rem;
         color: white;
@@ -910,22 +942,37 @@
       <span id="nickname">SIGNING UP...</span>
       <span id="score">$0</span>
       <div id="headerLifesaver">
-        <img id="headerLifesaverImg" src="salty/lifesaver.png"/>
+        <img id="headerLifesaverImg" src="salty/lifesaver.png" />
       </div>
     </header>
     <article id="standby" class="active">
       <div class="filter"></div>
-      <div class="logo active logoGame" style="background-image: url('salty/logo_game.png')"></div>
-      <div class="logo logoLS" style="background-image: url('salty/lifesavers.png')"></div>
-      <div class="logo logoRound1" style="background-image: url('salty/round_1.png')"></div>
-      <div class="logo logoRound2" style="background-image: url('salty/round_2.png')"></div>
-      <div class="logo logoRound3" style="background-image: url('salty/round_3.png')"></div>
+      <div
+        class="logo active logoGame"
+        style="background-image: url('salty/logo_game.png')"
+      ></div>
+      <div
+        class="logo logoLS"
+        style="background-image: url('salty/lifesavers.png')"
+      ></div>
+      <div
+        class="logo logoRound1"
+        style="background-image: url('salty/round_1.png')"
+      ></div>
+      <div
+        class="logo logoRound2"
+        style="background-image: url('salty/round_2.png')"
+      ></div>
+      <div
+        class="logo logoRound3"
+        style="background-image: url('salty/round_3.png')"
+      ></div>
       <div id="finalResult">
         <div id="finalHeader">Results</div>
         <div id="finalScore">$1,000,000</div>
         <div id="finalPlacement">You tied for 1st!</div>
       </div>
-      <div id="debugKeypad" style="display: none;">
+      <div id="debugKeypad" style="display: none">
         <div class="debugKeyRow">
           <div class="debugKey">L</div>
           <div class="debugKey">↑</div>
@@ -942,43 +989,44 @@
     </article>
     <article id="normal">
       <div class="filter"></div>
-      <div class="logo logoGame" style="background-image: url('salty/logo_game.png')"></div>
-      <div class="logo logoCandy" style="background-image: url('salty/logo_candy.png')"></div>
-      <div class="logo logoRage" style="background-image: url('salty/logo_rage.png')"></div>
+      <div
+        class="logo logoGame"
+        style="background-image: url('salty/logo_game.png')"
+      ></div>
+      <div
+        class="logo logoCandy"
+        style="background-image: url('salty/logo_candy.png')"
+      ></div>
+      <div
+        class="logo logoRage"
+        style="background-image: url('salty/logo_rage.png')"
+      ></div>
       <div class="filter"></div>
       <div class="questionFlex">
         <div class="question">
-          <div class="questionText">
-            Q
-          </div>
+          <div class="questionText">Q</div>
         </div>
         <div class="options">
-          <div class="option">
-            1
-          </div>
-          <div class="option">
-            2
-          </div>
-          <div class="option">
-            3
-          </div>
-          <div class="option">
-            4
-          </div>
+          <div class="option">1</div>
+          <div class="option">2</div>
+          <div class="option">3</div>
+          <div class="option">4</div>
         </div>
         <div class="btnLifesaver">
-          <img src="salty/lifesaver.png"> Use a Lifesaver (eliminate 2 choices)
+          <img src="salty/lifesaver.png" /> Use a Lifesaver (eliminate 2
+          choices)
         </div>
       </div>
     </article>
     <article id="sort">
       <div class="filter"></div>
-      <div class="logo active" style="background-image: url('salty/logo_sorta.png')"></div>
+      <div
+        class="logo active"
+        style="background-image: url('salty/logo_sorta.png')"
+      ></div>
       <div class="questionFlex">
         <div class="question">
-          <div class="questionText">
-            Q
-          </div>
+          <div class="questionText">Q</div>
         </div>
         <div class="sortBox">
           <div class="sortBoth">both</div>
@@ -992,60 +1040,55 @@
     </article>
     <article id="gib">
       <div class="filter"></div>
-      <div class="logo active" style="background-image: url('salty/logo_gib.png')"></div>
+      <div
+        class="logo active"
+        style="background-image: url('salty/logo_gib.png')"
+      ></div>
       <div class="questionFlex">
-        <div class="audienceWarning">Audience members can answer at any time.</div>
+        <div class="audienceWarning">
+          Audience members can answer at any time.
+        </div>
         <div class="question">
-          <div class="questionText">
-            Q
-          </div>
+          <div class="questionText">Q</div>
         </div>
         <div id="gibClues">
-          <div class="gibClue">
-            Wait for Clue 1...
-          </div>
-          <div class="gibClue">
-            Wait for Clue 2...
-          </div>
-          <div class="gibClue">
-            Wait for Clue 3...
-          </div>
+          <div class="gibClue">Wait for Clue 1...</div>
+          <div class="gibClue">Wait for Clue 2...</div>
+          <div class="gibClue">Wait for Clue 3...</div>
         </div>
-        <input type="text" pattern="[ !',-./0-9?A-Za-z]{0,64}" maxlength="64" />
+        <input type="text" pattern="[ !',-.\/0-9?A-Za-z]{0,64}" maxlength="64" />
         <button class="buzzer" type="button"></button>
       </div>
       <div class="skipButton">Yeah, we all get it</div>
     </article>
     <article id="thousand">
       <div class="filter"></div>
-      <div class="logo active" style="background-image: url('salty/logo_thousand.png')"></div>
+      <div
+        class="logo active"
+        style="background-image: url('salty/logo_thousand.png')"
+      ></div>
       <div class="questionFlex">
-        <div class="audienceWarning">Audience members can answer at any time.</div>
+        <div class="audienceWarning">
+          Audience members can answer at any time.
+        </div>
         <div class="question">
-          <div class="questionText">
-            Q
-          </div>
+          <div class="questionText">Q</div>
         </div>
         <div class="options">
-          <div class="option">
-            1
-          </div>
-          <div class="option">
-            2
-          </div>
-          <div class="option">
-            3
-          </div>
-          <div class="option">
-            4
-          </div>
+          <div class="option">1</div>
+          <div class="option">2</div>
+          <div class="option">3</div>
+          <div class="option">4</div>
         </div>
       </div>
       <div class="skipButton">Yeah, we all get it</div>
     </article>
     <article id="brain">
       <div class="filter"></div>
-      <div class="logo active" style="background-image: url('salty/logo_brain.png')"></div>
+      <div
+        class="logo active"
+        style="background-image: url('salty/logo_brain.png')"
+      ></div>
       <div class="filter"></div>
       <div class="questionFlex">
         <div class="questionCardsFlex">
@@ -1058,20 +1101,24 @@
             <div class="questionCardBG"></div>
             <div class="questionCardText">B</div>
           </div>
-        </div><div class="questionCardsFlex">
+        </div>
+        <div class="questionCardsFlex">
           <div class="questionCardSource">
             <div class="questionCardBG"></div>
             <div class="questionCardText">?</div>
           </div>
           <div class="questionCard">
             <div class="questionCardBG"></div>
-            <div class="questionCardText">Cao eu aoeu aou aoeu aoeu aoeu aoeu aoeu aeo u</div>
+            <div class="questionCardText">
+              Cao eu aoeu aou aoeu aoeu aoeu aoeu aoeu aeo u
+            </div>
           </div>
           <div class="questionCard">
             <div class="questionCardBG"></div>
             <div class="questionCardText">D</div>
           </div>
-        </div><div class="questionCardsFlex">
+        </div>
+        <div class="questionCardsFlex">
           <div class="questionCardBlank"></div>
           <div class="questionCard">
             <div class="questionCardBG"></div>
@@ -1083,37 +1130,29 @@
           </div>
         </div>
         <div class="question">
-          <div class="questionText">
-            Q
-          </div>
+          <div class="questionText">Q</div>
         </div>
         <div class="options">
-          <div class="option">
-            1
-          </div>
-          <div class="option">
-            2
-          </div>
-          <div class="option">
-            3
-          </div>
-          <div class="option">
-            4
-          </div>
+          <div class="option">1</div>
+          <div class="option">2</div>
+          <div class="option">3</div>
+          <div class="option">4</div>
         </div>
         <div class="btnLifesaver">
-          <img src="salty/lifesaver.png"> Use a Lifesaver (eliminate 2 choices)
+          <img src="salty/lifesaver.png" /> Use a Lifesaver (eliminate 2
+          choices)
         </div>
       </div>
     </article>
     <article id="sort">
       <div class="filter"></div>
-      <div class="logo active" style="background-image: url('salty/logo_sorta.png')"></div>
+      <div
+        class="logo active"
+        style="background-image: url('salty/logo_sorta.png')"
+      ></div>
       <div class="questionFlex">
         <div class="question">
-          <div class="questionText">
-            Q
-          </div>
+          <div class="questionText">Q</div>
         </div>
         <div class="sortBox">
           <div class="sortBoth">both</div>
@@ -1126,32 +1165,34 @@
       <div class="skipButton">Yeah, we all get it</div>
     </article>
     <article id="rush">
-      <img id="rush_bg" src="salty/rush.png">
+      <img id="rush_bg" src="salty/rush.png" />
       <div class="questionFlex">
         <div class="clue">Clue</div>
-        <div class="question"><div class="questionText"></div></div>
+        <div class="question">
+          <div class="questionText"></div>
+        </div>
         <div class="options">
-          <input type="checkbox" id="rush0" class="checkRush">
+          <input type="checkbox" id="rush0" class="checkRush" />
           <label for="rush0" class="optionRush">
             <span>1</span>
           </label>
-          <input type="checkbox" id="rush1" class="checkRush">
+          <input type="checkbox" id="rush1" class="checkRush" />
           <label for="rush1" class="optionRush">
             <span>2</span>
           </label>
-          <input type="checkbox" id="rush2" class="checkRush">
+          <input type="checkbox" id="rush2" class="checkRush" />
           <label for="rush2" class="optionRush">
             <span>3</span>
           </label>
-          <input type="checkbox" id="rush3" class="checkRush">
+          <input type="checkbox" id="rush3" class="checkRush" />
           <label for="rush3" class="optionRush">
             <span>4</span>
           </label>
-          <input type="checkbox" id="rush4" class="checkRush">
+          <input type="checkbox" id="rush4" class="checkRush" />
           <label for="rush4" class="optionRush">
             <span>5</span>
           </label>
-          <input type="checkbox" id="rush5" class="checkRush">
+          <input type="checkbox" id="rush5" class="checkRush" />
           <label for="rush5" class="optionRush">
             <span>6</span>
           </label>
@@ -1160,24 +1201,29 @@
       <div class="skipButton">Let’s do this.</div>
     </article>
     <article id="like">
-      <div class="logo active" style="background-image: url('salty/logo_like.png');"></div>
+      <div
+        class="logo active"
+        style="background-image: url('salty/logo_like.png')"
+      ></div>
       <div class="questionFlex">
         <div class="clue">Clue</div>
-        <div class="question"><div class="questionText"></div></div>
+        <div class="question">
+          <div class="questionText"></div>
+        </div>
         <div class="options">
-          <input type="checkbox" id="like0" class="checkRush">
+          <input type="checkbox" id="like0" class="checkRush" />
           <label for="like0" class="optionRush">
             <span>1</span>
           </label>
-          <input type="checkbox" id="like1" class="checkRush">
+          <input type="checkbox" id="like1" class="checkRush" />
           <label for="like1" class="optionRush">
             <span>2</span>
           </label>
-          <input type="checkbox" id="like2" class="checkRush">
+          <input type="checkbox" id="like2" class="checkRush" />
           <label for="like2" class="optionRush">
             <span>3</span>
           </label>
-          <input type="checkbox" id="like3" class="checkRush">
+          <input type="checkbox" id="like3" class="checkRush" />
           <label for="like3" class="optionRush">
             <span>4</span>
           </label>
@@ -1189,35 +1235,50 @@
   <!--END INJECTED HTML-->
   <script type="module">
     /** START INJECTED SCRIPT **/
-    import { ref, onValue, get, set, update, child } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js"
+    import {
+      ref,
+      onValue,
+      get,
+      set,
+      update,
+      child,
+    } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
     console.log("database object =", window.fb_db);
     var scene = document.querySelector("article#standby");
-    
+
     /* DEBUG: Make the debug keypad visible */
     //document.getElementById("debugKeypad").style.display = "";
-    
+
     /* Change BBcode tags to HTML tags */
     function convertBB(bbcode) {
       if (typeof bbcode == "string") {
         return bbcode
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/\[b\]/g, '<strong>')
-          .replace(/\[\/b\]/g, '</strong>')
-          .replace(/\[i\]/g, '<em>')
-          .replace(/\[\/i\]/g, '</em>')
-          .replace(/\[code\]/g, '<code>')
-          .replace(/\[\/code\]/g, '</code>')
-          .replace(/\[lb\]/g, '[')
-          .replace(/\[rb\]/g, ']');
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\[b\]/g, "<strong>")
+          .replace(/\[\/b\]/g, "</strong>")
+          .replace(/\[i\]/g, "<em>")
+          .replace(/\[\/i\]/g, "</em>")
+          .replace(/\[code\]/g, "<code>")
+          .replace(/\[\/code\]/g, "</code>")
+          .replace(/\[lb\]/g, "[")
+          .replace(/\[rb\]/g, "]");
       } else {
-        console.error("convertBB could not convert this content because it is not a string:", bbcode);
-        return "Error in funtion convertBB"
+        console.error(
+          "convertBB could not convert this content because it is not a string:",
+          bbcode
+        );
+        return "Error in funtion convertBB";
       }
     }
     /* New Firebase-based player initializer */
-    var ref_me = ref(window.fb_db, `rooms/${window.rc}/${window.isAudience ? "audience" : "players"}/${localStorage.getItem("name")}`);
-    get(ref_me).then(snapshot => {
+    var ref_me = ref(
+      window.fb_db,
+      `rooms/${window.rc}/${
+        window.isAudience ? "audience" : "players"
+      }/${localStorage.getItem("name")}`
+    );
+    get(ref_me).then((snapshot) => {
       console.log("Player Init");
       if (!snapshot.exists()) {
         console.error("Could not find ref_me");
@@ -1226,42 +1287,43 @@
       let val = snapshot.val();
       // What the hell is your content, bruh?
       console.log("Player init val", val);
-      document.getElementById('nickname').innerText = val.nick.toUpperCase();
+      document.getElementById("nickname").innerText = val.nick.toUpperCase();
       if (val.playerNumber == -1) {
-        document.getElementById('game').classList.add('audience');
-        document.getElementById('playerNumber').style.backgroundPositionX = "100%";
-        document.getElementById('playerNumber').style.backgroundPositionY = "100%";
+        document.getElementById("game").classList.add("audience");
+        document.getElementById("playerNumber").style.backgroundPositionX =
+          "100%";
+        document.getElementById("playerNumber").style.backgroundPositionY =
+          "100%";
       } else {
         if (val.playerNumber == 0) {
-          document.getElementById("standby").classList.add('playerOne');
-          document.querySelector('.startGame').addEventListener('click', () => {
-            document.getElementById("standby").classList.remove('playerOne');
-            sendButton(5, 'start game');
-          })
+          document.getElementById("standby").classList.add("playerOne");
+          document.querySelector(".startGame").addEventListener("click", () => {
+            document.getElementById("standby").classList.remove("playerOne");
+            sendButton(5, "start game");
+          });
         }
-        document.getElementById('playerNumber').style.backgroundPositionX = (
-          25 * (
-            val.playerNumber < 4 ? val.playerNumber + 1 : val.playerNumber - 4
-          ) + "%"
-        );
-        document.getElementById('playerNumber').style.backgroundPositionY = (
-          val.playerNumber < 4 ?
-          '0%' : '100%'
-        );
+        document.getElementById("playerNumber").style.backgroundPositionX =
+          25 *
+            (val.playerNumber < 4
+              ? val.playerNumber + 1
+              : val.playerNumber - 4) +
+          "%";
+        document.getElementById("playerNumber").style.backgroundPositionY =
+          val.playerNumber < 4 ? "0%" : "100%";
       }
     });
     /* New Firebase-based game event handler */
     var snapshotMe = {
-      "input": 0,
-      "inputFinale": "000000",
-      "inputText": "",
-      "lifesaver": false,
-      "messages": {"action": "none", "time": 0},
-      "nick": "Φ",
-      "playerNumber": -1,
-      "score": -1,
-      "scoreText": "$0"
-    }
+      input: 0,
+      inputFinale: "000000",
+      inputText: "",
+      lifesaver: false,
+      messages: { action: "none", time: 0 },
+      nick: "Φ",
+      playerNumber: -1,
+      score: -1,
+      scoreText: "$0",
+    };
     onValue(ref_me, (snapshot) => {
       const data = snapshot.val();
       //console.log("ref me", data);
@@ -1269,9 +1331,13 @@
       // includes changes in score, input state, nickname, etc.
       if (snapshotMe.lifesaver != data.lifesaver) {
         if (data.lifesaver) {
-          document.getElementById("headerLifesaver").classList.add("lsAvailable");
+          document
+            .getElementById("headerLifesaver")
+            .classList.add("lsAvailable");
         } else {
-          document.getElementById("headerLifesaver").classList.remove("lsAvailable");
+          document
+            .getElementById("headerLifesaver")
+            .classList.remove("lsAvailable");
         }
       }
       if (snapshotMe.nick != data.nick) {
@@ -1283,7 +1349,7 @@
           score.classList.add("negative");
         } else {
           score.classList.remove("negative");
-        };
+        }
         score.innerText = data.scoreText;
       }
       if (snapshotMe.messages.time < data.messages.time) {
@@ -1307,28 +1373,34 @@
         });
       }
     });
-    var onPlayerMessage = data => {
+    var onPlayerMessage = (data) => {
       console.log("onPlayerMessage", data.action);
       switch (data.action) {
         case "none":
           return;
         case "sortAcc":
           scene.getElementsByClassName("questionText")[0].innerHTML =
-            "Your accuracy was " + data.numerator + "/" + data.denominator + ".";
-          scene.getElementsByClassName('correct')[0].classList.remove("correct");
+            "Your accuracy was " +
+            data.numerator +
+            "/" +
+            data.denominator +
+            ".";
+          scene
+            .getElementsByClassName("correct")[0]
+            .classList.remove("correct");
           return;
         case "gibYourTurn":
           console.log("IT'S YOUR TURN TO TYPE");
-          var buzzer = scene.querySelector('.buzzer');
+          var buzzer = scene.querySelector(".buzzer");
           buzzer.disabled = true;
           setTimeout(() => {
             buzzer.disabled = false;
-            scene.classList.add('canSubmit');
+            scene.classList.add("canSubmit");
           }, 2000);
           buzzer.innerText = "Finish typing (or press ⏎)";
-          scene.classList.add('yourTurn');
-          scene.querySelector('input').disabled = false;
-          scene.querySelector('input').focus();
+          scene.classList.add("yourTurn");
+          scene.querySelector("input").disabled = false;
+          scene.querySelector("input").focus();
           return;
         case "finalResult":
           console.log("LMAO YEET finalResult", data);
@@ -1337,54 +1409,82 @@
           scene.classList.add("active");
           document.getElementById("finalScore").innerText = data.resultAsText;
           if (data.result < 0) {
-            document.getElementById("finalResult").classList.add('negative');
+            document.getElementById("finalResult").classList.add("negative");
           }
           document.getElementById("finalPlacement").innerText = data.comment;
           return;
         default:
           console.error("Unimplemented player message action: " + data.action);
-          return
+          return;
       }
     };
-    var onRoomMessage = data => {
+    var onRoomMessage = (data) => {
       console.log("onRoomMessage", data.sceneName);
       switch (data.sceneName) {
         case "intro":
           document.querySelector(".startGame").style.display = "none";
-          document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
-          document.getElementById("standby").querySelector(".logoRound1").classList.add("active");
+          document
+            .getElementById("standby")
+            .querySelector(".logo.active")
+            .classList.remove("active");
+          document
+            .getElementById("standby")
+            .querySelector(".logoRound1")
+            .classList.add("active");
           return;
         case "round2":
           document.querySelector(".startGame").style.display = "none";
-          document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
-          document.getElementById("standby").querySelector(".logoRound2").classList.add("active");
+          document
+            .getElementById("standby")
+            .querySelector(".logo.active")
+            .classList.remove("active");
+          document
+            .getElementById("standby")
+            .querySelector(".logoRound2")
+            .classList.add("active");
           return;
         case "lifesaver":
-          document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
-          document.getElementById("standby").querySelector(".logoLS").classList.add("active");
+          document
+            .getElementById("standby")
+            .querySelector(".logo.active")
+            .classList.remove("active");
+          document
+            .getElementById("standby")
+            .querySelector(".logoLS")
+            .classList.add("active");
           return;
         case "gameEnd":
           document.querySelector(".startGame").style.display = "none";
           document.getElementById("score").style.display = "none";
-          document.getElementById("standby").querySelector(".logo.active").classList.remove("active");
-          document.getElementById("standby").querySelector(".logoGame").classList.add("active");
+          document
+            .getElementById("standby")
+            .querySelector(".logo.active")
+            .classList.remove("active");
+          document
+            .getElementById("standby")
+            .querySelector(".logoGame")
+            .classList.add("active");
           return;
         case "showResult":
-          scene.classList.add('result');
+          scene.classList.add("result");
           return;
         case "enableBuzzIn":
           scene.classList.add("buzzIn");
-          if (document.querySelector('article#gib.active')) {
+          if (document.querySelector("article#gib.active")) {
             document.querySelector("#gib .buzzer").disabled = false;
             scene.classList.remove("qHidden");
             // let the audience members submit their own answers at any time
-            if (document.getElementById('game').classList.contains('audience')) {
-              console.log("Since you're in the Audience, you can answer the All Outta Salt any time.");
+            if (
+              document.getElementById("game").classList.contains("audience")
+            ) {
+              console.log(
+                "Since you're in the Audience, you can answer the All Outta Salt any time."
+              );
               scene.classList.remove("buzzIn");
-              scene.classList.add('yourTurn');
-              scene.querySelector('input').disabled = false;
-              scene.querySelector('input').focus();
-              scene.querySelector('.buzzer').innerText = "Final answer!";
+              scene.classList.add("yourTurn");
+              scene.querySelector("input").disabled = false;
+              scene.querySelector("input").focus();
+              scene.querySelector(".buzzer").innerText = "Final answer!";
             }
           }
           return;
@@ -1392,7 +1492,7 @@
           scene.classList.remove("buzzIn");
           return;
         case "enableSkip":
-          if (document.getElementById('playerNumber').innerText != '8') {
+          if (document.getElementById("playerNumber").innerText != "8") {
             scene.classList.add("skippable");
           }
           return;
@@ -1417,12 +1517,14 @@
           scene.classList.remove("normal", "candy", "rage");
           scene.classList.add("active", "qHidden", data.sceneName);
 
-          scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(data.question);
+          scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(
+            data.question
+          );
           var options = scene.querySelectorAll(".option");
           for (let i = 0; i < options.length; i++) {
             options[i].innerHTML = convertBB(data.options[i]);
-            options[i].classList.remove('correct', 'incorrect');
-          };
+            options[i].classList.remove("correct", "incorrect");
+          }
           return;
         case "brain":
           scene.classList.remove("active");
@@ -1432,40 +1534,45 @@
           for (let i = 0; i < 6; i++) {
             cards[i].innerHTML = convertBB(data.cards[i]);
           }
-          scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(data.question);
+          scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(
+            data.question
+          );
           var options = scene.querySelectorAll(".option");
           for (let i = 0; i < options.length; i++) {
             options[i].innerHTML = convertBB(data.options[i]);
-            options[i].classList.remove('correct', 'incorrect');
-          };
+            options[i].classList.remove("correct", "incorrect");
+          }
           return;
         case "sort":
           scene.classList.remove("active");
           scene = document.querySelector("article#sort");
           scene.classList.add("active", "qHidden");
 
-          scene.getElementsByClassName('sortA')[0].innerText = data.a
-          scene.getElementsByClassName('sortB')[0].innerText = data.b
+          scene.getElementsByClassName("sortA")[0].innerText = data.a;
+          scene.getElementsByClassName("sortB")[0].innerText = data.b;
           if (data.hasBoth == true) {
-            scene.getElementsByClassName('sortBoth')[0].style.display = "block";
+            scene.getElementsByClassName("sortBoth")[0].style.display = "block";
           } else {
-            scene.getElementsByClassName('sortBoth')[0].style.display = "none";
+            scene.getElementsByClassName("sortBoth")[0].style.display = "none";
           }
           return;
         case "sortQuestion":
           scene.classList.remove("qHidden");
-          scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(data.question);
-          if (scene.getElementsByClassName('correct').length > 0) {
-            scene.getElementsByClassName('correct')[0].classList.remove("correct");
+          scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(
+            data.question
+          );
+          if (scene.getElementsByClassName("correct").length > 0) {
+            scene
+              .getElementsByClassName("correct")[0]
+              .classList.remove("correct");
           }
           scene.classList.add("buzzIn");
           return;
         case "sortAnswer":
           scene.classList.remove("buzzIn");
-          let correctOne = scene.querySelector('.sort' + (
-            data.index === 0 ? 'A' :
-            data.index === 1 ? 'B' : 'Both'
-          ))
+          let correctOne = scene.querySelector(
+            ".sort" + (data.index === 0 ? "A" : data.index === 1 ? "B" : "Both")
+          );
           correctOne.classList.add("correct");
           return;
         case "gib":
@@ -1473,62 +1580,87 @@
           scene = document.querySelector("article#gib");
           scene.classList.add("active", "qHidden");
 
-          scene.getElementsByClassName('questionText')[0].innerText = data.question;
-          scene.querySelector('input').classList.remove("correct");
-          scene.querySelector('input').value = "";
-          scene.querySelector('input').disabled = true;
-          
-          if (document.getElementById('game').classList.contains('audience')) {
-              console.log("Since you're in the Audience, you can answer the All Outta Salt any time.");
-            scene.getElementsByClassName('buzzer')[0].innerText = "Audience members don't need to buzz in.";
+          scene.getElementsByClassName("questionText")[0].innerText =
+            data.question;
+          scene.querySelector("input").classList.remove("correct");
+          scene.querySelector("input").value = "";
+          scene.querySelector("input").disabled = true;
+
+          const gBuzzer = scene.querySelector("button.buzzer");
+          gBuzzer.style.display = "";
+          if (document.getElementById("game").classList.contains("audience")) {
+            gBuzzer.innerText = "Submit answer";
           } else {
-            scene.getElementsByClassName('buzzer')[0].innerText = "I know this one!";
+            gBuzzer.innerText = "I know this one!";
           }
-          for (let i = 0; i <= 2; i++) {scene.querySelectorAll('.gibClue')[i].innerHTML = `Wait for clue ${i+1}...`};
-          document.querySelector('#gib .buzzer').disabled = true;
+          for (let i = 0; i <= 2; i++) {
+            scene.querySelectorAll(".gibClue")[i].innerHTML = `Wait for clue ${
+              i + 1
+            }...`;
+          }
+          gBuzzer.disabled = true;
           return;
         case "gibClue":
-          scene.querySelectorAll('.gibClue')[data.i].innerHTML = convertBB(data.t);
+          scene.querySelectorAll(".gibClue")[data.i].innerHTML = convertBB(
+            data.t
+          );
           return;
         case "correctReveal":
-          var optionWrapper = scene.getElementsByClassName('options')[0];
+          var optionWrapper = scene.getElementsByClassName("options")[0];
           if (optionWrapper != undefined) {
-            optionWrapper.getElementsByClassName('option')[data.index].classList.add('correct');
-            optionWrapper.querySelectorAll('.option:not(.correct)').forEach((e, i) => { e.classList.add('incorrect') });
+            optionWrapper
+              .getElementsByClassName("option")
+              [data.index].classList.add("correct");
+            optionWrapper
+              .querySelectorAll(".option:not(.correct)")
+              .forEach((e, i) => {
+                e.classList.add("incorrect");
+              });
           } else {
             // will i actually use this or nah
             console.log("could not find optionWrapper");
           }
           return;
         case "wrongReveal":
-          var optionWrapper = scene.getElementsByClassName('options')[0];
-          if (optionWrapper != undefined) {
-            optionWrapper.getElementsByClassName('option')[data.index].classList.add('incorrect');
+          var optionWrapper = scene.getElementsByClassName("options")[0];
+          if (optionWrapper !== undefined) {
+            optionWrapper
+              .getElementsByClassName("option")
+              [data.index].classList.add("incorrect");
           } else {
             // will i actually use this or nah
             console.log("could not find optionWrapper");
           }
           return;
         case "gibReveal":
-          scene.classList.remove('buzzIn');
+          scene.classList.remove("buzzIn", "canSubmit", "yourTurn");
           //scene.classList.add('qHidden');
-          scene.querySelector('input').classList.add('correct');
-          scene.querySelector('input').value = data.answer;
-          scene.querySelector('input').disabled = true;
+          scene.querySelector("input").classList.add("correct");
+          scene.querySelector("input").value = data.answer;
+          scene.querySelector("input").disabled = true;
           return;
         case "thousand":
           scene.classList.remove("active");
           scene = document.querySelector("article#thousand");
           scene.classList.add("active", "qHidden");
-          console.log('data.question is', data.question, 'type of data.question is', typeof(data.question));
-          scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(data.question);
+          console.log(
+            "data.question is",
+            data.question,
+            "type of data.question is",
+            typeof data.question
+          );
+          scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(
+            data.question
+          );
           var options = scene.querySelectorAll(".option");
           for (let i = 0; i < options.length; i++) {
             options[i].innerHTML = convertBB(data.options[i]);
-            options[i].classList.remove('correct', 'incorrect');
-          };
-          if (document.getElementById('game').classList.contains('audience')) {
-            console.log("Since you're in the Audience, you can answer the Thousand Question Question any time, but only get the normal amount.");
+            options[i].classList.remove("correct", "incorrect");
+          }
+          if (document.getElementById("game").classList.contains("audience")) {
+            console.log(
+              "Since you're in the Audience, you can answer the Thousand Question Question any time, but only get the normal amount."
+            );
           }
           return;
         case "rush":
@@ -1536,87 +1668,87 @@
           document.getElementById("score").style.display = "none";
           scene = document.querySelector("article#rush");
           scene.classList.add("active", "qHidden");
-          scene.querySelector('.clue').innerHTML = convertBB(data.title);
-          scene.querySelector('.clue').style.display = "none";
+          scene.querySelector(".clue").innerHTML = convertBB(data.title);
+          scene.querySelector(".clue").style.display = "none";
           return;
         case "rushClue":
-          scene.querySelector('.clue').style.display = "block";
+          scene.querySelector(".clue").style.display = "block";
           return;
         case "rushSection":
-          scene.classList.remove('qHidden', 'reveal');
-          scene.querySelector('.questionText').innerHTML = convertBB(data.question);
+          scene.classList.remove("qHidden", "reveal");
+          scene.querySelector(".questionText").innerHTML = convertBB(
+            data.question
+          );
           var options = scene.querySelectorAll(".optionRush");
           var ticks = scene.querySelectorAll("input[type=checkbox]");
           for (let i = 0; i < options.length; i++) {
-            options[i].innerHTML = "<span>"+convertBB(data.options[i])+"</span>";
-            options[i].classList.remove('true', 'false');
+            options[i].innerHTML =
+              "<span>" + convertBB(data.options[i]) + "</span>";
+            options[i].classList.remove("true", "false");
             ticks[i].checked = false;
             ticks[i].disabled = true;
           }
-          options[0].classList.add('selectable');
+          options[0].classList.add("selectable");
           ticks[0].disabled = false;
           for (let i = 1; i < 6; i++) {
-            setTimeout(
-              () => {
-                options[i].classList.add('selectable');
-                ticks[i].disabled = false;
-              },
-              (i * 2 - (i % 2)) * 15000.0/16.0
-            );
+            setTimeout(() => {
+              options[i].classList.add("selectable");
+              ticks[i].disabled = false;
+            }, ((i * 2 - (i % 2)) * 15000.0) / 16.0);
           }
           return;
         case "rushReveal":
-          scene.classList.add('reveal');
+          scene.classList.add("reveal");
           var options = scene.querySelectorAll(".optionRush");
           var ticks = scene.querySelectorAll("input[type=checkbox]");
           for (let i = 0; i < options.length; i++) {
-            options[i].classList.remove('selectable');
-            options[i].classList.add(
-              data.answers[i] ? 'true': 'false'
-            );
-          };
+            options[i].classList.remove("selectable");
+            options[i].classList.add(data.answers[i] ? "true" : "false");
+          }
           return;
         case "like":
           scene.classList.remove("active");
           document.getElementById("score").style.display = "none";
           scene = document.querySelector("article#like");
           scene.classList.add("active", "qHidden");
-          scene.querySelector('.clue').style.display = "none";
-          scene.querySelector('.clue').innerHTML = convertBB(data.title);
+          scene.querySelector(".clue").style.display = "none";
+          scene.querySelector(".clue").innerHTML = convertBB(data.title);
           return;
         case "likeClue":
-          scene.querySelector('.clue').style.display = "block";
+          scene.querySelector(".clue").style.display = "block";
           return;
         case "likeOptions":
-          var options = scene.querySelectorAll('.optionRush');
+          var options = scene.querySelectorAll(".optionRush");
           for (let i = 0; i < options.length; i++) {
-            options[i].innerHTML = "<span>" + convertBB(data.options[i]) + "</span>";
+            options[i].innerHTML =
+              "<span>" + convertBB(data.options[i]) + "</span>";
           }
           return;
         case "likeSection":
-          scene.classList.remove('qHidden', 'reveal');
-          scene.querySelector('.questionText').innerHTML = convertBB(data.question);
+          scene.classList.remove("qHidden", "reveal");
+          scene.querySelector(".questionText").innerHTML = convertBB(
+            data.question
+          );
           var options = scene.querySelectorAll(".optionRush");
           var ticks = scene.querySelectorAll("input[type=checkbox]");
           for (let i = 0; i < options.length; i++) {
-            options[i].innerHTML = "<span>"+convertBB(data.options[i])+"</span>";
-            options[i].classList.remove('true', 'false');
-            options[i].classList.add('selectable');
+            options[i].innerHTML =
+              "<span>" + convertBB(data.options[i]) + "</span>";
+            options[i].classList.remove("true", "false");
+            options[i].classList.add("selectable");
             ticks[i].checked = false;
             ticks[i].disabled = false;
           }
           return;
         case "likeReveal":
-          scene.classList.add('reveal');
+          scene.classList.add("reveal");
           var options = scene.querySelectorAll(".optionRush");
           var ticks = scene.querySelectorAll("input[type=checkbox]");
           for (let i = 0; i < options.length; i++) {
-            options[i].classList.remove('selectable');
+            options[i].classList.remove("selectable");
             ticks[i].disabled = true;
-            options[i].classList.add(
-              data.answers[i] ? 'true': 'false'
-            );
-          };
+            options[i].classList.add(data.answers[i] ? "true" : "false");
+          }
           return;
         default:
           console.error("Unimplemented sceneName: " + data.sceneName);
@@ -1625,7 +1757,7 @@
     };
     function sendButton(which, reason, aux = undefined) {
       let bit = 1 << which;
-      update(ref_me, {"input": bit});
+      update(ref_me, { input: bit });
       console.debug(`Pressed button ${which} with reason ${reason}.`);
     }
     function reflectFinaleButton() {
@@ -1636,158 +1768,161 @@
         // appends "1" if checked, "0" if not
         text += elems[i].checked ? "1" : "0";
       }
-      update(ref_me, {"inputFinale": text});
+      update(ref_me, { inputFinale: text });
       console.debug(`Reflected button state of finale question: ${text}.`);
     }
     /* Add event handlers to send input */
     /* Debug keypad */
-    let debugKeys = document.getElementById('debugKeypad').querySelectorAll('.debugKey');
+    let debugKeys = document
+      .getElementById("debugKeypad")
+      .querySelectorAll(".debugKey");
     debugKeys.forEach((el, i, parent) => {
-      el.addEventListener('click', () => {
-        el.classList.add('pressed');
-        sendButton(i, 'debug keypad');
+      el.addEventListener("click", () => {
+        el.classList.add("pressed");
+        sendButton(i, "debug keypad");
         setTimeout(() => {
-          el.classList.remove('pressed')
+          el.classList.remove("pressed");
         }, 50);
       });
     });
     /* Skip buttons */
-    let skipButtons = document.querySelectorAll('.skipButton');
+    let skipButtons = document.querySelectorAll(".skipButton");
     skipButtons.forEach((el, i, parent) => {
-      el.addEventListener('click', () => {
-        sendButton(5, 'skip');
-      })
+      el.addEventListener("click", () => {
+        sendButton(5, "skip");
+      });
     });
 
     // Option buttons
-    let options = document.querySelectorAll('#normal .option, #thousand .option, #brain .option');
+    let options = document.querySelectorAll(
+      "#normal .option, #thousand .option, #brain .option"
+    );
     options.forEach((el, i) => {
-      el.addEventListener('click', () => {
-        if (scene.classList.contains('buzzIn') && !(el.classList.contains('incorrect'))) {
-          scene.classList.remove('buzzIn');
-          el.classList.add('pressed');
-          sendButton([1, 3, 5, 4][i % 4], 'answer normal question');
+      el.addEventListener("click", () => {
+        if (
+          scene.classList.contains("buzzIn") &&
+          !el.classList.contains("incorrect")
+        ) {
+          scene.classList.remove("buzzIn");
+          el.classList.add("pressed");
+          sendButton([1, 3, 5, 4][i % 4], "answer normal question");
           setTimeout(() => {
-            el.classList.remove('pressed')
+            el.classList.remove("pressed");
           }, 50);
-          console.log("Pressed option " + (i % 4 + 1))
+          console.log("Pressed option " + ((i % 4) + 1));
         }
       });
-    })
+    });
     // just for fun, tilt each note card in Big Brain Storming randomly
-    document.querySelectorAll(".questionCardsFlex > *").forEach(
-      (el, i) => {
-        el.style.transform = `rotate(${Math.cos(i + 1) * 1.5}deg)`;
-      }
-    )
+    document.querySelectorAll(".questionCardsFlex > *").forEach((el, i) => {
+      el.style.transform = `rotate(${Math.cos(i + 1) * 1.5}deg)`;
+    });
     // Lifesaver buttons
-    document.querySelector('#normal .btnLifesaver').addEventListener(
-      'click', () => {
-        if (document.getElementById("normal").classList.contains('buzzIn')) {
-          document.getElementById("normal").classList.remove('buzzIn');
-          sendButton(0, 'lifesaver normal question');
-          document.querySelectorAll('.btnLifesaver').forEach(
-            (el) => {el.style.display = "none";}
-          )
+    document
+      .querySelector("#normal .btnLifesaver")
+      .addEventListener("click", () => {
+        if (document.getElementById("normal").classList.contains("buzzIn")) {
+          document.getElementById("normal").classList.remove("buzzIn");
+          sendButton(0, "lifesaver normal question");
+          document.querySelectorAll(".btnLifesaver").forEach((el) => {
+            el.style.display = "none";
+          });
         }
-      }
-    )
-    document.querySelector('#brain .btnLifesaver').addEventListener(
-      'click', () => {
-        if (document.getElementById("brain").classList.contains('buzzIn')) {
-          document.getElementById("brain").classList.remove('buzzIn');
-          sendButton(0, 'lifesaver brain question');
-          document.querySelectorAll('.btnLifesaver').forEach(
-            (el) => {el.style.display = "none";}
-          )
+      });
+    document
+      .querySelector("#brain .btnLifesaver")
+      .addEventListener("click", () => {
+        if (document.getElementById("brain").classList.contains("buzzIn")) {
+          document.getElementById("brain").classList.remove("buzzIn");
+          sendButton(0, "lifesaver brain question");
+          document.querySelectorAll(".btnLifesaver").forEach((el) => {
+            el.style.display = "none";
+          });
         }
-      }
-    )
+      });
     // Sorta buttons
-    document.querySelector('#sort .sortA').addEventListener(
-      'click', () => {
-        if (document.getElementById("sort").classList.contains('buzzIn')) {
-          document.getElementById("sort").classList.remove('buzzIn');
-          document.querySelector('#sort .sortA').classList.add('pressed');
-          sendButton(3, 'sort question');
-          setTimeout(() => {
-            document.querySelector('#sort .sortA').classList.remove('pressed')
-          }, 50);
-        }
+    document.querySelector("#sort .sortA").addEventListener("click", () => {
+      if (document.getElementById("sort").classList.contains("buzzIn")) {
+        document.getElementById("sort").classList.remove("buzzIn");
+        document.querySelector("#sort .sortA").classList.add("pressed");
+        sendButton(3, "sort question");
+        setTimeout(() => {
+          document.querySelector("#sort .sortA").classList.remove("pressed");
+        }, 50);
       }
-    )
-    document.querySelector('#sort .sortB').addEventListener(
-      'click', () => {
-        if (document.getElementById("sort").classList.contains('buzzIn')) {
-          document.getElementById("sort").classList.remove('buzzIn');
-          document.querySelector('#sort .sortB').classList.add('pressed');
-          sendButton(5, 'sort question');
-          setTimeout(() => {
-            document.querySelector('#sort .sortB').classList.remove('pressed')
-          }, 50);
-        }
+    });
+    document.querySelector("#sort .sortB").addEventListener("click", () => {
+      if (document.getElementById("sort").classList.contains("buzzIn")) {
+        document.getElementById("sort").classList.remove("buzzIn");
+        document.querySelector("#sort .sortB").classList.add("pressed");
+        sendButton(5, "sort question");
+        setTimeout(() => {
+          document.querySelector("#sort .sortB").classList.remove("pressed");
+        }, 50);
       }
-    )
-    document.querySelector('#sort .sortBoth').addEventListener(
-      'click', () => {
-        if (document.getElementById("sort").classList.contains('buzzIn')) {
-          document.getElementById("sort").classList.remove('buzzIn');
-          document.querySelector('#sort .sortBoth').classList.add('pressed');
-          sendButton(1, 'sort question');
-          setTimeout(() => {
-            document.querySelector('#sort .sortBoth').classList.remove('pressed')
-          }, 50);
-        }
+    });
+    document.querySelector("#sort .sortBoth").addEventListener("click", () => {
+      if (document.getElementById("sort").classList.contains("buzzIn")) {
+        document.getElementById("sort").classList.remove("buzzIn");
+        document.querySelector("#sort .sortBoth").classList.add("pressed");
+        sendButton(1, "sort question");
+        setTimeout(() => {
+          document.querySelector("#sort .sortBoth").classList.remove("pressed");
+        }, 50);
       }
-    )
+    });
     // AOS buzzer button
-    document.querySelector('#gib .buzzer').addEventListener(
-      'click', () => {
-        if (document.getElementById("gib").classList.contains('buzzIn')) {
-          sendButton(5, 'all outta salt buzz in');
-        } else if (document.getElementById('gib').classList.contains('canSubmit')) {
-          sendButton(5, 'all outta salt finished');
-          document.querySelector('#gib .buzzer').style.display = "none";
-        }
+    document.querySelector("#gib .buzzer").addEventListener("click", () => {
+      if (document.getElementById("gib").classList.contains("buzzIn")) {
+        sendButton(5, "all outta salt buzz in");
+      } else if (
+        document.getElementById("gib").classList.contains("canSubmit")
+      ) {
+        sendButton(5, "all outta salt finished");
+        document.querySelector("#gib .buzzer").style.display = "none";
       }
-    )
+    });
     // Sugar Rush and Like/Leave option toggles
-    options = document.querySelectorAll('#rush .optionRush');
+    options = document.querySelectorAll("#rush .optionRush");
     options.forEach((el, i) => {
-      el.addEventListener('click', () => {
+      el.addEventListener("click", () => {
         let tick = document.getElementById(el.htmlFor);
         if (!tick.disabled) {
-          el.classList.add('pressed')
-          console.log("Toggled option " + (i + 1) + " o" + (tick.checked ? "ff" : "n"))
+          el.classList.add("pressed");
+          console.log(
+            "Toggled option " + (i + 1) + " o" + (tick.checked ? "ff" : "n")
+          );
           setTimeout(() => {
-            reflectFinaleButton()
-            el.classList.remove('pressed')
+            reflectFinaleButton();
+            el.classList.remove("pressed");
           }, 50);
         }
       });
-    })
-    options = document.querySelectorAll('#like .optionRush');
+    });
+    options = document.querySelectorAll("#like .optionRush");
     options.forEach((el, i) => {
-      el.addEventListener('click', () => {
+      el.addEventListener("click", () => {
         let tick = document.getElementById(el.htmlFor);
         if (!tick.disabled) {
-          el.classList.add('pressed')
+          el.classList.add("pressed");
           setTimeout(() => {
-            reflectFinaleButton()
-            el.classList.remove('pressed')
+            reflectFinaleButton();
+            el.classList.remove("pressed");
           }, 50);
-          console.log("Toggled option " + (i + 1) + " o" + (tick.checked ? "ff" : "n"))
+          console.log(
+            "Toggled option " + (i + 1) + " o" + (tick.checked ? "ff" : "n")
+          );
         }
       });
-    })
+    });
 
     const updateText = (finalize) => {
       console.log("Updating text content");
-      var text = document.querySelector('#gib input').value;
-      update(ref_me, {"inputText": text});
-    }
-    
-    function debounce(func, timeout = 300){
+      var text = document.querySelector("#gib input").value;
+      update(ref_me, { inputText: text });
+    };
+
+    function debounce(func, timeout = 300) {
       let timer;
       return (...args) => {
         if (!timer) {
@@ -1801,10 +1936,8 @@
       };
     }
 
-    const sendTextContent = debounce(
-      updateText, 80
-    );
-    
+    const sendTextContent = debounce(updateText, 80);
+
     /*
      *  If the nickname contains curly Unicode single quotes,
      *  replace them with the allowed typewriter/ASCII single quotes.
@@ -1813,31 +1946,26 @@
       // replace unicode single quotes
       var start = el.selectionStart;
       var end = el.selectionEnd;
-      const quotes = /[\u2018\u2019\u201b]/g
+      const quotes = /[\u2018\u2019\u201b]/g;
       el.value = el.value.replaceAll(quotes, "'");
-      el.value = el.value.replaceAll('\u201a', ",");
+      el.value = el.value.replaceAll("\u201a", ",");
       console.log("Fixed quotes:", el.value);
       el.setSelectionRange(start, end);
-    }
+    };
 
-    document.querySelector('#gib input').addEventListener(
-      'input', () => {
-        console.log("Text changed");
-        fixQuotes(document.querySelector('#gib input'));
-        sendTextContent();
+    document.querySelector("#gib input").addEventListener("input", () => {
+      console.log("Text changed");
+      fixQuotes(document.querySelector("#gib input"));
+      sendTextContent();
+    });
+    document.querySelector("#gib input").addEventListener("keyup", (e) => {
+      console.log("Keypress", e.which);
+      if (e.which == 13) {
+        sendButton(5, "gib done submit by pressing enter");
+        document.querySelector("#gib .buzzer").style.display = "none";
       }
-    );
-    document.querySelector('#gib input').addEventListener(
-      'keyup', (e) => {
-        console.log("Keypress", e.which);
-        if (e.which == 13) {
-          sendButton(5, "gib done submit by pressing enter");
-          document.querySelector('#gib .buzzer').style.display = "none";
-        }
-      }
-    );
+    });
 
     /** END INJECTED SCRIPT **/
   </script>
-
 </body>
