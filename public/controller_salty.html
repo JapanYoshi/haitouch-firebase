@@ -1245,6 +1245,24 @@
     } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
     console.log("database object =", window.fb_db);
     var scene = document.querySelector("article#standby");
+    
+    // Judge that the game has been ended if it has been 10 seconds since the last timestamp update.
+    const close_room = () => {
+      console.log("close_room()");
+      // Show disconnect overlay
+      document.getElementById("roomClosedBg").style.display = "";
+    }
+    var disconnect_timer = undefined;
+    const disconnect_timer_timeout_ms = 10000;
+    var ref_timestamp = ref(window.fb_db, `rooms/${window.rc}/lastUpdate`);
+    onValue(ref_timestamp, (snapshot) => {
+      // If this gets called, the value has changed (not deleted)
+      // const data = snapshot.val();
+      if (disconnect_timer) {
+        clearTimeout(disconnect_timer);
+      }
+      disconnect_timer = setTimeout(close_room, disconnect_timer_timeout_ms);
+    });
 
     /* DEBUG: Make the debug keypad visible */
     //document.getElementById("debugKeypad").style.display = "";

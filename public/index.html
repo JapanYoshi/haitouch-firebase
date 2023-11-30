@@ -99,6 +99,13 @@ onValue(roomCodeRef, (snapshot) => {
   console.log("Room codes updated on", new Date);  
   // in case inputRc is not empty upon page load (browser remembered last room code)
   //validateChange();
+  if (window.rc != "") {
+    if (!roomExists(window.rc)) {
+      // unset section tag because the room is gone
+      window.location.hash = "";
+      document.getElementById("roomClosedBg").style.display = "";
+    }
+  }
 });
 get(roomCodeRef).then(snapshot => {
   roomCodeList = snapshot.val();
