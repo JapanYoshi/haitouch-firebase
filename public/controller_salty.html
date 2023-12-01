@@ -194,7 +194,7 @@
         display: none;
       }
 
-      #headerLifesaver.lsAvailable {
+      #game.lsAvailable #headerLifesaver {
         display: block;
       }
 
@@ -203,7 +203,7 @@
         height: 3rem;
       }
 
-      #headerLifesaver.lsAvailable #headerLifesaverImg {
+      #game.lsAvailable #headerLifesaver #headerLifesaverImg {
         animation: rot-anim 15s infinite linear;
       }
 
@@ -591,8 +591,13 @@
         background: var(--red-gradient);
         color: black;
       }
-
+      
       .btnLifesaver {
+        display: none;
+      }
+
+      #game.lsAvailable .btnLifesaver {
+        display: block;
         flex: 0 0 auto;
         height: 3rem;
         background-color: white;
@@ -1347,16 +1352,15 @@
       //console.log("ref me", data);
       // do stuff with it
       // includes changes in score, input state, nickname, etc.
-      if (snapshotMe.lifesaver != data.lifesaver) {
-        if (data.lifesaver) {
-          document
-            .getElementById("headerLifesaver")
-            .classList.add("lsAvailable");
-        } else {
-          document
-            .getElementById("headerLifesaver")
-            .classList.remove("lsAvailable");
-        }
+      // reconnection might change whether lifesaver is active
+      if (data.lifesaver) {
+        document
+          .getElementById("game")
+          .classList.add("lsAvailable");
+      } else {
+        document
+          .getElementById("game")
+          .classList.remove("lsAvailable");
       }
       if (snapshotMe.nick != data.nick) {
         document.getElementById("nickname").innerText = data.nick;
@@ -1842,9 +1846,6 @@
         if (document.getElementById("normal").classList.contains("buzzIn")) {
           document.getElementById("normal").classList.remove("buzzIn");
           sendButton(0, "lifesaver normal question");
-          document.querySelectorAll(".btnLifesaver").forEach((el) => {
-            el.style.display = "none";
-          });
         }
       });
     document
@@ -1853,9 +1854,6 @@
         if (document.getElementById("brain").classList.contains("buzzIn")) {
           document.getElementById("brain").classList.remove("buzzIn");
           sendButton(0, "lifesaver brain question");
-          document.querySelectorAll(".btnLifesaver").forEach((el) => {
-            el.style.display = "none";
-          });
         }
       });
     // Sorta buttons
