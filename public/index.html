@@ -73,6 +73,7 @@ signInAnonymously(auth).then(
 );
 let roomRef;
 let roomCodeList = {};
+let roomCodeListInitialized = false;
 let controllerPageName = "";
 
 let myName = localStorage.getItem("name");
@@ -95,6 +96,7 @@ function formatRoomCode(text) {
 
 let roomCodeRef = ref(window.fb_db, 'roomCodes');
 onValue(roomCodeRef, (snapshot) => {
+  if (!snapshot.val()) return;
   roomCodeList = snapshot.val();
   console.log("Room codes updated on", new Date);  
   // in case inputRc is not empty upon page load (browser remembered last room code)
@@ -110,6 +112,7 @@ onValue(roomCodeRef, (snapshot) => {
 get(roomCodeRef).then(snapshot => {
   roomCodeList = snapshot.val();
   console.log("Room codes initialized on", new Date);
+  roomCodeListInitialized = true;
   validateChange();
 });
 
@@ -168,7 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /*
 Join request!
-TODO: Treat results.
 */
 function joinRoom() {
   btnJoin.disabled = true;
@@ -213,7 +215,7 @@ function validateChange() {
     inputRc.validity.valid
   ) {
     btnJoin.disabled = true;
-    if (!ready) {
+    if (!ready || !roomCodeListInitialized) {
       roomName.innerText = "Connecting to database";
       roomStatus.innerText = "Please wait...";
       setTimeout(250, validateChange);
@@ -254,6 +256,8 @@ function validateChange() {
         }
         if (btnJoin.disabled === false) {
           inputNick.focus();
+          // set cursor position after the name so that the player can reset it
+          inputNick.setSelectionRange(inputNick.value.length, inputNick.value.length);
         }
       }
     );
@@ -281,13 +285,13 @@ function fixQuotes(el) {
   el.value = el.value.toUpperCase();
   //console.log("Fixed quotes:", el.value);
   el.setSelectionRange(start, end);
-  document.querySelector("label[for=nick] + .letterCount").innerText = `${el.value.length}/12`;
+  document.querySelector("label[for=nick] + .letterCount").innerText = `${el.value.length}/${el.maxlength}`;
 }
 
 function inputNickValidation() {
   fixQuotes(inputNick);
   // Check against the name regex
-  var nameRegex = RegExp("^[ !',-./0-9?A-Za-z]{0,12}$");
+  var nameRegex = RegExp("^[ !',-./0-9?A-Za-z]+$");
   if (nameRegex.test(inputNick.value)) {
     // Valid nick, allow join and save for later
     document.getElementById("btnJoin").disabled = false;
@@ -324,6 +328,7 @@ function replacePage() {
       document.body.innerHTML = htmlText;
       document.body.appendChild(disconnectedModal);
       // manually extract the element script using specific comments
+      // again, this is janky and I do not recommend doing this
       header = '/** START INJECTED SCRIPT **/';
       start = xmlHttp.responseText.indexOf(header) + header.length;
       end = xmlHttp.responseText.indexOf("/** END INJECTED SCRIPT **/");
