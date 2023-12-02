@@ -47,19 +47,20 @@ var ready = false;
 
 const STRINGS = {
   connectingToDb: "Connecting to database",
-  connectingWait: "Please wait...",
+  connectingWait: "Подождите...",
+  roomCodeNotEntered: "Incomplete room code",
   roomCodeInvalid: "Room code must be 4 capital letters.",
-  roomNone: "No such room",
-  roomPleaseVerify: "Double-check your room code",
+  roomNone: "Нет такой комнаты",
+  roomPleaseVerify: "Еще раз проверьте код комнаты",
   roomError: "Error checking room",
   loadingGameName: "Fetching game name...",
-  joinWait: "Please wait...",
+  joinWait: "Подождите...",
   joinRejected: "Your join request was rejected.",
   joinFull: "Sorry, this room is full.",
   fullGameInProgress: "Game in progress. Rejoins only.",
-  joinAsPlayer: "Join as player",
-  joinAsAudience: "Join as audience",
-  buttonJoin: "Join room",
+  joinAsPlayer: "Войти как игрок",
+  joinAsAudience: "Войти как зритель",
+  buttonJoin: "Войти в комнату",
   loadingController: "Loading game-specific controller...",
   buttonJoinSuccess: "Success!",
   disconnectedThanks: "Thank you for playing!",
@@ -97,6 +98,7 @@ let roomRef;
 let roomCodeList = {};
 let roomCodeListInitialized = false;
 let controllerPageName = "";
+let roomCanBeJoined = false;
 
 let myName = localStorage.getItem("name");
 if (!myName) {
@@ -196,6 +198,11 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("roomClosedThanks").innerText = STRINGS.disconnectedThanks;
   document.getElementById("roomClosedMessage").innerText = STRINGS.disconnected;
   document.querySelector("#roomClosedModal button").innerText = STRINGS.buttonReload;
+  if (!ready) {
+    document.getElementById("roomName").innerText = STRINGS.connectingToDb;
+    document.getElementById("roomStatus").innerText = STRINGS.connectingWait;
+    btnJoin.innerText = STRINGS.buttonJoin;
+  }
 });
 
 /*
@@ -237,6 +244,7 @@ Room code input.
 If the room code is valid, first check if it's in the list of room codes. Then if it exists, get the current state of the room.
  */
 function validateChange() {
+  roomCanBeJoined = false;
   let rc = inputRc.value.toUpperCase();
   document.querySelector("label[for=rc] + .letterCount").innerText = `${rc.length}/4`;
   if (
@@ -273,23 +281,25 @@ function validateChange() {
         switch (value.state) {
           case 0:
             roomStatus.innerText = STRINGS.joinFull;
+            roomCanBeJoined = false;
             break
           case 1:
-            btnJoin.disabled = false;
             roomStatus.innerText = STRINGS.joinAsPlayer;
+            roomCanBeJoined = true;
             break
           case 2:
-            btnJoin.disabled = false;
             roomStatus.innerText = STRINGS.joinAsAudience;
+            roomCanBeJoined = true;
             break
           case 3:
-            btnJoin.disabled = false;
             roomStatus.innerText = STRINGS.fullGameInProgress;
+            roomCanBeJoined = false;
             break
           default:
             roomStatus.innerText = `Unknown status (${value.state})`;
+            roomCanBeJoined = false;
         }
-        if (btnJoin.disabled === false) {
+        if (roomCanBeJoined) {
           inputNick.focus();
           // set cursor position after the name so that the player can reset it
           inputNick.setSelectionRange(inputNick.value.length, inputNick.value.length);
@@ -298,7 +308,7 @@ function validateChange() {
     );
   } else {
     btnJoin.disabled = true;
-    roomName.innerText = "...";
+    roomName.innerText = STRINGS.roomCodeNotEntered;
     roomStatus.innerText = STRINGS.roomCodeInvalid;
   }
 }
@@ -324,12 +334,13 @@ function fixQuotes(el) {
 }
 
 function inputNickValidation() {
+  console.log("inputNickValidation", roomCanBeJoined);
   fixQuotes(inputNick);
   // Check against the name regex
   var nameRegex = RegExp("^[ !',-./0-9?A-Za-z]+$");
   if (nameRegex.test(inputNick.value)) {
     // Valid nick, allow join and save for later
-    document.getElementById("btnJoin").disabled = false;
+    document.getElementById("btnJoin").disabled = !roomCanBeJoined;
     localStorage.setItem("nickname", inputNick.value);
   } else {
     // Not a valid nick, don't allow join
@@ -401,25 +412,25 @@ document.getElementById("roomClosedBg").style.display = "none";
   <div id="main">
     <div id="join">
       <div class="letterCountSplit">
-        <label for="rc">Room code</label>
+        <label for="rc">Код комнаты</label>
         <span class="letterCount">0/4</span>
       </div>
       <input style="text-transform: uppercase;" name="rc" id="rc" type="text"
-      pattern="[A-Za-z]{4}" maxlength="4" title="4 capital letters." placeholder="ABCD">
-      <div id="roomName">...</div>
-      <div id="roomStatus">Room code must be 4 capital letters.</div>
+      pattern="[A-Za-z]{4}" maxlength="4" title="4 заглавные латинские буквы." placeholder="ABCD">
+      <div id="roomName"></div>
+      <div id="roomStatus"></div>
       <div class="letterCountSplit">
-        <label for="nick">Nickname <i>(optional)</i></label>
+        <label for="nick">Никнейм <i>(необязательное)</i></label>
         <span class="letterCount">0/12</span>
       </div>
       <input style="text-transform: uppercase;" name="nick" id="nick" type="text"
-      maxlength="12" title="Up to 12 letters, numbers, and limited symbols: !',-./?" placeholder="PLAYER">
-      <div id="joinStatus">Press button to join.</div>
-      <button id="btnJoin" disabled>Join room</button>
+      maxlength="12" title="До 12 латинских или кириллических букв, цифр и ограниченных символов: !',-./?" placeholder="PLAYER">
+      <div id="joinStatus"></div>
+      <button id="btnJoin" disabled></button>
       <div id="finePrint">
-        By clicking “Join room”, you agree to our <a href="https://haitouch.ga/tos">Terms of Service</a>.<br>
-        Created by <a href="https://haitouch.ga">hai!touch Studios</a> as <a href="https://github.com/JapanYoshi/haitouch-firebase">free and open-source software</a><br>
-        Powered by <a href="https://firebase.google.com">Firebase Realtime Database</a>
+        Нажимая «Войти в комнату», вы соглашаетесь с нашими <a href="https://haitouch.ga/tos">Условиями Обслуживания</a>.<br>
+        Создано <a href="https://haitouch.ga">hai!touch Studios</a> как <a href="https://github.com/JapanYoshi/haitouch-firebase">бесплатное программное обеспечение с открытым исходным кодом.</a><br>
+        Работает на базе <a href="https://firebase.google.com">базы данных Firebase в реального времени.</a>
       </div>
       <a href="https://vk.com/theboxjack"><img style="display:block;margin:2rem auto;width:16rem;" src="img/thebox.svg" alt="Перевод THE BOX"></a>
     </div>
