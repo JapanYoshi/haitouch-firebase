@@ -44,7 +44,7 @@ import { getDatabase, ref, onValue, get, push, update, child } from "https://www
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
 
 var ready = false;
-
+const NICKNAME_CHAR_LIMIT = 12;
 const STRINGS = {
   connectingToDb: "Connecting to database",
   connectingWait: "Подождите...",
@@ -99,6 +99,8 @@ let roomCodeList = {};
 let roomCodeListInitialized = false;
 let controllerPageName = "";
 let roomCanBeJoined = false;
+let nicknameIsValid = false;
+
 
 let myName = localStorage.getItem("name");
 if (!myName) {
@@ -114,38 +116,34 @@ if (!myName) {
   localStorage.setItem("name", myName);
 }
 
+
 function formatRoomCode(text) {
   return text.toUpperCase();
 }
+
 
 let roomCodeRef = ref(window.fb_db, 'roomCodes');
 onValue(roomCodeRef, (snapshot) => {
   if (!snapshot.val()) return;
   roomCodeList = snapshot.val();
+  roomCodeListInitialized = true;
   console.log("Room codes updated on", new Date);  
   // in case inputRc is not empty upon page load (browser remembered last room code)
-  //validateChange();
+  //validateRoomCode();
   if (window.rc != "") {
     if (!roomExists(window.rc)) {
       // unset section tag because the room is gone
       window.location.hash = "";
-      document.getElementById("roomClosedBg").style.display = "";
     }
   }
+  document.getElementById("roomClosedBg").style.display = "";
 });
-function initializeRoomCodes() {
-  get(roomCodeRef).then(snapshot => {
-    roomCodeList = snapshot.val();
-    console.log("Room codes initialized on", new Date);
-    roomCodeListInitialized = true;
-    validateChange();
-  });
-}
-initializeRoomCodes();
+
 
 function roomExists(roomCode) {
   return roomCodeList[roomCode] == true;
 }
+
 
 function getRoomData(roomCode) {
   console.log("getRoomData");
@@ -177,12 +175,21 @@ function getRoomData(roomCode) {
   return promise;
 }
 
-/* Lobby HTML */
 
+/* Lobby HTML */
 const inputRc = document.getElementById('rc');
 const inputNick = document.getElementById('nick');
 const btnJoin = document.getElementById('btnJoin');
 const joinStatus = document.getElementById('joinStatus');
+function setNicknameValid(newValue) {
+  nicknameIsValid = newValue;
+  if (newValue) {
+    inputNick.classList.remove("fixThis");
+  } else {
+    inputNick.classList.add("fixThis");
+  }
+}
+
 
 /* Autofill upon reload */
 document.addEventListener("DOMContentLoaded", () => {
@@ -205,10 +212,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+
 /*
 Join request!
 */
 function joinRoom() {
+  if (!(roomCanBeJoined && nicknameIsValid)) {return;}
   btnJoin.disabled = true;
   console.log("Joining");
   btnJoin.innerText = STRINGS.joinWait;
@@ -239,11 +248,15 @@ function joinRoom() {
 
 btnJoin.addEventListener("click", joinRoom);
 
+
 /*
 Room code input.
 If the room code is valid, first check if it's in the list of room codes. Then if it exists, get the current state of the room.
  */
-function validateChange() {
+function validateRoomCode(event) {
+  if (!!event && event.isComposing) {
+    return
+  };
   roomCanBeJoined = false;
   let rc = inputRc.value.toUpperCase();
   document.querySelector("label[for=rc] + .letterCount").innerText = `${rc.length}/4`;
@@ -255,13 +268,13 @@ function validateChange() {
     if (!ready) {
       roomName.innerText = STRINGS.connectingToDb;
       roomStatus.innerText = STRINGS.connectingWait;
-      setTimeout(250, validateChange);
+      setTimeout(250, validateRoomCode);
       return;
     }
     if (!roomCodeListInitialized) {
       roomName.innerText = STRINGS.connectingToDb;
       roomStatus.innerText = STRINGS.connectingWait;
-      setTimeout(250, validateChange);
+      setTimeout(250, validateRoomCode);
       return;
     }
     if (!roomExists(rc)) {
@@ -300,6 +313,7 @@ function validateChange() {
             roomCanBeJoined = false;
         }
         if (roomCanBeJoined) {
+          btnJoin.disabled = roomCanBeJoined && nicknameIsValid;
           inputNick.focus();
           // set cursor position after the name so that the player can reset it
           inputNick.setSelectionRange(inputNick.value.length, inputNick.value.length);
@@ -312,7 +326,8 @@ function validateChange() {
     roomStatus.innerText = STRINGS.roomCodeInvalid;
   }
 }
-inputRc.addEventListener("input", validateChange);
+inputRc.addEventListener("input", validateRoomCode);
+
 
 /*
 Nickname input.
@@ -330,30 +345,39 @@ function fixQuotes(el) {
   el.value = el.value.toUpperCase();
   //console.log("Fixed quotes:", el.value);
   el.setSelectionRange(start, end);
-  document.querySelector("label[for=nick] + .letterCount").innerText = `${el.value.length}/${el.maxLength}`;
+  document.querySelector("label[for=nick] + .letterCount").innerText = `${el.value.length}/${NICKNAME_CHAR_LIMIT}`;
 }
 
-function inputNickValidation() {
-  console.log("inputNickValidation", roomCanBeJoined);
+
+function inputNickValidation(event) {
+  if (!!event && event.isComposing) {
+    return;
+  }
   fixQuotes(inputNick);
   // Check against the name regex
-  var nameRegex = RegExp("^[ !',-./0-9?A-Za-z]+$");
+  var nameRegex = RegExp("^[ !',-./0-9?A-Za-zЁА-яё]{0," + NICKNAME_CHAR_LIMIT + "}$");
   if (nameRegex.test(inputNick.value)) {
     // Valid nick, allow join and save for later
-    document.getElementById("btnJoin").disabled = !roomCanBeJoined;
+    setNicknameValid(true);
     localStorage.setItem("nickname", inputNick.value);
+    console.log(inputNick.value, "is valid");
   } else {
     // Not a valid nick, don't allow join
-    document.getElementById("btnJoin").disabled = true;
+    setNicknameValid(false);
+    console.log(inputNick.value, "is invalid");
   }
+  btnJoin.disabled = roomCanBeJoined && nicknameIsValid;
 };
 inputNick.addEventListener("input", inputNickValidation);
+
+
 // Let the player press Enter after entering their nickname to insta-join
 inputNick.addEventListener('keypress', (e) => {
   if (e.key === "Enter" && btnJoin.disabled === false) {
     joinRoom();
   }
 });
+
 
 // Once you join, replace the page's contents with the specified controller
 function replacePage() {
@@ -389,6 +413,7 @@ function replacePage() {
   xmlHttp.open("GET", "https://" + window.location.hostname + "/" + controllerPageName + ".html", true);
   xmlHttp.send(null)
 }
+
 
 // Finally, hide the disconnect overlay
 document.getElementById("roomClosedBg").style.display = "none";

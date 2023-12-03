@@ -220,3 +220,8 @@ input[type=text] {
     border: 2px solid lightgray;
     box-sizing: border-box;
 }
+
+input[type=text].fixThis {
+  color: #d00;
+  border-color: #faa;
+}
