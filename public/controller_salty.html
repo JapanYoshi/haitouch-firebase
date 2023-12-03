@@ -1570,8 +1570,8 @@
           scene = document.querySelector("article#sort");
           scene.classList.add("active", "qHidden");
 
-          scene.getElementsByClassName("sortA")[0].innerText = data.a;
-          scene.getElementsByClassName("sortB")[0].innerText = data.b;
+          scene.getElementsByClassName("sortA")[0].innerText = convertBB(data.a);
+          scene.getElementsByClassName("sortB")[0].innerText = convertBB(data.b);
           if (data.hasBoth == true) {
             scene.getElementsByClassName("sortBoth")[0].style.display = "block";
           } else {
@@ -1658,7 +1658,7 @@
           scene.classList.remove("buzzIn", "canSubmit", "yourTurn");
           //scene.classList.add('qHidden');
           scene.querySelector("input").classList.add("correct");
-          scene.querySelector("input").value = data.answer;
+          scene.querySelector("input").value = convertBB(data.answer);
           scene.querySelector("input").disabled = true;
           return;
         case "thousand":
