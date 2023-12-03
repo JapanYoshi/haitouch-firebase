@@ -243,7 +243,10 @@ btnJoin.addEventListener("click", joinRoom);
 Room code input.
 If the room code is valid, first check if it's in the list of room codes. Then if it exists, get the current state of the room.
  */
-function validateChange() {
+function validateChange(event) {
+  if (!!event && event.isComposing) {
+    return
+  };
   roomCanBeJoined = false;
   let rc = inputRc.value.toUpperCase();
   document.querySelector("label[for=rc] + .letterCount").innerText = `${rc.length}/4`;
@@ -330,14 +333,17 @@ function fixQuotes(el) {
   el.value = el.value.toUpperCase();
   //console.log("Fixed quotes:", el.value);
   el.setSelectionRange(start, end);
-  document.querySelector("label[for=nick] + .letterCount").innerText = `${el.value.length}/${el.maxLength}`;
+  document.querySelector("label[for=nick] + .letterCount").innerText = `${el.value.length}/12`;
 }
 
-function inputNickValidation() {
+function inputNickValidation(event) {
+  if (!!event && event.isComposing) {
+    return;
+  }
   console.log("inputNickValidation", roomCanBeJoined);
   fixQuotes(inputNick);
   // Check against the name regex
-  var nameRegex = RegExp("^[ !',-./0-9?A-Za-z]+$");
+  var nameRegex = RegExp("^[ !',-./0-9?A-Za-z]{0,12}$");
   if (nameRegex.test(inputNick.value)) {
     // Valid nick, allow join and save for later
     document.getElementById("btnJoin").disabled = !roomCanBeJoined;
@@ -423,8 +429,7 @@ document.getElementById("roomClosedBg").style.display = "none";
         <label for="nick">Nickname <i>(optional)</i></label>
         <span class="letterCount">0/12</span>
       </div>
-      <input style="text-transform: uppercase;" name="nick" id="nick" type="text"
-      maxlength="12" title="Up to 12 letters, numbers, and limited symbols: !',-./?" placeholder="PLAYER">
+      <input style="text-transform: uppercase;" name="nick" id="nick" type="text" title="Up to 12 letters, numbers, and limited symbols: !',-./?" placeholder="PLAYER">
       <div id="joinStatus">Press button to join.</div>
       <button id="btnJoin" disabled>Join room</button>
       <div id="finePrint">
