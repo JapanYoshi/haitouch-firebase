@@ -1377,6 +1377,13 @@
       if (snapshotMe.messages.time < data.messages.time) {
         onPlayerMessage(data.messages);
       }
+      if (snapshotMe.lifesaver != data.lifesaver) {
+        if (data.lifesaver) {
+          document.getElementById("game").classList.add("lsAvailable");
+        } else {
+          document.getElementById("game").classList.remove("lsAvailable");
+        }
+      }
       // update local copy for next snapshot
       snapshotMe = data;
     });
