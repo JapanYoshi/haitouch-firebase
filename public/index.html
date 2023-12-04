@@ -379,7 +379,7 @@ Join request!
       setNicknameValid(false);
       console.log(inputNick.value, "is invalid");
     }
-    btnJoin.disabled = roomCanBeJoined && nicknameIsValid;
+    btnJoin.disabled = !(roomCanBeJoined && nicknameIsValid);
   }
   inputNick.addEventListener("input", inputNickValidation);
 
@@ -536,8 +536,8 @@ document.getElementById("roomClosedBg").style.display = "none";
           title="4 capital letters."
           placeholder="ABCD"
         />
-        <div id="roomName">...</div>
-        <div id="roomStatus">Room code must be 4 capital letters.</div>
+        <div id="roomName"></div>
+        <div id="roomStatus"></div>
         <div class="letterCountSplit">
           <label for="nick">Nickname <i>(optional)</i></label>
           <span class="letterCount">0/12</span>
@@ -550,8 +550,8 @@ document.getElementById("roomClosedBg").style.display = "none";
           title="Up to 12 letters, numbers, and limited symbols: !',-./?"
           placeholder="PLAYER"
         />
-        <div id="joinStatus">Press button to join.</div>
-        <button id="btnJoin" disabled>Join room</button>
+        <div id="joinStatus"></div>
+        <button id="btnJoin" disabled></button>
         <div id="finePrint">
           By clicking “Join room”, you agree to our
           <a href="https://haitouch.ga/tos">Terms of Service</a>.<br />
