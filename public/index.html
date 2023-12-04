@@ -255,8 +255,11 @@ If the room code is valid, first check if it's in the list of room codes. Then i
     document.querySelector(
       "label[for=rc] + .letterCount"
     ).innerText = `${rc.length}/4`;
-    if (rc.length == 4 && inputRc.validity.valid) {
+    const regex = /^[A-Z]{4}$/;
+    if (regex.test(rc)) {
+      // valid room code
       btnJoin.disabled = true;
+      inputRc.classList.remove("fixThis");
       if (!ready) {
         roomName.innerText = STRINGS.connectingToDb;
         roomStatus.innerText = STRINGS.connectingWait;
@@ -318,6 +321,7 @@ If the room code is valid, first check if it's in the list of room codes. Then i
       });
     } else {
       btnJoin.disabled = true;
+      inputRc.classList.add("fixThis");
       roomName.innerText = STRINGS.roomCodeNotEntered;
       roomStatus.innerText = STRINGS.roomCodeInvalid;
     }
@@ -419,7 +423,8 @@ function replacePage() {
   // fetch the controller file
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = () => {
-    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+    if (xmlHttp.readyState == 4) {
+      if (xmlHttp.status == 200) {
       //console.log(xmlHttp.responseText);
       // manually extract the element div.game using specific comments
       // this is pretty janky, so if you're looking at this, don't do this for your own projects
@@ -441,6 +446,8 @@ function replacePage() {
       scriptEl.type = "module";
       document.head.appendChild(scriptEl);
       // setInterval(heartbeat, 1000);
+    } else {
+      joinStatus.innerText = "Error downloading controller.";
     }
   };
   xmlHttp.open(
@@ -531,8 +538,6 @@ document.getElementById("roomClosedBg").style.display = "none";
           name="rc"
           id="rc"
           type="text"
-          pattern="[A-Za-z]{4}"
-          maxlength="4"
           title="4 capital letters."
           placeholder="ABCD"
         />
