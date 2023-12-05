@@ -46,7 +46,7 @@
     <link rel="stylesheet" href="client.css" />
     <script id="confirmLeave">
       window.onbeforeunload = function () {
-        return "Are you sure you want to leave/reload this page?";
+        return "Вы уверены, что хотите перезагрузить/закрыт страницу?";
       };
     </script>
     <script type="module">
@@ -109,7 +109,7 @@
             />
           </svg>
         </div>
-        <div id="roomClosedMessage">Disconnected from server.</div>
+        <div id="roomClosedMessage">Вы были отключены.</div>
         <button type="button" onclick="location.reload()">Reload page</button>
       </div>
     </div>
@@ -135,7 +135,7 @@
         <div id="roomName"></div>
         <div id="roomStatus"></div>
         <div class="letterCountSplit">
-          <label for="nick">Никнейм <i>(необязательное)</i></label>
+          <label for="nick">Никнейм <i>(необязательно)</i></label>
           <span class="letterCount">0/12</span>
         </div>
         <input
@@ -144,24 +144,24 @@
           id="nick"
           type="text"
           maxlength="12"
-          title="До 12 латинских или кириллических букв, цифр и ограниченных символов: !',-./?"
-          placeholder="PLAYER"
+          title="До 12 символов"
+          placeholder="ИМЯ/НИКНЕЙМ"
         />
         <div id="joinStatus"></div>
         <button id="btnJoin" disabled></button>
         <div id="finePrint">
-          Нажимая «Войти в комнату», вы соглашаетесь с нашими
-          <a href="https://haitouch.ga/tos">Условиями Обслуживания</a>.<br />
+          Нажимая «Играть», вы соглашаетесь с нашими
+          <a href="https://haitouch.ga/tos">Условиями предоставления услуг</a>.<br />
           Создано <a href="https://haitouch.ga">hai!touch Studios</a> как
           <a href="https://github.com/JapanYoshi/haitouch-firebase"
             >бесплатное программное обеспечение с открытым исходным кодом.</a
           ><br />
-          Работает на базе
+          Работает на 
           <a href="https://firebase.google.com"
-            >базы данных Firebase в реального времени.</a
+            >серверах Firebase в режиме реального времени.</a
           >
         </div>
-        <a href="https://vk.com/theboxjack"
+        <a href="https://the.jackbox.su"
           ><img
             style="display: block; margin: 2rem auto; width: 16rem"
             src="img/thebox.svg"
