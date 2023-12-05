@@ -188,7 +188,8 @@ If the room code is valid, first check if it's in the list of room codes. Then i
           setTimeout(250, validateRoomCode);
           return;
         }
-        if (roomCodeListInitialized + 15_000 < +new Date()) {
+        // Keep room code cache for 10 seconds
+        if (roomCodeListInitialized + 10_000 < +new Date()) {
           roomName.innerText = STRINGS.roomCodeRefreshing;
           roomStatus.innerText = STRINGS.roomCodeRefreshingWait;
           get(roomCodeRef).then((snapshot) => {
