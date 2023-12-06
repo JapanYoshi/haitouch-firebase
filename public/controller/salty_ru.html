@@ -837,12 +837,14 @@
 
       .checkRush:not(:checked) + .optionRush::before,
       .optionRush.false::before {
+        /* TRANSLATEME: */
         content: "No: ";
         background-image: url("salty/rush_false.png");
       }
-
+      
       .checkRush:checked + .optionRush::before,
       .optionRush.true::before {
+        /* TRANSLATEME: */
         content: "Yes: ";
         background-image: url("salty/rush_true.png");
       }
@@ -944,8 +946,9 @@
     </style>
     <header>
       <div id="playerNumber"></div>
-      <span id="nickname">SIGNING UP...</span>
-      <span id="score">$0</span>
+      <!-- TRANSLATEME: -->
+      <span id="nickname">Записываю...</span>
+      <span id="score">₽0</span>
       <div id="headerLifesaver">
         <img id="headerLifesaverImg" src="salty/lifesaver.png" />
       </div>
@@ -973,8 +976,9 @@
         style="background-image: url('salty/round_3.png')"
       ></div>
       <div id="finalResult">
+        <!-- TRANSLATEME: (finalHeader only, the rest will be supplied by the main game) -->
         <div id="finalHeader">Results</div>
-        <div id="finalScore">$1,000,000</div>
+        <div id="finalScore">₽1,000,000</div>
         <div id="finalPlacement">You tied for 1st!</div>
       </div>
       <div id="debugKeypad" style="display: none">
@@ -989,7 +993,9 @@
           <div class="debugKey">→</div>
         </div>
       </div>
+      <!-- TRANSLATEME: -->
       <div class="startGame">Start</div>
+      <!-- TRANSLATEME: (This text appears several times in the file, find-and-replace) -->
       <div class="skipButton">Yeah, we all get it</div>
     </article>
     <article id="normal">
@@ -1018,6 +1024,7 @@
           <div class="option">4</div>
         </div>
         <div class="btnLifesaver">
+          <!-- TRANSLATEME: (This text appears several times in the file, find-and-replace) -->
           <img src="salty/lifesaver.png" /> Use a Lifesaver (eliminate 2
           choices)
         </div>
@@ -1034,6 +1041,7 @@
           <div class="questionText">Q</div>
         </div>
         <div class="sortBox">
+          <!-- TRANSLATEME: -->
           <div class="sortBoth">both</div>
           <div class="sortAB">
             <div class="sortA">a</div>
@@ -1041,6 +1049,7 @@
           </div>
         </div>
       </div>
+      <!-- TRANSLATEME: -->
       <div class="skipButton">Yeah, we all get it</div>
     </article>
     <article id="gib">
@@ -1051,6 +1060,7 @@
       ></div>
       <div class="questionFlex">
         <div class="audienceWarning">
+          <!-- TRANSLATEME: -->
           Audience members can answer at any time.
         </div>
         <div class="question">
@@ -1064,6 +1074,7 @@
         <input type="text" pattern="[ !',-.\/0-9?A-Za-z]{0,64}" maxlength="64" />
         <button class="buzzer" type="button"></button>
       </div>
+      <!-- TRANSLATEME: -->
       <div class="skipButton">Yeah, we all get it</div>
     </article>
     <article id="thousand">
@@ -1074,6 +1085,7 @@
       ></div>
       <div class="questionFlex">
         <div class="audienceWarning">
+          <!-- TRANSLATEME: -->
           Audience members can answer at any time.
         </div>
         <div class="question">
@@ -1086,6 +1098,7 @@
           <div class="option">4</div>
         </div>
       </div>
+      <!-- TRANSLATEME: -->
       <div class="skipButton">Yeah, we all get it</div>
     </article>
     <article id="brain">
@@ -1144,6 +1157,7 @@
           <div class="option">4</div>
         </div>
         <div class="btnLifesaver">
+          <!-- TRANSLATEME: -->
           <img src="salty/lifesaver.png" /> Use a Lifesaver (eliminate 2
           choices)
         </div>
@@ -1394,6 +1408,7 @@
         case "none":
           return;
         case "sortAcc":
+          // TRANSLATEME:
           scene.getElementsByClassName("questionText")[0].innerHTML =
             "Your accuracy was " +
             data.numerator +
@@ -1412,6 +1427,7 @@
               buzzer.disabled = false;
               scene.classList.add("canSubmit");
             }, 2000);
+            // TRANSLATEME:
             buzzer.innerText = "Finish typing (or press ⏎)";
           }
           scene.classList.add("yourTurn");
@@ -1500,6 +1516,7 @@
               scene.classList.add("yourTurn");
               scene.querySelector("input").disabled = false;
               scene.querySelector("input").focus();
+              // TRANSLATEME:
               scene.querySelector(".buzzer").innerText = "Final answer!";
             }
           }
