@@ -70,10 +70,6 @@ export function doEverything(STRINGS) {
     localStorage.setItem("name", myName);
   }
 
-  function formatRoomCode(text) {
-    return text.toUpperCase();
-  }
-
   let roomCodeRef = ref(window.fb_db, "roomCodes");
   function setRoomCodes(snapshot) {
     if (!snapshot.val()) return;
@@ -140,7 +136,7 @@ export function doEverything(STRINGS) {
     } else {
       inputRc.value = "";
     }
-    fixQuotes(inputNick);
+    validateNickname();
     document.getElementById("roomClosedThanks").innerText =
       STRINGS.disconnectedThanks;
     document.getElementById("roomClosedMessage").innerText =
@@ -166,7 +162,8 @@ export function doEverything(STRINGS) {
 
     /*
 Room code input.
-If the room code is valid, first check if it's in the list of room codes. Then if it exists, get the current state of the room.
+If the room code is valid, first check if it's in the list of room codes.
+Then if it exists, get the current state of the room.
 */
     function validateRoomCode(event) {
       if (!!event && event.isComposing) {
@@ -233,7 +230,7 @@ If the room code is valid, first check if it's in the list of room codes. Then i
               roomCanBeJoined = false;
           }
           if (roomCanBeJoined) {
-            btnJoin.disabled = roomCanBeJoined && nicknameIsValid;
+            validateNickname();
             inputNick.focus();
             // set cursor position after the name so that the player can reset it
             inputNick.setSelectionRange(
@@ -250,6 +247,7 @@ If the room code is valid, first check if it's in the list of room codes. Then i
       }
     }
     inputRc.addEventListener("input", validateRoomCode);
+    inputRc.addEventListener("compositionend", validateRoomCode);
     /*
 Join request!
 */
@@ -287,7 +285,7 @@ Join request!
 
     btnJoin.addEventListener("click", joinRoom);
 
-    function inputNickValidation(event) {
+    function validateNickname(event) {
       if (!!event && event.isComposing) {
         return;
       }
@@ -305,7 +303,7 @@ Join request!
         console.log(inputNick.value, "is invalid");
       }
     }
-    inputNick.addEventListener("input", inputNickValidation);
+    inputNick.addEventListener("input", validateNickname);
 
     // Let the player press Enter after entering their nickname to insta-join
     inputNick.addEventListener("keypress", (e) => {
@@ -313,64 +311,67 @@ Join request!
         joinRoom();
       }
     });
-  });
 
-  /*
+    /*
 Nickname input.
 Pass the input element.
 If the nickname contains curly Unicode single quotes,
 replace them with the allowed typewriter/ASCII single quotes.
 */
-  function fixQuotes(el) {
-    // replace unicode single quotes
-    var start = el.selectionStart;
-    var end = el.selectionEnd;
-    const quotes = /[\u2018\u2019\u201b]/g;
-    el.value = el.value.replaceAll(quotes, "'");
-    el.value = el.value.replaceAll("\u201a", ",");
-    // use uppercase Eszett for German (also avoids longstanding Chromium bug)
-    el.value = el.value.replaceAll("ß", "ẞ");
-    el.value = el.value.toUpperCase();
-    el.setSelectionRange(start, end);
-    document.querySelector(
-      "label[for=nick] + .letterCount"
-    ).innerText = `${el.value.length}/${NICKNAME_CHAR_LIMIT}`;
-  }
+    function fixQuotes(el) {
+      // replace unicode single quotes
+      var start = el.selectionStart;
+      var end = el.selectionEnd;
+      const quotes = /[\u2018\u2019\u201b]/g;
+      el.value = el.value.replaceAll(quotes, "'");
+      el.value = el.value.replaceAll("\u201a", ",");
+      // use uppercase Eszett for German (also avoids longstanding Chromium bug)
+      el.value = el.value.replaceAll("ß", "ẞ");
+      el.value = el.value.toUpperCase();
+      el.setSelectionRange(start, end);
+      document.querySelector(
+        "label[for=nick] + .letterCount"
+      ).innerText = `${el.value.length}/${NICKNAME_CHAR_LIMIT}`;
+    }
 
-  // Once you join, replace the page's contents with the specified controller
-  function replacePage() {
-    // set section tag to make rejoining easier
-    window.location.hash = window.rc;
-    // fetch the controller file
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = () => {
-      if (xmlHttp.readyState == 4) {
-        if (xmlHttp.status == 200) {
-          //console.log(xmlHttp.responseText);
-          // manually extract the element div.game using specific comments
-          // this is pretty janky, so if you're looking at this, don't do this for your own projects
-          let header = "<!--START INJECTED HTML-->";
-          let start = xmlHttp.responseText.indexOf(header) + header.length;
-          let end = xmlHttp.responseText.indexOf("<!--END INJECTED HTML-->");
-          let htmlText = xmlHttp.responseText.substring(start, end);
-          let disconnectedModal = document.getElementById("roomClosedBg");
-          document.body.innerHTML = htmlText;
-          document.body.appendChild(disconnectedModal);
-          // manually extract the element script using specific comments
-          // again, this is janky and I do not recommend doing this
-          header = "/** START INJECTED SCRIPT **/";
-          start = xmlHttp.responseText.indexOf(header) + header.length;
-          end = xmlHttp.responseText.indexOf("/** END INJECTED SCRIPT **/");
-          let jsText = xmlHttp.responseText.substring(start, end);
-          let scriptEl = document.createElement("script");
-          scriptEl.innerHTML = jsText;
-          scriptEl.type = "module";
-          document.head.appendChild(scriptEl);
-          // setInterval(heartbeat, 1000);
+    // Once you join, replace the page's contents with the specified controller
+    function replacePage() {
+      // set section tag to make rejoining easier
+      window.location.hash = window.rc;
+      // fetch the controller file
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = () => {
+        if (xmlHttp.readyState == 4) {
+          if (xmlHttp.status == 200) {
+            console.log(xmlHttp.responseText);
+            // manually extract the element div.game using specific comments
+            // this is pretty janky, so if you're looking at this, don't do this for your own projects
+            let header = "<!--START INJECTED HTML-->";
+            let start = xmlHttp.responseText.indexOf(header) + header.length;
+            let end = xmlHttp.responseText.indexOf("<!--END INJECTED HTML-->");
+            let htmlText = xmlHttp.responseText.substring(start, end);
+            let disconnectedModal = document.getElementById("roomClosedBg");
+            document.body.innerHTML = htmlText;
+            document.body.appendChild(disconnectedModal);
+            // manually extract the element script using specific comments
+            // again, this is janky and I do not recommend doing this
+            header = "/** START INJECTED SCRIPT **/";
+            start = xmlHttp.responseText.indexOf(header) + header.length;
+            end = xmlHttp.responseText.indexOf("/** END INJECTED SCRIPT **/");
+            let jsText = xmlHttp.responseText.substring(start, end);
+            let scriptEl = document.createElement("script");
+            scriptEl.innerHTML = jsText;
+            scriptEl.type = "module";
+            document.head.appendChild(scriptEl);
+            // setInterval(heartbeat, 1000);
+          } else {
+            console.log(`Failed (status is ${xmlHttp.status}, not 200`);
+            joinStatus.innerText = "Error downloading controller.";
+          }
         } else {
-          joinStatus.innerText = "Error downloading controller.";
+          console.log(`Not ready (readyState is ${xmlHttp.readyState}, not 4)`);
         }
-      }
+      };
       xmlHttp.open(
         "GET",
         "https://" +
@@ -381,6 +382,6 @@ replace them with the allowed typewriter/ASCII single quotes.
         true
       );
       xmlHttp.send(null);
-    };
-  }
+    }
+  });
 }
