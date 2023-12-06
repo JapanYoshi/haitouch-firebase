@@ -1149,26 +1149,6 @@
         </div>
       </div>
     </article>
-    <article id="sort">
-      <div class="filter"></div>
-      <div
-        class="logo active"
-        style="background-image: url('salty/logo_sorta.png')"
-      ></div>
-      <div class="questionFlex">
-        <div class="question">
-          <div class="questionText">Q</div>
-        </div>
-        <div class="sortBox">
-          <div class="sortBoth">both</div>
-          <div class="sortAB">
-            <div class="sortA">a</div>
-            <div class="sortB">b</div>
-          </div>
-        </div>
-      </div>
-      <div class="skipButton">Yeah, we all get it</div>
-    </article>
     <article id="rush">
       <img id="rush_bg" src="salty/rush.png" />
       <div class="questionFlex">
@@ -1367,8 +1347,8 @@
       if (data.lifesaver) {
         console.log("user has lifesaver")
         document
-        .getElementById("game")
-        .classList.add("lsAvailable");
+          .getElementById("game")
+          .classList.add("lsAvailable");
       } else {
         console.log("user doesn't have lifesaver")
         document
@@ -1625,11 +1605,14 @@
           const gBuzzer = scene.querySelector("button.buzzer");
           gBuzzer.style.display = "";
           if (document.getElementById("game").classList.contains("audience")) {
+            // TRANSLATEME:
             gBuzzer.innerText = "Submit answer";
           } else {
+            // TRANSLATEME:
             gBuzzer.innerText = "I know this one!";
           }
           for (let i = 0; i <= 2; i++) {
+            // TRANSLATEME:
             scene.querySelectorAll(".gibClue")[i].innerHTML = `Wait for clue ${
               i + 1
             }...`;
