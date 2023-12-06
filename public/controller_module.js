@@ -34,20 +34,6 @@ export function doEverything(STRINGS) {
   window.rc = "";
 
   const auth = getAuth();
-  signInAnonymously(auth)
-    .then(() => {
-      console.log("Signed in anonymously to Firebase Realtime Database.");
-      document.getElementById("roomName").innerText = STRINGS.connectedToDb;
-      document.getElementById("roomStatus").innerText = STRINGS.connectedPrompt;
-      ready = true;
-    })
-    .catch((error) => {
-      console.error(
-        "Error signing in anonymously to Firebase Realtime Database.",
-        error.code,
-        error.message
-      );
-    });
   let roomRef;
   let roomCodeList = {};
   let roomCodeListInitialized = 0;
@@ -76,14 +62,6 @@ export function doEverything(STRINGS) {
     roomCodeList = snapshot.val();
     roomCodeListInitialized = +new Date();
     console.log("Room codes updated on", roomCodeListInitialized);
-    // in case inputRc is not empty upon page load (browser remembered last room code)
-    //validateRoomCode();
-    if (window.rc != "") {
-      if (!roomExists(window.rc)) {
-        // unset section tag because the room is gone
-        window.location.hash = "";
-      }
-    } // document.getElementById("roomClosedBg").style.display = "";
   }
 
   function roomExists(roomCode) {
@@ -128,6 +106,22 @@ export function doEverything(STRINGS) {
     const btnJoin = document.getElementById("btnJoin");
     const joinStatus = document.getElementById("joinStatus");
 
+    signInAnonymously(auth)
+    .then(() => {
+      console.log("Signed in anonymously to Firebase Realtime Database.");
+      document.getElementById("roomName").innerText = STRINGS.connectedToDb;
+      document.getElementById("roomStatus").innerText = STRINGS.connectedPrompt;
+      ready = true;
+      validateRoomCode();
+    })
+    .catch((error) => {
+      console.error(
+        "Error signing in anonymously to Firebase Realtime Database.",
+        error.code,
+        error.message
+      );
+    });
+    
     var rc = window.location.hash
       .substring(1) // starts with a literal "#"
       .toUpperCase();
@@ -136,7 +130,7 @@ export function doEverything(STRINGS) {
     } else {
       inputRc.value = "";
     }
-    validateNickname();
+    validateRoomCode();
     document.getElementById("roomClosedThanks").innerText =
       STRINGS.disconnectedThanks;
     document.getElementById("roomClosedMessage").innerText =
@@ -174,10 +168,10 @@ Then if it exists, get the current state of the room.
       document.querySelector(
         "label[for=rc] + .letterCount"
       ).innerText = `${rc.length}/4`;
+      btnJoin.disabled = true;
       const regex = /^[A-Z]{4}$/;
       if (regex.test(rc)) {
         // valid room code
-        btnJoin.disabled = true;
         inputRc.classList.remove("fixThis");
         if (!ready) {
           roomName.innerText = STRINGS.connectingToDb;
@@ -198,6 +192,7 @@ Then if it exists, get the current state of the room.
         if (!roomExists(rc)) {
           roomName.innerText = STRINGS.roomNone;
           roomStatus.innerText = STRINGS.roomPleaseVerify;
+          window.location.hash = "";
           return;
         }
         roomName.innerText = STRINGS.loadingGameName;
@@ -260,7 +255,6 @@ Join request!
       btnJoin.innerText = STRINGS.joinWait;
       // write own username into 'pending', then listen for it to be removed after it being processed
       let joinRef = child(roomRef, `pending/${myName}`);
-      update(joinRef, { status: 1, nick: inputNick.value, uuid: myName });
       onValue(joinRef, (snapshot) => {
         let val = snapshot.val();
         console.log("joinRoom val", val);
@@ -281,6 +275,7 @@ Join request!
           replacePage();
         }
       });
+      update(joinRef, { status: 1, nick: inputNick.value, uuid: myName });
     }
 
     btnJoin.addEventListener("click", joinRoom);
@@ -343,7 +338,7 @@ replace them with the allowed typewriter/ASCII single quotes.
       xmlHttp.onreadystatechange = () => {
         if (xmlHttp.readyState == 4) {
           if (xmlHttp.status == 200) {
-            console.log(xmlHttp.responseText);
+            // console.log(xmlHttp.responseText);
             // manually extract the element div.game using specific comments
             // this is pretty janky, so if you're looking at this, don't do this for your own projects
             let header = "<!--START INJECTED HTML-->";
