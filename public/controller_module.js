@@ -75,9 +75,14 @@ export function doEverything(STRINGS) {
         .then((snapshot) => {
           console.log("getRoomData then");
           if (!snapshot.exists()) {
-            resolve({ state: -1, name: STRINGS.roomNone }); // room nonexistent; please update room codes list
+            // room nonexistent; please update room codes list
+            resolve({ state: -1, name: STRINGS.roomNone });
           }
           let val = snapshot.val();
+          if (val.lastUpdate + 10_000 < +(new Date())) {
+            // room hasn't been updated in 10 seconds, it's probably disconnected
+            resolve({ state: -1, name: STRINGS.roomNone });
+          }
           controllerPageName = val.controllerName;
           if (val.inProgress === true) {
             resolve({ state: 3, name: val.gameName }); // game already started and can’t join as audience
