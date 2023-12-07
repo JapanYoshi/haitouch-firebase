@@ -1234,6 +1234,7 @@
     // Judge that the game has been ended if it has been 10 seconds since the last timestamp update.
     const close_room = () => {
       console.log("close_room()");
+      window.location.hash = "";
       // Show disconnect overlay
       document.getElementById("roomClosedBg").style.display = "";
     }
