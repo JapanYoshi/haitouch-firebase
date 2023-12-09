@@ -241,7 +241,9 @@ Then if it exists, get the current state of the room.
         });
       } else {
         btnJoin.disabled = true;
-        inputRc.classList.add("fixThis");
+        if (rc !== "") {
+          inputRc.classList.add("fixThis");
+        }
         roomName.innerText = STRINGS.roomCodeNotEntered;
         roomStatus.innerText = STRINGS.roomCodeInvalid;
       }
