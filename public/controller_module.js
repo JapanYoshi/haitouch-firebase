@@ -41,26 +41,26 @@ export function doEverything(STRINGS) {
   let roomCanBeJoined = false;
   let nicknameIsValid = false;
 
-  let myName = localStorage.getItem("name");
-  if (!myName) {
-    myName = "";
+  let myUuid = localStorage.getItem("name");
+  if (!myUuid) {
+    myUuid = "";
     let seed = new Date().valueOf(); // current timestamp in ms
     // this is not actually Base64
     const key =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
     // just make shit up using Math.random()
     for (let i = 0; i < 8; i++) {
-      myName += key.charAt(Math.floor(Math.random() * 64));
+      myUuid += key.charAt(Math.floor(Math.random() * 64));
     }
-    console.log("New name is:", myName);
-    localStorage.setItem("name", myName);
+    console.log("Your UUID is:", myUuid);
+    localStorage.setItem("name", myUuid);
   }
 
   let roomCodeRef = ref(window.fb_db, "roomCodes");
   function setRoomCodes(snapshot) {
     if (!snapshot.val()) return;
     roomCodeList = snapshot.val();
-    roomCodeListInitialized = +new Date();
+    roomCodeListInitialized = +new Date() / 1000;
     console.log("Room codes updated on", roomCodeListInitialized);
   }
 
@@ -79,7 +79,7 @@ export function doEverything(STRINGS) {
             resolve({ state: -1, name: STRINGS.roomNone });
           }
           let val = snapshot.val();
-          if (val.lastUpdate + 10_000 < +(new Date())) {
+          if (val.lastUpdate + 10 < (+new Date() / 1000)) {
             // room hasn't been updated in 10 seconds, it's probably disconnected
             resolve({ state: -1, name: STRINGS.roomNone });
           }
@@ -185,7 +185,7 @@ Then if it exists, get the current state of the room.
           return;
         }
         // Keep room code cache for 10 seconds
-        if (roomCodeListInitialized + 10_000 < +new Date()) {
+        if (roomCodeListInitialized + 10 < (+new Date() / 1000)) {
           roomName.innerText = STRINGS.roomCodeRefreshing;
           roomStatus.innerText = STRINGS.roomCodeRefreshingWait;
           get(roomCodeRef).then((snapshot) => {
@@ -261,7 +261,7 @@ Join request!
       console.log("Joining");
       btnJoin.innerText = STRINGS.joinWait;
       // write own username into 'pending', then listen for it to be removed after it being processed
-      let joinRef = child(roomRef, `pending/${myName}`);
+      let joinRef = child(roomRef, `pending/${myUuid}`);
       onValue(joinRef, (snapshot) => {
         let val = snapshot.val();
         console.log("joinRoom val", val);
@@ -282,7 +282,7 @@ Join request!
           replacePage();
         }
       });
-      update(joinRef, { status: 1, nick: inputNick.value, uuid: myName });
+      update(joinRef, { status: 1, nick: inputNick.value, uuid: myUuid });
     }
 
     btnJoin.addEventListener("click", joinRoom);

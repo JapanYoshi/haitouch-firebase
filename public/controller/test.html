@@ -1,0 +1,173 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="client.css" />
+</head>
+
+<body>
+  <!--Anything that's not between the "START INJECTED HTML" comment and the "END INJECTED HTML" comment won't be used in the app.-->
+
+  <!--START INJECTED HTML-->
+  <div id="game">
+    <style>
+      html {
+        font-family: sans-serif;
+        --color-bg: #000000;
+        --color-accent: #a03030;
+        --color-text: #eeeeee;
+        background: var(--color-bg);
+        color: var(--color-text);
+      }
+
+      code {
+        font-family: monospace;
+      }
+
+      body {
+        margin: 0;
+        -webkit-touch-callout: none;
+        /* iOS Safari */
+        -webkit-user-select: none;
+        /* Safari */
+        -khtml-user-select: none;
+        /* Konqueror HTML */
+        -moz-user-select: none;
+        /* Old versions of Firefox */
+        -ms-user-select: none;
+        /* Internet Explorer/Edge */
+        user-select: none;
+        /* Non-prefixed version, currently
+        supported by Chrome, Edge, Opera and Firefox */
+      }
+
+      #game {
+        width: 100vw;
+        height: 100svh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header {
+        position: relative;
+        z-index: 64;
+        flex-grow: 0;
+        flex-shrink: 0;
+        width: 100%;
+        height: 3rem;
+        line-height: 3rem;
+        font-size: 1.5rem;
+        text-align: center;
+        background: var(--color-accent);
+        color: var(--color-bg);
+        margin: -1rem 0rem 0;
+        padding: 1rem 0rem 0;
+        box-shadow: 0 0 0.25rem black;
+      }
+
+      #nickname {
+        font-weight: bold;
+      }
+
+      article {
+        position: relative;
+        display: block;
+        flex-grow: 0;
+        flex-shrink: 1;
+        flex-basis: 100svh;
+        min-height: 0;
+        overflow: hidden;
+        transition: flex-basis 150ms ease-out;
+      }
+
+      article:not(.active) {
+        flex-basis: 0vh;
+      }
+
+      .logo {
+        opacity: 0;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 100%;
+        height: 100%;
+        max-width: 640px;
+        max-height: 360px;
+        transform: translate(-50%, -50%);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .logo.active {
+        opacity: 1;
+      }
+
+      .skipButton,
+      .startGame {
+        position: absolute;
+        top: 4rem;
+        left: 4rem;
+        right: 4rem;
+        background: var(--red-gradient);
+        color: white;
+        font-size: 1.5rem;
+        padding: 2rem 1rem;
+        text-align: center;
+        border-radius: 0.25rem;
+        display: none;
+      }
+
+      .skippable .skipButton,
+      .playerOne .startGame {
+        display: block;
+      }
+
+      #game button {
+        font-family: inherit;
+        font-size: inherit;
+      }
+
+    </style>
+    <header>
+      <div id="playerNumber"></div>
+      <span id="nickname">SIGNING UP...</span>
+    </header>
+    <article id="standby" class="active">
+      <div
+        class="logo active logoGame"
+        style="background-image: url('salty/logo_game.png')"
+      ></div>
+      <div
+        class="logo logoLS"
+        style="background-image: url('salty/lifesavers.png')"
+      ></div>
+      <div class="button" id="debugButton">Press me!</div>
+      <input id="debugInput"></input>
+      <div class="startGame">Start</div>
+      <div class="skipButton">Skip</div>
+    </article>
+  </div>
+  <!--END INJECTED HTML-->
+  <script type="module">
+    /** START INJECTED SCRIPT **/
+    import { createControllerHandler } from "./controller/common.js";
+    createControllerHandler({
+      playerInit: (snapshot, newSnapshot) => {console.log("playerInit");},
+      playerUpdate: (snapshot, newSnapshot) => {console.log("playerInit");},
+      roomMessage: (snapshot, message) => {console.log("playerInit");},
+      playerMessage: (snapshot, message) => {console.log("playerInit");},
+      needButtonListener: [{
+        selector: "#debugButton",
+        selectAll: false,
+        buttonIndex: 0,
+        reason: "debug button",
+      }],
+      needTextListener: [{
+        selector: "#debugInput",
+        selectAll: false,
+        dbKey: "inputText",
+      }]
+    })
+    /** END INJECTED SCRIPT **/
+  </script>
+</body>

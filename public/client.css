@@ -1,12 +1,3 @@
-:root {
-    --purple: #56405c;
-    --purple2: #3a2b3f;
-    --blue: #6594e5;
-    --blue2: #c8f3ff;
-    --pink: #f63886;
-    --pink2: #ffc2ee;
-}
-
 html {
     background-color: var(--purple2);
     color: #fff;
