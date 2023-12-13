@@ -41,7 +41,7 @@ export function doEverything() {
     let usedRoomCodes = [];
     for (let k of Object.keys(val)) {
       if (val[k].lastUpdate < cutoff) {
-        let childRef = ref("rooms/" + k);
+        let childRef = ref(window.fb_db, "rooms/" + k);
         await set(childRef, {});
         deletedCount++;
       } else {

@@ -69,7 +69,7 @@ export const createModeratorHandler = (params) => {
     }
   })
   // Init this value.
-  get(snapshotMod).then((snapshot) => {
+  get(refMod).then((snapshot) => {
     let val = snapshot.val;
     if (!val) {
       console.error("Failed to initialize the mod queue");
@@ -77,7 +77,7 @@ export const createModeratorHandler = (params) => {
     }
     for (let i = 0; i < val.length; i++) {
       if (val[i].status === PENDING) {
-        snapshotMod.push(val[i]);
+        refMod.push(val[i]);
         params.onNewModEvent(val[i]);
       }
     }
@@ -93,7 +93,7 @@ export const createModeratorHandler = (params) => {
         )
       );
       snapshotMod[local].status = ACCEPTED;
-      snapshotMod.update({local: snapshotMod[local]})
+      refMod.update({local: snapshotMod[local]})
     },
     rejectModEvent: (uuid, type, id) => {
       const local = snapshotMod.findIndex(
@@ -104,7 +104,7 @@ export const createModeratorHandler = (params) => {
         )
       );
       snapshotMod[local].status = REJECTED;
-      snapshotMod.update({local: snapshotMod[local]})
+      refMod.update({local: snapshotMod[local]})
       const refPlayerWarns = ref(
         window.fb_db,
         `rooms/${window.rc}/connections/${uuid}/warned`
@@ -123,18 +123,18 @@ export const createModeratorHandler = (params) => {
         )
       );
       snapshotMod[local].status = KICKED;
-      snapshotMod.update({local: snapshotMod[local]}).then(() => {
+      refMod.update({local: snapshotMod[local]}).then(() => {
         const refPlayerKicked = ref(
           window.fb_db,
           `rooms/${window.rc}/connections/${uuid}/kicked`
         );
+        set(refPlayerKicked, 1);
       });
-      set(refPlayerKicked, 1);
     },
     alterModEvent: (uuid, type, id, newContent) => {
       const i = snapshotMod.findIndex((entry) => entry.uuid === modEvent.uuid && entry.type === "join")
       snapshotMod[i].nick = newName;
-      snapshotMod.update({i: snapshotMod[i]});
+      refMod.update({i: snapshotMod[i]});
     }
   };
 }
