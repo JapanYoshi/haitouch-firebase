@@ -28,38 +28,42 @@ export function doEverything() {
   window.rc = "";
 
   const auth = getAuth();
-  
+
   document.addEventListener("DOMContentLoaded", async () => {
-    await signInAnonymously(auth)
-    
+    await signInAnonymously(auth);
+
     let theRef = ref(window.fb_db, "rooms");
-    let snapshot = await get(theRef)
+    let snapshot = await get(theRef);
     let val = snapshot.val();
     const cutoff = +(new Date() / 1000) - 600; // 10 minutes ago
     console.log(val, cutoff);
     let deletedCount = 0;
-    let usedRoomCodes = []
+    let usedRoomCodes = [];
     for (let k of Object.keys(val)) {
       if (val[k].lastUpdate < cutoff) {
         let childRef = ref("rooms/" + k);
         await set(childRef, {});
-        deletedCount ++;
+        deletedCount++;
       } else {
         usedRoomCodes.push(k);
       }
     }
     let roomCodeRef = ref(window.fb_db, "roomCodes");
-    snapshot = await get(roomCodeRef)
+    snapshot = await get(roomCodeRef);
     let val_ = snapshot.val();
     console.log(val_);
     let newRoomCodes = Object.keys(val_);
     newRoomCodes = newRoomCodes.filter(
-      (rc) => (val_[rc] == true) && (usedRoomCodes.includes(rc))
-    )
+      (rc) => val_[rc] == true && usedRoomCodes.includes(rc)
+    );
     newRoomCodes = Object.fromEntries(
       Array.from(newRoomCodes, (entry) => [entry, true])
     );
-    set(roomCodeRef, newRoomCodes)
-    console.log("Cleaned up " + deletedCount + " rooms that have been unused for 10 minutes.");
+    set(roomCodeRef, newRoomCodes);
+    console.log(
+      "Cleaned up " +
+        deletedCount +
+        " rooms that have been unused for 10 minutes."
+    );
   });
 }

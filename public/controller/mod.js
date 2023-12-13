@@ -3,8 +3,6 @@ import {
   onValue,
   get,
   set,
-  update,
-  child,
 } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
 
 export function convertBB(bbcode) {
