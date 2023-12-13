@@ -38,6 +38,7 @@ export function doEverything(STRINGS) {
   let roomCodeList = {};
   let roomCodeListInitialized = 0;
   let controllerPageName = "";
+  let modPageName = "";
   let roomCanBeJoined = false;
   let nicknameIsValid = false;
 
@@ -84,6 +85,7 @@ export function doEverything(STRINGS) {
             resolve({ state: -1, name: STRINGS.roomNone });
           }
           controllerPageName = val.controllerName;
+          modPageName = val.controllerNameMod;
           if (val.inProgress === true) {
             resolve({ state: 3, name: val.gameName }); // game already started and can’t join as audience
           }
@@ -269,17 +271,22 @@ Join request!
           // no change
           return;
         }
-        if (val.status == -1) {
+        if (val.status === -1) {
           console.log("join rejected");
           btnJoin.disabled = false;
           joinStatus.innerText = STRINGS.joinRejected;
           btnJoin.innerText = STRINGS.buttonJoin;
+        } else if (val.status === 10) {
+          console.log("joined as mod");
+          joinStatus.innerText = STRINGS.loadingController;
+          btnJoin.innerText = STRINGS.buttonJoinSuccess;
+          replacePage(true);
         } else {
-          window.isAudience = val.status == 9;
+          window.isAudience = val.status === 9;
           console.log("join permitted");
           joinStatus.innerText = STRINGS.loadingController;
           btnJoin.innerText = STRINGS.buttonJoinSuccess;
-          replacePage();
+          replacePage(false);
         }
       });
       update(joinRef, { status: 1, nick: inputNick.value, uuid: myUuid });
@@ -337,7 +344,7 @@ replace them with the allowed typewriter/ASCII single quotes.
     }
 
     // Once you join, replace the page's contents with the specified controller
-    function replacePage() {
+    function replacePage(asModerator) {
       // set section tag to make rejoining easier
       window.location.hash = window.rc;
       // fetch the controller file
@@ -379,7 +386,7 @@ replace them with the allowed typewriter/ASCII single quotes.
         "https://" +
           window.location.hostname +
           "/controller/" +
-          controllerPageName +
+          (asModerator ? modPageName : controllerPageName) +
           ".html",
         true
       );
