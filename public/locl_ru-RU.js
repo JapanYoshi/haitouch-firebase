@@ -18,6 +18,7 @@ export const STRINGS = {
   joinWait: "Ожидание...",
   joinRejected: "Запрос на вход был отклонён.",
   joinFull: "Комната заполнена.",
+  wrongModUsername: "Имя пользователя не может состоять только из цифр.",
   fullGameInProgress: "Игра уже начата. Доступны только переподключения",
   joinAsPlayer: "Войти как игрок",
   joinAsAudience: "Войти к публике",

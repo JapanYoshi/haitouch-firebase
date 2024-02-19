@@ -107,7 +107,7 @@ export const createModeratorHandler = (params) => {
       refMod.update({local: snapshotMod[local]})
       const refPlayerWarns = ref(
         window.fb_db,
-        `rooms/${window.rc}/connections/${uuid}/warned`
+        `rooms/${window.rc}/join_requests/${uuid}/warned`
       );
       get(refPlayerWarns).then((snapshot) => {
         const val = snapshot.value;
@@ -126,7 +126,7 @@ export const createModeratorHandler = (params) => {
       refMod.update({local: snapshotMod[local]}).then(() => {
         const refPlayerKicked = ref(
           window.fb_db,
-          `rooms/${window.rc}/connections/${uuid}/kicked`
+          `rooms/${window.rc}/join_requests/${uuid}/kicked`
         );
         set(refPlayerKicked, 1);
       });

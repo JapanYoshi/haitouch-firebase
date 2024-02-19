@@ -251,11 +251,12 @@
 
     // Listen to updates.
     onValue(refMod, (snapshot) => {
-      let val = snapshot.val;
+      let val = snapshot.val();
       if (!val) {
-        console.error("Got a blank update");
+        console.error("Snapshot of /modQueue is blank.");
         return;
       }
+      console.log("New snapshot of /modQueue!");
       for (let i = 0; i < val.length; i++) {
         const local = snapshotMod.findIndex(
           (element) =>
@@ -266,29 +267,31 @@
         if (local == -1) {
           // no local match, new addition
           snapshotMod.push(val[i]);
-          params.onNewModEvent(val[i]);
+          onNewModEvent(val[i]);
         } else if (snapshotMod[local].status !== val[i].status) {
           snapshotMod[local].status = val[i].status;
           if (val[i].status !== PENDING) {
-            params.onRemovedModEvent(val[i]);
+            onRemovedModEvent(val[i]);
           }
         }
       }
     });
     // Init this value.
     get(refMod).then((snapshot) => {
-      let val = snapshot.val;
+      let val = snapshot.val();
       if (!val) {
-        console.error("Failed to initialize the mod queue");
+        console.error("Failed to get snapshot of /modQueue.");
         return;
       }
+      console.log("New snapshot of /modQueue:", val);
       for (let i = 0; i < val.length; i++) {
         if (val[i].status === PENDING) {
-          refMod.push(val[i]);
+          set(refMod, val[i]);
           onNewModEvent(val[i]);
         }
       }
     });
+    console.log("Initializing the snapshot of /modQueue.");
 
     const acceptModEvent = (uuid, type, id) => {
       const local = snapshotMod.findIndex(
@@ -308,11 +311,11 @@
       refMod.update({ local: snapshotMod[local] });
       const refPlayerWarns = ref(
         window.fb_db,
-        `rooms/${window.rc}/connections/${uuid}/warned`
+        `rooms/${window.rc}/modHistory/${uuid}/warned`
       );
       get(refPlayerWarns).then((snapshot) => {
         const val = snapshot.value;
-        set(refPlayerWarns, val + 1);
+        set(refPlayerWarns, (+val) + 1);
       });
     };
 
@@ -325,7 +328,7 @@
       refMod.update({ local: snapshotMod[local] }).then(() => {
         const refPlayerKicked = ref(
           window.fb_db,
-          `rooms/${window.rc}/connections/${uuid}/kicked`
+          `rooms/${window.rc}/modHistory/${uuid}/kicked`
         );
         set(refPlayerKicked, 1);
       });
@@ -333,26 +336,38 @@
 
     const alterModEvent = (uuid, type, id, newContent) => {
       const i = snapshotMod.findIndex(
-        (entry) => entry.uuid === modEvent.uuid && entry.type === "join"
+        (entry) => entry.uuid === modEvent.uuid && entry.type === type
       );
-      snapshotMod[i].nick = newName;
-      refMod.update({ i: snapshotMod[i] });
+      snapshotMod[i].value = newContent;
+      refMod.update({ i: snapshotMod[i] }).then(() => {
+        const refPlayerEdited = ref(
+          window.fb_db,
+          `rooms/${window.rc}/modHistory/${uuid}/edited`
+        );
+        get(refPlayerEdited).then((snapshot) => {
+          const val = snapshot.value;
+          set(refPlayerEdited, (+val) + 1);
+        })
+      });
     };
 
+    // Stores the number of times a player's answer has been edited, rejected, or the reason the player got kicked (that one only goes up to 1)
     let playersSnapshot = {};
-    let refPlayers = ref(window.fb_db, `rooms/${window.rc}/connections`);
+    let refPlayers = ref(window.fb_db, `rooms/${window.rc}/modHistory`);
 
     const updatePlayersSnapshot = (snapshot) => {
-      let val = snapshot.val;
+      let val = snapshot.val();
       if (!val) {
-        console.error("got a blank update");
+        console.error("Got snapshot of /modHistory, but it's blank.");
         return;
       }
+      console.log("New snapshot of /modHistory:", val)
       playersSnapshot = val;
     };
 
     onValue(refPlayers, updatePlayersSnapshot);
     get(refPlayers).then(updatePlayersSnapshot);
+    console.log("Initializing snapshot of /modHistory.")
 
     const nameTemplate = document.createElement("div");
     nameTemplate.classList.add("row");
@@ -402,7 +417,7 @@
   </button>
 </div>
 `;
-    let snapshot = {};
+    
     const modQueue = document.getElementById("modQueue");
     const nameQueue = document.getElementById("joinQueue");
 
@@ -443,11 +458,20 @@
         kickModEvent.bind(modEvent.uuid, modEvent.type, modEvent.id)
       );
 
-      el.querySelector("name").innerText = playersSnapshot[modEvent.uuid].nick;
-      el.querySelector("warns").innerText = `(Warned ${
+      // this may be blank if the player hasn't been modded yet
+      if (!(modEvent.uuid in playersSnapshot)) {
+        playersSnapshot[modEvent.uuid] = {
+          nick: "",
+          edited: 0,
+          warned: 0,
+          kicked: 0,
+        }
+      }
+      el.querySelector(".name").innerText = playersSnapshot[modEvent.uuid].nick;
+      el.querySelector(".warns").innerText = `(Warned ${
         playersSnapshot[modEvent.uuid].warned
       } times)`;
-      el.querySelector("bubbleText").innerText = convertBB(modEvent.content);
+      el.querySelector(".bubbleText").innerText = convertBB(modEvent.content);
       return el;
     }
 
@@ -475,6 +499,15 @@
         rejectModEvent.bind(modEvent.uuid, "join", modEvent.id)
       );
 
+      // this may be blank if the player hasn't been modded yet
+      if (!(modEvent.uuid in playersSnapshot)) {
+        playersSnapshot[modEvent.uuid] = {
+          nick: "",
+          edited: 0,
+          warned: 0,
+          kicked: 0,
+        }
+      };
       el.querySelector("name").innerText = playersSnapshot[modEvent.uuid].nick;
       el.querySelector("warns").innerText = `(Warned ${
         playersSnapshot[modEvent.uuid].warned

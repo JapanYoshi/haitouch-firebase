@@ -5,7 +5,7 @@ import {
   ref,
   onValue,
   get,
-  push,
+  set,
   update,
   child,
 } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
@@ -62,7 +62,38 @@ export function doEverything(STRINGS) {
     if (!snapshot.val()) return;
     roomCodeList = snapshot.val();
     roomCodeListInitialized = +new Date() / 1000;
-    console.log("Room codes updated on", roomCodeListInitialized);
+    console.log(roomCodeList.length, "Room codes updated on", roomCodeListInitialized);
+    if (Object.keys(roomCodeList).length > 32) {
+      pruneRooms();
+    }
+  }
+
+  function pruneRooms() {
+    console.log("pruneRooms() activated");
+    // delete rooms that are at least 30 minutes abandoned
+    const deleteBefore = roomCodeListInitialized - 1800;
+    let tempRoomsRef = child(window.fb_dbRef, "rooms");
+    get(tempRoomsRef).then(
+      snapshot => {
+        const _val = snapshot.val();
+        const roomCodes = Object.keys(_val);
+        roomCodes.forEach(roomCode => {
+          if (roomCode == "lastUpdate") return;
+          const tempRoomRef = child(window.fb_dbRef, `rooms/${roomCode}`);
+          get(tempRoomRef).then(snapshot => {
+            const val = snapshot.val();
+            if (val.lastUpdate < deleteBefore) {
+              set(tempRoomRef, null).then(() => {console.log("Room deleted", roomCode)});
+            } else {
+              console.log("Room not deleted", roomCode);
+            }
+          })
+          let objToUpdate = {};
+          objToUpdate[roomCode] = null;
+          update(roomCodeRef, objToUpdate);
+        });
+      }
+    )
   }
 
   function roomExists(roomCode) {
@@ -271,22 +302,33 @@ Join request!
           // no change
           return;
         }
-        if (val.status === -1) {
-          console.log("join rejected");
-          btnJoin.disabled = false;
-          joinStatus.innerText = STRINGS.joinRejected;
+        if (val.status === -2) {
+          console.log("wrong mod username");
+          joinStatus.innerText = STRINGS.wrongModUsername;
           btnJoin.innerText = STRINGS.buttonJoin;
+          btnJoin.disabled = false;
         } else if (val.status === 10) {
           console.log("joined as mod");
           joinStatus.innerText = STRINGS.loadingController;
           btnJoin.innerText = STRINGS.buttonJoinSuccess;
           replacePage(true);
-        } else {
-          window.isAudience = val.status === 9;
-          console.log("join permitted");
+        } else if (val.status === 9) {
+          window.isAudience = true;
+          console.log("joined as audience");
           joinStatus.innerText = STRINGS.loadingController;
           btnJoin.innerText = STRINGS.buttonJoinSuccess;
           replacePage(false);
+        } else if (val.status === 8) {
+          window.isAudience = false;
+          console.log("joined as player");
+          joinStatus.innerText = STRINGS.loadingController;
+          btnJoin.innerText = STRINGS.buttonJoinSuccess;
+          replacePage(false);
+        } else {
+          console.log("join rejected; status " + val.status);
+          joinStatus.innerText = STRINGS.joinRejected;
+          btnJoin.innerText = STRINGS.buttonJoin;
+          btnJoin.disabled = false;
         }
       });
       update(joinRef, { status: 1, nick: inputNick.value, uuid: myUuid });

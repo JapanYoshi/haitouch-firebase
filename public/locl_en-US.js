@@ -18,6 +18,7 @@ export const STRINGS = {
   joinWait: "Please wait...",
   joinRejected: "Your join request was rejected.",
   joinFull: "Sorry, this room is full.",
+  wrongModUsername: "Sorry, the username may not be all numeric.",
   fullGameInProgress: "Game in progress. Rejoins only.",
   joinAsPlayer: "Join as player",
   joinAsAudience: "Join as audience",
