@@ -591,7 +591,7 @@
         background: var(--red-gradient);
         color: black;
       }
-      
+
       .btnLifesaver {
         display: none;
       }
@@ -1061,7 +1061,11 @@
           <div class="gibClue">Wait for Clue 2...</div>
           <div class="gibClue">Wait for Clue 3...</div>
         </div>
-        <input type="text" pattern="[ !',-.\/0-9?A-Za-z]{0,64}" maxlength="64" />
+        <input
+          type="text"
+          pattern="[ !',-.\/0-9?A-Za-z]{0,64}"
+          maxlength="64"
+        />
         <button class="buzzer" type="button"></button>
       </div>
       <div class="skipButton">Yeah, we all get it</div>
@@ -1230,14 +1234,14 @@
     } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
     console.log("database object =", window.fb_db);
     var scene = document.querySelector("article#standby");
-    
+
     // Judge that the game has been ended if it has been 10 seconds since the last timestamp update.
     const close_room = () => {
       console.log("close_room()");
       window.location.hash = "";
       // Show disconnect overlay
       document.getElementById("roomClosedBg").style.display = "";
-    }
+    };
     var disconnect_timer = undefined;
     const disconnect_timer_timeout_ms = 10000;
     var ref_timestamp = ref(window.fb_db, `rooms/${window.rc}/lastUpdate`);
@@ -1252,6 +1256,18 @@
 
     /* DEBUG: Make the debug keypad visible */
     //document.getElementById("debugKeypad").style.display = "";
+
+    /* Remove timestamps (and soft hyphens) from the question text */
+    function removeTimestamps(bbcode) {
+      if (typeof bbcode == "string") {
+        return bbcode.replace(/\[#[1-9]\d*#\]/g, "");
+      }
+      console.error(
+        "This non-string value was passed to removeTimestamps():",
+        bbcode
+      );
+      return "ERROR: A non-string value was passed to removeTimestamps(). This error has been logged.";
+    }
 
     /* Change BBcode tags to HTML tags */
     function convertBB(bbcode) {
@@ -1269,10 +1285,10 @@
           .replace(/\[rb\]/g, "]");
       } else {
         console.error(
-          "convertBB could not convert this content because it is not a string:",
+          "This non-string value was passed to convertBB():",
           bbcode
         );
-        return "Error in funtion convertBB";
+        return "ERROR: A non-string value was passed to convertBB(). This error has been logged.";
       }
     }
     /* New Firebase-based player initializer */
@@ -1328,14 +1344,10 @@
           val.playerNumber < 4 ? "0%" : "100%";
         if (val.lifesaver) {
           console.log("user has lifesaver");
-          document
-            .getElementById("game")
-            .classList.add("lsAvailable");
+          document.getElementById("game").classList.add("lsAvailable");
         } else {
           console.log("user doesn't have lifesaver");
-          document
-            .getElementById("game")
-            .classList.remove("lsAvailable");
+          document.getElementById("game").classList.remove("lsAvailable");
         }
       }
     });
@@ -1346,15 +1358,11 @@
       // includes changes in score, input state, nickname, etc.
       // reconnection might change whether lifesaver is active
       if (data.lifesaver) {
-        console.log("user has lifesaver")
-        document
-        .getElementById("game")
-        .classList.add("lsAvailable");
+        console.log("user has lifesaver");
+        document.getElementById("game").classList.add("lsAvailable");
       } else {
-        console.log("user doesn't have lifesaver")
-        document
-          .getElementById("game")
-          .classList.remove("lsAvailable");
+        console.log("user doesn't have lifesaver");
+        document.getElementById("game").classList.remove("lsAvailable");
       }
       if (snapshotMe.nick != data.nick) {
         document.getElementById("nickname").innerText = data.nick;
@@ -1402,7 +1410,9 @@
             data.denominator +
             ".";
           var correct = scene.getElementsByClassName("correct")[0];
-          if (correct) {correct.classList.remove("correct");}
+          if (correct) {
+            correct.classList.remove("correct");
+          }
           return;
         case "gibYourTurn":
           console.log("IT'S YOUR TURN TO TYPE");
@@ -1535,7 +1545,7 @@
           scene.classList.add("active", "qHidden", data.sceneName);
 
           scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(
-            data.question
+            removeTimestamps(data.question)
           );
           var options = scene.querySelectorAll(".option");
           for (let i = 0; i < options.length; i++) {
@@ -1565,8 +1575,12 @@
           scene = document.querySelector("article#sort");
           scene.classList.add("active", "qHidden");
 
-          scene.getElementsByClassName("sortA")[0].innerText = convertBB(data.a);
-          scene.getElementsByClassName("sortB")[0].innerText = convertBB(data.b);
+          scene.getElementsByClassName("sortA")[0].innerText = convertBB(
+            data.a
+          );
+          scene.getElementsByClassName("sortB")[0].innerText = convertBB(
+            data.b
+          );
           if (data.hasBoth == true) {
             scene.getElementsByClassName("sortBoth")[0].style.display = "block";
           } else {
@@ -1667,7 +1681,7 @@
             typeof data.question
           );
           scene.getElementsByClassName("questionText")[0].innerHTML = convertBB(
-            data.question
+            removeTimestamps(data.question)
           );
           var options = scene.querySelectorAll(".option");
           for (let i = 0; i < options.length; i++) {
