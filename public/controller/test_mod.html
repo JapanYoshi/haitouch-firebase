@@ -247,7 +247,7 @@
     console.log("database object =", window.fb_db);
 
     let refMod = ref(window.fb_db, `rooms/${window.rc}/modQueue`);
-    let snapshotMod = [];
+    let snapshotMod = {};
 
     // Listen to updates.
     onValue(refMod, (snapshot) => {
@@ -257,21 +257,15 @@
         return;
       }
       console.log("New snapshot of /modQueue!");
-      for (let i = 0; i < val.length; i++) {
-        const local = snapshotMod.findIndex(
-          (element) =>
-            element.uuid == val[i].uuid &&
-            element.type == val[i].type &&
-            element.id == val[i].id
-        );
-        if (local == -1) {
+      for (let key of Object.keys(refMod)) {
+        if (key in snapshotMod) {
           // no local match, new addition
-          snapshotMod.push(val[i]);
-          onNewModEvent(val[i]);
-        } else if (snapshotMod[local].status !== val[i].status) {
-          snapshotMod[local].status = val[i].status;
-          if (val[i].status !== PENDING) {
-            onRemovedModEvent(val[i]);
+          snapshotMod.push(val[key]);
+          onNewModEvent(key, val[key]);
+        } else if (snapshotMod[key].status !== val[key].status) {
+          snapshotMod[key].status = val[key].status;
+          if (val[key].status !== PENDING) {
+            onRemovedModEvent(key, val[key]);
           }
         }
       }
@@ -284,34 +278,26 @@
         return;
       }
       console.log("New snapshot of /modQueue:", val);
-      for (let i = 0; i < val.length; i++) {
-        if (val[i].status === PENDING) {
-          set(refMod, val[i]);
-          onNewModEvent(val[i]);
+      for (let key of Object.keys(val)) {
+        if (val[key].status === PENDING) {
+          set(refMod, val[key]);
+          onNewModEvent(key, val[key]);
         }
       }
     });
     console.log("Initializing the snapshot of /modQueue.");
 
-    const acceptModEvent = (uuid, type, id) => {
-      const local = snapshotMod.findIndex(
-        (element) =>
-          element.uuid == uuid && element.type == type && element.id == id
-      );
-      snapshotMod[local].status = ACCEPTED;
-      refMod.update({ local: snapshotMod[local] });
+    const acceptModEvent = (eventID) => {
+      snapshotMod[eventID].status = ACCEPTED;
+      refMod.update({ eventID: snapshotMod[eventID] });
     };
 
-    const rejectModEvent = (uuid, type, id) => {
-      const local = snapshotMod.findIndex(
-        (element) =>
-          element.uuid == uuid && element.type == type && element.id == id
-      );
-      snapshotMod[local].status = REJECTED;
-      refMod.update({ local: snapshotMod[local] });
+    const rejectModEvent = (eventID) => {
+      snapshotMod[eventID].status = REJECTED;
+      refMod.update({ eventID: snapshotMod[eventID] });
       const refPlayerWarns = ref(
         window.fb_db,
-        `rooms/${window.rc}/modHistory/${uuid}/warned`
+        `rooms/${window.rc}/modHistory/${snapshotMod[eventID].uuid}/warned`
       );
       get(refPlayerWarns).then((snapshot) => {
         const val = snapshot.value;
@@ -319,30 +305,23 @@
       });
     };
 
-    const kickModEvent = (uuid, type, id) => {
-      const local = snapshotMod.findIndex(
-        (element) =>
-          element.uuid == uuid && element.type == type && element.id == id
-      );
-      snapshotMod[local].status = KICKED;
-      refMod.update({ local: snapshotMod[local] }).then(() => {
+    const kickModEvent = (eventID) => {
+      snapshotMod[eventID].status = KICKED;
+      refMod.update({ eventID: snapshotMod[eventID] }).then(() => {
         const refPlayerKicked = ref(
           window.fb_db,
-          `rooms/${window.rc}/modHistory/${uuid}/kicked`
+          `rooms/${window.rc}/modHistory/${snapshotMod[eventID].uuid}/kicked`
         );
         set(refPlayerKicked, 1);
       });
     };
 
-    const alterModEvent = (uuid, type, id, newContent) => {
-      const i = snapshotMod.findIndex(
-        (entry) => entry.uuid === modEvent.uuid && entry.type === type
-      );
-      snapshotMod[i].value = newContent;
-      refMod.update({ i: snapshotMod[i] }).then(() => {
+    const alterModEvent = (eventID, newContent) => {
+      snapshotMod[eventID].value = newContent;
+      refMod.update({ eventID: snapshotMod[eventID] }).then(() => {
         const refPlayerEdited = ref(
           window.fb_db,
-          `rooms/${window.rc}/modHistory/${uuid}/edited`
+          `rooms/${window.rc}/modHistory/${snapshotMod[eventID].uuid}/edited`
         );
         get(refPlayerEdited).then((snapshot) => {
           const val = snapshot.value;
@@ -421,41 +400,40 @@
     const modQueue = document.getElementById("modQueue");
     const nameQueue = document.getElementById("joinQueue");
 
-    const onNewModEvent = (modEvent) => {
+    const onNewModEvent = (eventId, modEvent) => {
       if (modEvent.type == "join") {
-        const modRow = createNameRow(modEvent);
+        const modRow = createNameRow(eventId, modEvent);
         nameQueue.appendChild(modRow);
       } else {
-        const modRow = createModRow(modEvent);
+        const modRow = createModRow(eventId, modEvent);
         modQueue.appendChild(modRow);
       }
     };
 
-    const onRemovedModEvent = (modEvent) => {
-      const eventId = modEvent.uuid + ";" + modEvent.type + ";" + modEvent.id;
+    const onRemovedModEvent = (eventId, modEvent) => {
       const modRow = document.querySelector(
         '.row[data-event-id="' + eventId + '"]'
       );
       modQueue.removeChild(modRow);
     };
 
-    function createModRow(modEvent) {
-      const eventID = modEvent.uuid + ";" + modEvent.type + ";" + modEvent.id;
+    function createModRow(eventID, modEvent) {
       const el = rowTemplate.cloneNode(true);
+      el.id = eventID;
       el.setAttribute("eventID", eventID);
 
       const btns = el.querySelectorAll("button");
       btns[0].addEventListener(
         "click",
-        acceptModEvent.bind(modEvent.uuid, modEvent.type, modEvent.id)
+        acceptModEvent.bind(eventId)
       );
       btns[1].addEventListener(
         "click",
-        rejectModEvent.bind(modEvent.uuid, modEvent.type, modEvent.id)
+        rejectModEvent.bind(eventId)
       );
       btns[2].addEventListener(
         "click",
-        kickModEvent.bind(modEvent.uuid, modEvent.type, modEvent.id)
+        kickModEvent.bind(eventId)
       );
 
       // this may be blank if the player hasn't been modded yet
@@ -475,15 +453,15 @@
       return el;
     }
 
-    function createNameRow(modEvent) {
-      const eventID = modEvent.uuid + ";join;" + modEvent.id;
+    function createNameRow(eventID, modEvent) {
       const el = nameTemplate.cloneNode(true);
+      el.id = eventID;
       el.setAttribute("eventID", eventID);
 
       const btns = el.querySelectorAll("button");
       btns[0].addEventListener(
         "click",
-        acceptModEvent.bind(modEvent.uuid, "join", modEvent.id)
+        acceptModEvent.bind(eventID)
       );
       btns[1].addEventListener("click", () => {
         const newName = window.prompt(
@@ -492,11 +470,11 @@
         if (newName === null) {
           return;
         }
-        alterModEvent(modEvent.uuid, "join", modEvent.id, newName);
+        alterModEvent(eventID, newName);
       });
       btns[2].addEventListener(
         "click",
-        rejectModEvent.bind(modEvent.uuid, "join", modEvent.id)
+        rejectModEvent.bind(eventID)
       );
 
       // this may be blank if the player hasn't been modded yet
@@ -508,11 +486,8 @@
           kicked: 0,
         }
       };
-      el.querySelector("name").innerText = playersSnapshot[modEvent.uuid].nick;
-      el.querySelector("warns").innerText = `(Warned ${
-        playersSnapshot[modEvent.uuid].warned
-      } times)`;
-      el.querySelector("bubbleText").innerText = convertBB(modEvent.content);
+      el.querySelector(".name").innerText = modEvent.value;
+      //el.querySelector(".bubbleText").innerText = modEvent.content;
       return el;
     }
     /** END INJECTED SCRIPT **/
