@@ -110,6 +110,7 @@
 
       button span {
         padding: 0.125rem;
+        flex-grow: 1;
       }
 
       .buttonIcon {
@@ -237,7 +238,30 @@
       onValue,
       get,
       set,
+      update,
     } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
+
+    export function convertBB(bbcode) {
+      if (typeof bbcode == "string") {
+        return bbcode
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\[b\]/g, "<strong>")
+          .replace(/\[\/b\]/g, "</strong>")
+          .replace(/\[i\]/g, "<em>")
+          .replace(/\[\/i\]/g, "</em>")
+          .replace(/\[code\]/g, "<code>")
+          .replace(/\[\/code\]/g, "</code>")
+          .replace(/\[lb\]/g, "[")
+          .replace(/\[rb\]/g, "]");
+      } else {
+        console.error(
+          "convertBB could not convert this content because it is not a string:",
+          bbcode
+        );
+        return "Error in funtion convertBB";
+      }
+    }
 
     const PENDING = 1;
     const ACCEPTED = 2;
@@ -248,6 +272,7 @@
 
     let refMod = ref(window.fb_db, `rooms/${window.rc}/modQueue`);
     let snapshotMod = {};
+    let snapshotModChanges = {};
 
     // Listen to updates.
     onValue(refMod, (snapshot) => {
@@ -256,11 +281,11 @@
         console.error("Snapshot of /modQueue is blank.");
         return;
       }
-      console.log("New snapshot of /modQueue!");
-      for (let key of Object.keys(refMod)) {
-        if (key in snapshotMod) {
+      console.log("New snapshot of /modQueue!", val);
+      for (let key of Object.keys(val)) {
+        if (!(key in snapshotMod)) {
           // no local match, new addition
-          snapshotMod.push(val[key]);
+          snapshotMod[key] = val[key];
           onNewModEvent(key, val[key]);
         } else if (snapshotMod[key].status !== val[key].status) {
           snapshotMod[key].status = val[key].status;
@@ -280,7 +305,16 @@
       console.log("New snapshot of /modQueue:", val);
       for (let key of Object.keys(val)) {
         if (val[key].status === PENDING) {
-          set(refMod, val[key]);
+          if (snapshotMod.hasOwnProperty(key)) {
+            if (snapshotMod[key].value == val[key].value) {
+              return; // no change
+            } else {
+              // there is a change
+              onUpdateModEvent(key, val[key]);
+            }
+          }
+          // this is a new event
+          // set(refMod, val[key]); // this is causing errors?
           onNewModEvent(key, val[key]);
         }
       }
@@ -288,13 +322,26 @@
     console.log("Initializing the snapshot of /modQueue.");
 
     const acceptModEvent = (eventID) => {
-      snapshotMod[eventID].status = ACCEPTED;
-      refMod.update({ eventID: snapshotMod[eventID] });
+      console.log("acceptModEvent", 0, eventID);
+      if (!snapshotModChanges.hasOwnProperty(eventID)) {
+        snapshotModChanges[eventID] = structuredClone(snapshotMod[eventID]);
+      }
+      console.log("acceptModEvent", 1, snapshotModChanges[eventID]);
+      snapshotModChanges[eventID].status = ACCEPTED;
+      console.log("acceptModEvent", 2, snapshotModChanges[eventID]);
+      update(refMod, snapshotModChanges).then(() => {
+        delete snapshotModChanges[eventID];
+      });
     };
 
     const rejectModEvent = (eventID) => {
-      snapshotMod[eventID].status = REJECTED;
-      refMod.update({ eventID: snapshotMod[eventID] });
+      if (!snapshotModChanges.hasOwnProperty(eventID)) {
+        snapshotModChanges[eventID] = structuredClone(snapshotMod[eventID]);
+      }
+      snapshotModChanges[eventID].status = REJECTED;
+      update(refMod, snapshotModChanges).then(() => {
+        delete snapshotModChanges[eventID];
+      });
       const refPlayerWarns = ref(
         window.fb_db,
         `rooms/${window.rc}/modHistory/${snapshotMod[eventID].uuid}/warned`
@@ -306,8 +353,12 @@
     };
 
     const kickModEvent = (eventID) => {
-      snapshotMod[eventID].status = KICKED;
-      refMod.update({ eventID: snapshotMod[eventID] }).then(() => {
+      if (!snapshotModChanges.hasOwnProperty(eventID)) {
+        snapshotModChanges[eventID] = structuredClone(snapshotMod[eventID]);
+      }
+      snapshotModChanges[eventID].status = KICKED;
+      update(refMod, snapshotModChanges).then(() => {
+        delete snapshotModChanges[eventID];
         const refPlayerKicked = ref(
           window.fb_db,
           `rooms/${window.rc}/modHistory/${snapshotMod[eventID].uuid}/kicked`
@@ -317,15 +368,24 @@
     };
 
     const alterModEvent = (eventID, newContent) => {
-      snapshotMod[eventID].value = newContent;
-      refMod.update({ eventID: snapshotMod[eventID] }).then(() => {
+      if (!snapshotModChanges.hasOwnProperty(eventID)) {
+        snapshotModChanges[eventID] = structuredClone(snapshotMod[eventID]);
+      }
+      snapshotModChanges[eventID].value = newContent;
+      update(refMod, snapshotModChanges).then(() => {
+        delete snapshotModChanges[eventID];
         const refPlayerEdited = ref(
           window.fb_db,
           `rooms/${window.rc}/modHistory/${snapshotMod[eventID].uuid}/edited`
         );
         get(refPlayerEdited).then((snapshot) => {
           const val = snapshot.value;
-          set(refPlayerEdited, (+val) + 1);
+          console.log("alterModEvent val", val);
+          if (val == undefined) {
+            set;(refPlayerEdited, 1);
+          } else {
+            set(refPlayerEdited, (+val) + 1);
+          }
         })
       });
     };
@@ -400,40 +460,51 @@
     const modQueue = document.getElementById("modQueue");
     const nameQueue = document.getElementById("joinQueue");
 
-    const onNewModEvent = (eventId, modEvent) => {
+    const onNewModEvent = (eventID, modEvent) => {
       if (modEvent.type == "join") {
-        const modRow = createNameRow(eventId, modEvent);
+        const modRow = createNameRow(eventID, modEvent);
         nameQueue.appendChild(modRow);
       } else {
-        const modRow = createModRow(eventId, modEvent);
+        const modRow = createModRow(eventID, modEvent);
         modQueue.appendChild(modRow);
       }
     };
 
-    const onRemovedModEvent = (eventId, modEvent) => {
+    const onRemovedModEvent = (eventID, modEvent) => {
       const modRow = document.querySelector(
-        '.row[data-event-id="' + eventId + '"]'
+        '.row[data-eventid="' + eventID + '"]'
       );
-      modQueue.removeChild(modRow);
+      modRow.parentElement.removeChild(modRow);
     };
+
+    const onUpdateModEvent = (eventID, modEvent) => {
+      const modRow = document.querySelector(
+        '.row[data-eventid="' + eventID + '"]'
+      );
+      if (modEvent.type == "join") {
+        el.querySelector(".name").innerText = modEvent.value;
+      } else {
+        el.querySelector(".bubbleText").innerText = convertBB(modEvent.content);
+      }
+    }
 
     function createModRow(eventID, modEvent) {
       const el = rowTemplate.cloneNode(true);
       el.id = eventID;
-      el.setAttribute("eventID", eventID);
+      el.setAttribute("data-eventid", eventID);
 
       const btns = el.querySelectorAll("button");
       btns[0].addEventListener(
         "click",
-        acceptModEvent.bind(eventId)
+        (_) => {acceptModEvent(eventID)}
       );
       btns[1].addEventListener(
         "click",
-        rejectModEvent.bind(eventId)
+        (_) => {rejectModEvent(eventID)}
       );
       btns[2].addEventListener(
         "click",
-        kickModEvent.bind(eventId)
+        (_) => {kickModEvent.bind(eventID)}
       );
 
       // this may be blank if the player hasn't been modded yet
@@ -456,12 +527,12 @@
     function createNameRow(eventID, modEvent) {
       const el = nameTemplate.cloneNode(true);
       el.id = eventID;
-      el.setAttribute("eventID", eventID);
+      el.setAttribute("data-eventid", eventID);
 
       const btns = el.querySelectorAll("button");
       btns[0].addEventListener(
         "click",
-        acceptModEvent.bind(eventID)
+        (_) => {acceptModEvent(eventID)}
       );
       btns[1].addEventListener("click", () => {
         const newName = window.prompt(
@@ -474,7 +545,7 @@
       });
       btns[2].addEventListener(
         "click",
-        rejectModEvent.bind(eventID)
+        (_) => {rejectModEvent(eventID)}
       );
 
       // this may be blank if the player hasn't been modded yet
